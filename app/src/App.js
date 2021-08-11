@@ -1,24 +1,34 @@
-import logo from './logo.svg';
 import './App.css';
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { ThemeProvider } from '@material-ui/styles';
+import { createTheme } from '@material-ui/core/styles';
+import Navbar from './components/Navbar/Navbar';
 
 function App() {
+  const theme = createTheme({
+    palette: {
+        primary: {
+            main: '#90E0EF',
+        },
+        secondary: {
+            light: '#0066ff',
+            main: '#0077B6',
+            contrastText: '#000000',
+        },
+        info: {
+          main: '#FFFFFF',
+        },
+        contrastThreshold: 3,
+        tonalOffset: 0.2,
+    },
+    spacing: 8,
+  });
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider theme={theme}>
+      <Navbar />
+    </ThemeProvider>
   );
 }
 
