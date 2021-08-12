@@ -12,11 +12,12 @@ import PeopleIcon from '@material-ui/icons/People';
 import LocalHospitalIcon from '@material-ui/icons/LocalHospital';
 import LibraryAddIcon from '@material-ui/icons/LibraryAdd';
 import HelpIcon from '@material-ui/icons/Help';
+import YoutubeSearchedForIcon from '@material-ui/icons/YoutubeSearchedFor';
 
 import useStyles from './styles';
 import logo from '../../assets/logo.png';
 
-const Navbar = () => {
+const Navbar = ({ setDrawerState, drawerState }) => {
     const classes = useStyles();
     // const location = useLocation();
     const history = useHistory();
@@ -29,8 +30,6 @@ const Navbar = () => {
     const [userToken, setUserToken] = useState(JSON.stringify(localStorage.getItem('userToken')));
     const [userProfile, setUserProfile] = useState(JSON.parse(localStorage.getItem('profile')));
     const [userType, setUserType] = useState("admin");
-    const [logoutbtn, setlogoutbtn] = useState(false);
-    const [drawerState, setDrawerState] = useState(false);
 
     const handleDrawer = () => {
         if (drawerState == false) setDrawerState(true);
@@ -82,12 +81,16 @@ const Navbar = () => {
                 <div className={classes.drawerContainer}>
                     <List>
                         <ListItem button >
-                             <ListItemIcon className={classes.navIcon}><LibraryAddIcon /></ListItemIcon>
+                            <ListItemIcon className={classes.navIcon}><LibraryAddIcon /></ListItemIcon>
                             <ListItemText primary="Channeling Management" />
                         </ListItem>
                         <ListItem button>
                             <ListItemIcon className={classes.navIcon}><MonetizationOnIcon /></ListItemIcon>
-                                 <ListItemText primary="Finance Management" />
+                            <ListItemText primary="Finance Management" />
+                        </ListItem>
+                        <ListItem button>
+                            <ListItemIcon className={classes.navIcon}><YoutubeSearchedForIcon /></ListItemIcon>
+                            <ListItemText primary="Laboratory Management" />
                         </ListItem>
                         <ListItem button>
                             <ListItemIcon className={classes.navIcon}><LocalHospitalIcon /></ListItemIcon>
