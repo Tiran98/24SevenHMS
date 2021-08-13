@@ -70,5 +70,30 @@ export default makeStyles((theme) => ({
         '&:hover': {
             backgroundColor: "#023E8A",
         },
-    }
+    },
+    dialogBox: {
+        backgroundColor: '#ffffff',
+        padding: theme.spacing(5),
+    },
+    dialogContent: {
+        color: "#2b2b2b",
+        fontWeight: "500",
+    },
+    dialogBtn: {
+        marginRight: "5px",
+        padding: "8px",
+        color: "#ffffff",
+        backgroundColor: "#828282",
+        '&:hover': {
+            backgroundColor: "#2b2b2b",
+        },
+    },
+    dialogBtnRed: {
+        padding: "8px",
+        color: "#ffffff",
+        backgroundColor: "#ff4040",
+        '&:hover': {
+            backgroundColor: "#7d0000",
+        },
+    },
 }));
