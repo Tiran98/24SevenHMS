@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useForm, Controller } from "react-hook-form";
-import { TextField, Paper, Button, Grid, Typography, IconButton, Table, TableBody, TableContainer, TableFooter, TablePagination, TableRow } from '@material-ui/core/';
+import { TextField, Paper, Button, Grid, Typography, IconButton, Table, TableBody, TableContainer, TableFooter, TablePagination, TableRow, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle  } from '@material-ui/core/';
 import { withStyles } from '@material-ui/core/styles';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import { Link } from 'react-router-dom';
@@ -14,6 +14,7 @@ import FirstPageIcon from '@material-ui/icons/FirstPage';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 
 import useStyles from './styles';
 
@@ -102,6 +103,7 @@ const AllEmployees = () => {
     const { control, handleSubmit, reset } = useForm();
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
+    const [opendlt, setOpendlt] = React.useState(false);
 
     const CssTextField = withStyles({
         root: {
@@ -150,6 +152,14 @@ const AllEmployees = () => {
     })(MuiTableCell);
 
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, employees.length - page * rowsPerPage);
+
+    const handleClickOpen = () => {
+        setOpendlt(true);
+    };
+    
+    const handleClose = () => {
+        setOpendlt(false);
+    };
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -244,7 +254,7 @@ const AllEmployees = () => {
                                                 <Button variant="contained" color="secondary" className={classes.tableBtn}>
                                                     Message
                                                 </Button>
-                                                <Button variant="contained" color="error" className={classes.tableBtnRed}>
+                                                <Button variant="contained" className={classes.tableBtnRed} onClick={handleClickOpen}>
                                                     Remove
                                                 </Button>
                                             </TableCell>
@@ -282,6 +292,29 @@ const AllEmployees = () => {
                         </TableContainer>
                 </Grid>
             </Grid>
+            <Dialog
+                open={opendlt}
+                onClose={handleClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <Paper className={classes.dialogBox}>
+                    <DialogTitle id="alert-dialog-title" style={{ textAlign:"center" }}><DeleteForeverIcon style={{ fontSize: "100px", color: "#ff4040" }} /></DialogTitle>
+                    <DialogContent style={{ textAlign:"center" }}> 
+                        <DialogContentText id="alert-dialog-description" className={classes.dialogContent}>
+                            Are you sure you want to<br /> permanetly delete this record?
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions style={{ justifyContent:"center" }}>
+                        <Button onClick={handleClose} variant="contained"color="secondary" className={classes.dialogBtn}>
+                            Cancel
+                        </Button>
+                        <Button onClick={handleClose} variant="contained" className={classes.dialogBtnRed} autoFocus>
+                            Yes, Delete it
+                        </Button>
+                    </DialogActions>
+                </Paper>
+            </Dialog>
         </div>
     )
 }
