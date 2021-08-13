@@ -96,7 +96,7 @@ const Navbar = ({ setDrawerState, drawerState }) => {
                             <ListItemIcon className={classes.navIcon}><LocalHospitalIcon /></ListItemIcon>
                             <ListItemText primary="Inventory Management" />
                         </ListItem>
-                        <ListItem button>
+                        <ListItem component={Link} to ="/all-employees" button>
                             <ListItemIcon className={classes.navIcon}><PeopleIcon /></ListItemIcon>
                             <ListItemText primary="Employee Management" />
                         </ListItem>

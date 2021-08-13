@@ -35,5 +35,40 @@ export default makeStyles((theme) => ({
         padding: "10px",
         color: "#0077B6",
         fontWeight: "500"
+    },
+    tableRow: {
+        backgroundColor: "#ffffff",
+        marginBottom: "50px",
+    },
+    table: {
+        minWidth: 500,
+        border: "none",
+    },
+    tableth: {
+        color: "#0077B6",
+        fontWeight: "500",
+    },
+    tableBtnRed: {
+        marginRight: "20px",
+        padding: "8px",
+        color: "#ffffff",
+        backgroundColor: "#ff4040",
+        '&:hover': {
+            backgroundColor: "#7d0000",
+        },
+    },
+    tableBtn: {
+        marginRight: "20px",
+        padding: "8px",
+        color: "#ffffff",
+    },
+    paginationBtn: {
+        backgroundColor: "#0077B6",
+        padding: "3px",
+        color: "#ffffff",
+        margin: "3px",
+        '&:hover': {
+            backgroundColor: "#023E8A",
+        },
     }
 }));
