@@ -7,6 +7,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Navbar from './components/Navbar/Navbar';
 import { Toolbar } from '@material-ui/core';
 import AddEmployee from './components/EmployeeManagement/AddEmployee';
+import AllEmployees from './components/EmployeeManagement/AllEmployees';
 import AddEmpPayment from './components/EmpPaymentManagement/AddEmpPayment';
 
 const drawerWidth = 240;
@@ -32,13 +33,16 @@ function App() {
         info: {
           main: '#FFFFFF',
         },
+        error: {
+          main: '#ff4040',
+        },
         contrastThreshold: 3,
         tonalOffset: 0.2,
     },
     spacing: 8,
   });
 
-  const [drawerState, setDrawerState] = React.useState(false);
+  const [drawerState, setDrawerState] = React.useState(true);
   const classes = useStyles();
 
   return (
@@ -50,6 +54,7 @@ function App() {
             <Toolbar />
             {/* <Route path="/" exact component={LandingPage} /> */}
             <Route path="/add-employee" exact component={AddEmployee} />
+            <Route path="/all-employees" exact component={AllEmployees} />
             <Route path="/add-emp-payment" exact component={AddEmpPayment} />
             {/* <Route exact path="/register">
                 <Registration 
