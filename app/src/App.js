@@ -1,14 +1,17 @@
 import './App.css';
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { ThemeProvider } from '@material-ui/styles';
 import { createTheme } from '@material-ui/core/styles';
+
 import { makeStyles } from '@material-ui/core/styles';
 import Navbar from './components/Navbar/Navbar';
 import { Toolbar } from '@material-ui/core';
 import AddEmployee from './components/EmployeeManagement/AddEmployee';
 import AllEmployees from './components/EmployeeManagement/AllEmployees';
 import AddEmpPayment from './components/EmpPaymentManagement/AddEmpPayment';
+import AdminLogin from './components/UserAuth/AdminLogin';
 
 const drawerWidth = 240;
 
@@ -43,12 +46,15 @@ function App() {
   });
 
   const [drawerState, setDrawerState] = React.useState(true);
+  const [pathName, setPathName] = React.useState("");
   const classes = useStyles();
 
   return (
     <Router>
       <ThemeProvider theme={theme}>
-        <Navbar setDrawerState={setDrawerState} drawerState={drawerState} />
+        {pathName != "/admin" ? 
+          <Navbar setDrawerState={setDrawerState} drawerState={drawerState} /> :
+          <></>}
         <Switch>
           <div className={classes.content} style={{ marginLeft: drawerWidth * drawerState }}>
             <Toolbar />
@@ -56,11 +62,12 @@ function App() {
             <Route path="/add-employee" exact component={AddEmployee} />
             <Route path="/all-employees" exact component={AllEmployees} />
             <Route path="/add-emp-payment" exact component={AddEmpPayment} />
-            {/* <Route exact path="/register">
-                <Registration 
+            <Route exact path="/admin">
+                <AdminLogin 
                   setDrawerState={setDrawerState}
+                  setPathName={setPathName}
                 />
-            </Route> */}
+            </Route>
           </div>
         </Switch>
       </ThemeProvider>
