@@ -12,6 +12,8 @@ import AddEmployee from './components/EmployeeManagement/AddEmployee';
 import AllEmployees from './components/EmployeeManagement/AllEmployees';
 import AddEmpPayment from './components/EmpPaymentManagement/AddEmpPayment';
 import AdminLogin from './components/UserAuth/AdminLogin';
+import EmployeeLogin from './components/UserAuth/EmployeeLogin';
+import AddReport from './components/LabManagement/AddReport';
 
 const drawerWidth = 240;
 
@@ -45,14 +47,14 @@ function App() {
     spacing: 8,
   });
 
-  const [drawerState, setDrawerState] = React.useState(true);
+  const [drawerState, setDrawerState] = React.useState(false);
   const [pathName, setPathName] = React.useState("");
   const classes = useStyles();
 
   return (
     <Router>
       <ThemeProvider theme={theme}>
-        {pathName != "/admin" ? 
+        {pathName != "/admin" &&  pathName != "/login"? 
           <Navbar setDrawerState={setDrawerState} drawerState={drawerState} /> :
           <></>}
         <Switch>
@@ -61,10 +63,16 @@ function App() {
             {/* <Route path="/" exact component={LandingPage} /> */}
             <Route path="/add-employee" exact component={AddEmployee} />
             <Route path="/all-employees" exact component={AllEmployees} />
+            <Route path="/add-report" exact component={AddReport} />
             <Route path="/add-emp-payment" exact component={AddEmpPayment} />
             <Route exact path="/admin">
                 <AdminLogin 
                   setDrawerState={setDrawerState}
+                  setPathName={setPathName}
+                />
+            </Route>
+            <Route exact path="/login">
+                <EmployeeLogin 
                   setPathName={setPathName}
                 />
             </Route>
