@@ -14,6 +14,7 @@ import AddEmpPayment from './components/EmpPaymentManagement/AddEmpPayment';
 import AdminLogin from './components/UserAuth/AdminLogin';
 import EmployeeLogin from './components/UserAuth/EmployeeLogin';
 import AddReport from './components/LabManagement/AddReport';
+import AllReports from './components/LabManagement/AllReports';
 
 const drawerWidth = 240;
 
@@ -64,6 +65,7 @@ function App() {
             <Route path="/add-employee" exact component={AddEmployee} />
             <Route path="/all-employees" exact component={AllEmployees} />
             <Route path="/add-report" exact component={AddReport} />
+            <Route path="/all-reports" exact component={AllReports} />
             <Route path="/add-emp-payment" exact component={AddEmpPayment} />
             <Route exact path="/admin">
                 <AdminLogin 
