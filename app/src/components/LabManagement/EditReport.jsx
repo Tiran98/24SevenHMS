@@ -8,7 +8,7 @@ import DateRangeIcon from '@material-ui/icons/DateRange';
 
 import useStyles from './styles';
 
-const AddReport = () => {
+const EditReport = () => {
     const classes = useStyles();
     const { control, handleSubmit, reset } = useForm();
     const [gender, setGender] = useState("");
@@ -73,7 +73,7 @@ const AddReport = () => {
             <Grid container spacing={3}>
                 <Grid item xs={12}>
                     <Paper className={classes.paperTitle}>
-                        <Typography variant="h4" className={classes.pageTitle}>Add New Blood Report</Typography>
+                        <Typography variant="h4" className={classes.pageTitle}>Edit Blood Report</Typography>
                     </Paper>
                 </Grid>
                 <Grid item xs={12}>
@@ -81,6 +81,15 @@ const AddReport = () => {
                         <Paper className={classes.paper}>
                             
                                 <Grid container spacing={2}>
+                                    <Grid item xs={12} sm={6}>
+                                        <Controller
+                                            name="reportID"
+                                            control={control}
+                                            defaultValue=""
+                                            render={({ field }) => 
+                                            <CssTextField disabled fullWidth label="Report ID" variant="outlined" color="primary" {...field} />}
+                                        />
+                                    </Grid>
                                     <Grid item xs={12} sm={6}>
                                         <Controller
                                             name="fullname"
@@ -125,32 +134,6 @@ const AddReport = () => {
                                                 <CssTextField
                                                     fullWidth
                                                     label="Date of Birth"
-                                                    type="date"
-                                                    variant="outlined"
-                                                    color="primary"
-                                                    {...field}
-                                                    InputLabelProps={{
-                                                        shrink: true,
-                                                    }}
-                                                    InputProps={{
-                                                        startAdornment: (
-                                                          <InputAdornment position="start">
-                                                            <DateRangeIcon />
-                                                          </InputAdornment>
-                                                        ),
-                                                    }}
-                                            />}
-                                        />
-                                    </Grid>
-                                    <Grid item xs={12} sm={6}>
-                                        <Controller
-                                            name="datecollected"
-                                            control={control}
-                                            defaultValue=""
-                                            render={({ field }) => 
-                                                <CssTextField
-                                                    fullWidth
-                                                    label="Date Collected"
                                                     type="date"
                                                     variant="outlined"
                                                     color="primary"
@@ -365,4 +348,4 @@ const AddReport = () => {
     )
 }
 
-export default AddReport;
+export default EditReport;
