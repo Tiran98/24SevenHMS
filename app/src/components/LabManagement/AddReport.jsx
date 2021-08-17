@@ -141,7 +141,7 @@ const AddReport = () => {
                                 <Grid container spacing={2}>
                                     <Grid item xs={12} sm={6}>
                                         <Controller
-                                            name="firstName"
+                                            name="fullname"
                                             control={control}
                                             defaultValue=""
                                             render={({ field }) => 
@@ -202,7 +202,7 @@ const AddReport = () => {
                                     </Grid>
                                     <Grid item xs={12} sm={6}>
                                         <Controller
-                                            name="dob"
+                                            name="datecollected"
                                             control={control}
                                             defaultValue=""
                                             render={({ field }) => 
@@ -423,4 +423,4 @@ const AddReport = () => {
     )
 }
 
-export default AddReport
+export default AddReport;
