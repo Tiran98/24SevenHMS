@@ -25,6 +25,8 @@ export default makeStyles((theme) => ({
         backgroundColor: '#023e8a',
         color: '#ffffff',
         padding: "15px",
+        width:"300px",
+        marginLeft:"-2px"
     },
     resetbtn: {
         backgroundColor: '#6e6e6e',
@@ -35,5 +37,65 @@ export default makeStyles((theme) => ({
         padding: "10px",
         color: "#0077B6",
         fontWeight: "500"
-    }
+    },
+    tableRow: {
+        backgroundColor: "#ffffff",
+        marginBottom: "50px",
+    },
+    table: {
+        minWidth: 500,
+        border: "none",
+    },
+    tableth: {
+        color: "#0077B6",
+        fontWeight: "500",
+    },
+    tableBtnRed: {
+        marginRight: "20px",
+        padding: "8px",
+        color: "#ffffff",
+        backgroundColor: "#ff4040",
+        '&:hover': {
+            backgroundColor: "#7d0000",
+        },
+    },
+    tableBtn: {
+        marginRight: "20px",
+        padding: "8px",
+        color: "#ffffff",
+    },
+    paginationBtn: {
+        backgroundColor: "#0077B6",
+        padding: "3px",
+        color: "#ffffff",
+        margin: "3px",
+        '&:hover': {
+            backgroundColor: "#023E8A",
+        },
+    },
+    dialogBox: {
+        backgroundColor: '#ffffff',
+        padding: theme.spacing(5),
+    },
+    dialogContent: {
+        color: "#2b2b2b",
+        fontWeight: "500",
+    },
+    dialogBtn: {
+        marginRight: "5px",
+        padding: "8px",
+        color: "#ffffff",
+        backgroundColor: "#828282",
+        '&:hover': {
+            backgroundColor: "#2b2b2b",
+        },
+    },
+    dialogBtnRed: {
+        padding: "8px",
+        color: "#ffffff",
+        backgroundColor: "#ff4040",
+        '&:hover': {
+            backgroundColor: "#7d0000",
+        },
+    },
 }));
