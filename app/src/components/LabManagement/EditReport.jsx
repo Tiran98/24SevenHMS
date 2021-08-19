@@ -1,56 +1,17 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useForm, Controller } from "react-hook-form";
-import { Radio, RadioGroup, FormLabel, TextField, FormControlLabel, Paper, Button, Grid, Typography, Divider, Snackbar } from '@material-ui/core/';
-import MuiAlert from '@material-ui/lab/Alert';
+import { Radio, RadioGroup, FormLabel, TextField, FormControlLabel, Paper, Button, Grid, Typography, Divider } from '@material-ui/core/';
 import { withStyles } from '@material-ui/core/styles';
 import InputAdornment from '@material-ui/core/InputAdornment';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
 
 import DateRangeIcon from '@material-ui/icons/DateRange';
 
 import useStyles from './styles';
 
-function Alert(props) {
-    return <MuiAlert elevation={6} variant="filled" {...props} />;
-}
-
-const schema = yup.object().shape({
-    fullname: yup.string().required("Patient Name is required."),
-    email: yup.string().email("Enter a valid Email."),
-    mobile: yup.string().required("Mobile Number is required.").max(10, "Mobile Number cannot exceed 10 characters."),
-    dob: yup.string().required("Date of Birth is required."),
-    datecollected: yup.string().required("Date Collected is required."),
-    hemoglobin: yup.number().typeError('You must enter a number').required(),
-    rbc: yup.number().typeError('You must enter a number'),
-    hct: yup.number().typeError('You must enter a number'),
-    mcv: yup.number().typeError('You must enter a number'),
-    mch: yup.number().typeError('You must enter a number'),
-    mchc: yup.number().typeError('You must enter a number'),
-    rdwcv: yup.number().typeError('You must enter a number'),
-    rdwsd: yup.number().typeError('You must enter a number'),
-    wbc: yup.number().typeError('You must enter a number'),
-    neu: yup.number().typeError('You must enter a number'),
-    lym: yup.number().typeError('You must enter a number'),
-    mon: yup.number().typeError('You must enter a number'),
-    eos: yup.number().typeError('You must enter a number'),
-    bas: yup.number().typeError('You must enter a number'),
-    lym2: yup.number().typeError('You must enter a number'),
-    gra: yup.number().typeError('You must enter a number'),
-    plt: yup.number().typeError('You must enter a number'),
-    esr: yup.number().typeError('You must enter a number'),
-});
-
-const AddReport = () => {
+const EditReport = () => {
     const classes = useStyles();
-    const { control, handleSubmit, reset, formState: { errors }  } = useForm(
-        {
-            resolver: yupResolver(schema),
-            reValidateMode: 'onSubmit',
-        }
-    );
+    const { control, handleSubmit, reset } = useForm();
     const [gender, setGender] = useState("");
-    const [successMsg, setSuccessMsg] = useState(true);
 
     const CssTextField = withStyles({
         root: {
@@ -83,9 +44,6 @@ const AddReport = () => {
               borderColor: '#0077B6',
             },
           },
-          "& .MuiFormHelperText-root": {
-            color: "#ff0000",
-          },
         },
         input: {
           color: "#1a1a1a"
@@ -93,7 +51,6 @@ const AddReport = () => {
     })(TextField);
 
     const onSubmit = (data) => {
-        console.log(data);
 
         // if(userType == "attendee") {
         //     formDataNew.append('firstName', data.firstName);
@@ -105,55 +62,43 @@ const AddReport = () => {
         // for(var pair of formDataNew.entries()) {
         //         console.log(pair[0]+', '+pair[1]);
         // }
-
-        setSuccessMsg(true);
     }
 
     const handleRadioChange = (event) => {
         setGender(event.target.value, console.log(gender));
     };
 
-    const handleSuccessMsg = (event, reason) => {
-
-        if (reason === 'clickaway') {
-          return;
-        }
-    
-        setSuccessMsg(false);
-    };
-
-
     return (
         <div>
             <Grid container spacing={3}>
                 <Grid item xs={12}>
                     <Paper className={classes.paperTitle}>
-                        <Typography variant="h4" className={classes.pageTitle}>Add New Blood Report</Typography>
+                        <Typography variant="h4" className={classes.pageTitle}>Edit Blood Report</Typography>
                     </Paper>
                 </Grid>
                 <Grid item xs={12}>
                     <form onSubmit={handleSubmit(onSubmit)} className={classes.form}>
                         <Paper className={classes.paper}>
+                            
                                 <Grid container spacing={2}>
+                                    <Grid item xs={12} sm={6}>
+                                        <Controller
+                                            name="reportID"
+                                            control={control}
+                                            defaultValue=""
+                                            render={({ field }) => 
+                                            <CssTextField disabled fullWidth label="Report ID" variant="outlined" color="primary" {...field} />}
+                                        />
+                                    </Grid>
                                     <Grid item xs={12} sm={6}>
                                         <Controller
                                             name="fullname"
                                             control={control}
                                             defaultValue=""
-                                            render={({ field, formState }) => 
-                                            <CssTextField 
-                                                fullWidth 
-                                                label="Patient Name" 
-                                                variant="outlined" 
-                                                color="primary" 
-                                                {...field}
-                                                error={!!errors?.fullname}
-                                                helperText={errors?.fullname?.message}
-                                                
-                                            />}
+                                            render={({ field }) => 
+                                            <CssTextField fullWidth label="Patient Name" variant="outlined" color="primary" {...field} />}
                                         />
                                     </Grid>
-                                    {/* <p>{errors}</p> */}
                                     <Grid item xs={12} sm={6}>
                                         <FormLabel component="legend" className={classes.radioGoupLabel}>Gender</FormLabel>
                                         <RadioGroup aria-label="gender" name="gender" row value={gender} onChange={handleRadioChange}>
@@ -163,20 +108,12 @@ const AddReport = () => {
                                         </RadioGroup>
                                     </Grid>
                                     <Grid item xs={12} sm={6}>
-                                    <Controller
+                                        <Controller
                                             name="email"
                                             control={control}
                                             defaultValue=""
                                             render={({ field }) => 
-                                            <CssTextField 
-                                                fullWidth 
-                                                label="Patient Email" 
-                                                variant="outlined" 
-                                                color="primary" 
-                                                {...field}
-                                                error={!!errors?.email}
-                                                helperText={errors?.email?.message} 
-                                            />}
+                                            <CssTextField fullWidth label="Patient Email" variant="outlined" color="primary" {...field} />}
                                         />
                                     </Grid> 
                                     <Grid item xs={12} sm={6}>
@@ -185,15 +122,7 @@ const AddReport = () => {
                                             control={control}
                                             defaultValue=""
                                             render={({ field }) => 
-                                            <CssTextField 
-                                                fullWidth 
-                                                label="Patient Mobile Number" 
-                                                variant="outlined" 
-                                                color="primary" 
-                                                {...field} 
-                                                error={!!errors?.mobile}
-                                                helperText={errors?.mobile?.message} 
-                                            />}
+                                            <CssTextField fullWidth label="Patient Mobile Number" variant="outlined" color="primary" {...field} />}
                                         />
                                     </Grid>
                                     <Grid item xs={12} sm={6}>
@@ -219,36 +148,6 @@ const AddReport = () => {
                                                           </InputAdornment>
                                                         ),
                                                     }}
-                                                    error={!!errors?.dob}
-                                                    helperText={errors?.dob?.message} 
-                                            />}
-                                        />
-                                    </Grid>
-                                    <Grid item xs={12} sm={6}>
-                                        <Controller
-                                            name="datecollected"
-                                            control={control}
-                                            defaultValue=""
-                                            render={({ field }) => 
-                                                <CssTextField
-                                                    fullWidth
-                                                    label="Date Collected"
-                                                    type="date"
-                                                    variant="outlined"
-                                                    color="primary"
-                                                    {...field}
-                                                    InputLabelProps={{
-                                                        shrink: true,
-                                                    }}
-                                                    InputProps={{
-                                                        startAdornment: (
-                                                          <InputAdornment position="start">
-                                                            <DateRangeIcon />
-                                                          </InputAdornment>
-                                                        ),
-                                                    }}
-                                                    error={!!errors?.datecollected}
-                                                    helperText={errors?.datecollected?.message}
                                             />}
                                         />
                                     </Grid>
@@ -272,7 +171,7 @@ const AddReport = () => {
                                             control={control}
                                             defaultValue=""
                                             render={({ field }) => 
-                                            <CssTextField fullWidth label="Hemoglobin" variant="outlined" color="primary" {...field}  error={!!errors?.hemoglobin} helperText={errors?.hemoglobin?.message} />}
+                                            <CssTextField fullWidth label="Hemoglobin" variant="outlined" color="primary" {...field} />}
                                         />
                                     </Grid>
                                     <Grid item xs={6} sm={3}>
@@ -281,7 +180,7 @@ const AddReport = () => {
                                             control={control}
                                             defaultValue=""
                                             render={({ field }) => 
-                                            <CssTextField fullWidth label="RBC" variant="outlined" color="primary" {...field} error={!!errors?.rbc} helperText={errors?.rbc?.message} />}
+                                            <CssTextField fullWidth label="RBC" variant="outlined" color="primary" {...field} />}
                                         />
                                     </Grid>
                                     <Grid item xs={6} sm={3}>
@@ -290,7 +189,7 @@ const AddReport = () => {
                                             control={control}
                                             defaultValue=""
                                             render={({ field }) => 
-                                            <CssTextField fullWidth label="HCT" variant="outlined" color="primary" {...field} error={!!errors?.hct} helperText={errors?.hct?.message} />}
+                                            <CssTextField fullWidth label="HCT" variant="outlined" color="primary" {...field} />}
                                         />
                                     </Grid>
                                     <Grid item xs={6} sm={3}>
@@ -299,7 +198,7 @@ const AddReport = () => {
                                             control={control}
                                             defaultValue=""
                                             render={({ field }) => 
-                                            <CssTextField fullWidth label="MCV" variant="outlined" color="primary" {...field} error={!!errors?.mcv} helperText={errors?.mcv?.message} />}
+                                            <CssTextField fullWidth label="MCV" variant="outlined" color="primary" {...field} />}
                                         />
                                     </Grid>
                                     <Grid item xs={6} sm={3}>
@@ -308,7 +207,7 @@ const AddReport = () => {
                                             control={control}
                                             defaultValue=""
                                             render={({ field }) => 
-                                            <CssTextField fullWidth label="MCH" variant="outlined" color="primary" {...field} error={!!errors?.mch} helperText={errors?.mch?.message} />}
+                                            <CssTextField fullWidth label="MCH" variant="outlined" color="primary" {...field} />}
                                         />
                                     </Grid>
                                     <Grid item xs={6} sm={3}>
@@ -317,7 +216,7 @@ const AddReport = () => {
                                             control={control}
                                             defaultValue=""
                                             render={({ field }) => 
-                                            <CssTextField fullWidth label="MCHC" variant="outlined" color="primary" {...field} error={!!errors?.mchc} helperText={errors?.mchc?.message} />}
+                                            <CssTextField fullWidth label="MCHC" variant="outlined" color="primary" {...field} />}
                                         />
                                     </Grid>
                                     <Grid item xs={6} sm={3}>
@@ -326,7 +225,7 @@ const AddReport = () => {
                                             control={control}
                                             defaultValue=""
                                             render={({ field }) => 
-                                            <CssTextField fullWidth label="RDW-CV" variant="outlined" color="primary" {...field} error={!!errors?.rdwcv} helperText={errors?.rdwcv?.message} />}
+                                            <CssTextField fullWidth label="RDW-CV" variant="outlined" color="primary" {...field} />}
                                         />
                                     </Grid>
                                     <Grid item xs={6} sm={3}>
@@ -335,7 +234,7 @@ const AddReport = () => {
                                             control={control}
                                             defaultValue=""
                                             render={({ field }) => 
-                                            <CssTextField fullWidth label="RDW-SD" variant="outlined" color="primary" {...field} error={!!errors?.rdwsd} helperText={errors?.rdwsd?.message} />}
+                                            <CssTextField fullWidth label="RDW-SD" variant="outlined" color="primary" {...field} />}
                                         />
                                     </Grid>
                                     <Grid item xs={6} sm={3}>
@@ -344,7 +243,7 @@ const AddReport = () => {
                                             control={control}
                                             defaultValue=""
                                             render={({ field }) => 
-                                            <CssTextField fullWidth label="WBC" variant="outlined" color="primary" {...field} error={!!errors?.wbc} helperText={errors?.wbc?.message} />}
+                                            <CssTextField fullWidth label="WBC" variant="outlined" color="primary" {...field} />}
                                         />
                                     </Grid>
                                     <Grid item xs={6} sm={3}>
@@ -353,7 +252,7 @@ const AddReport = () => {
                                             control={control}
                                             defaultValue=""
                                             render={({ field }) => 
-                                            <CssTextField fullWidth label="NEU%" variant="outlined" color="primary" {...field} error={!!errors?.neu} helperText={errors?.neu?.message} />}
+                                            <CssTextField fullWidth label="NEU%" variant="outlined" color="primary" {...field} />}
                                         />
                                     </Grid>
                                     <Grid item xs={6} sm={3}>
@@ -362,7 +261,7 @@ const AddReport = () => {
                                             control={control}
                                             defaultValue=""
                                             render={({ field }) => 
-                                            <CssTextField fullWidth label="LYM%" variant="outlined" color="primary" {...field} error={!!errors?.lym} helperText={errors?.lym?.message} />}
+                                            <CssTextField fullWidth label="LYM%" variant="outlined" color="primary" {...field} />}
                                         />
                                     </Grid>
                                     <Grid item xs={6} sm={3}>
@@ -371,7 +270,7 @@ const AddReport = () => {
                                             control={control}
                                             defaultValue=""
                                             render={({ field }) => 
-                                            <CssTextField fullWidth label="MON%" variant="outlined" color="primary" {...field} error={!!errors?.mon} helperText={errors?.mon?.message} />}
+                                            <CssTextField fullWidth label="MON%" variant="outlined" color="primary" {...field} />}
                                         />
                                     </Grid>
                                     <Grid item xs={6} sm={3}>
@@ -380,7 +279,7 @@ const AddReport = () => {
                                             control={control}
                                             defaultValue=""
                                             render={({ field }) => 
-                                            <CssTextField fullWidth label="EOS%" variant="outlined" color="primary" {...field} error={!!errors?.eos} helperText={errors?.eos?.message} />}
+                                            <CssTextField fullWidth label="EOS%" variant="outlined" color="primary" {...field} />}
                                         />
                                     </Grid>
                                     <Grid item xs={6} sm={3}>
@@ -389,7 +288,7 @@ const AddReport = () => {
                                             control={control}
                                             defaultValue=""
                                             render={({ field }) => 
-                                            <CssTextField fullWidth label="BAS%" variant="outlined" color="primary" {...field} error={!!errors?.bas} helperText={errors?.bas?.message} />}
+                                            <CssTextField fullWidth label="BAS%" variant="outlined" color="primary" {...field} />}
                                         />
                                     </Grid>
                                     <Grid item xs={6} sm={3}>
@@ -398,7 +297,7 @@ const AddReport = () => {
                                             control={control}
                                             defaultValue=""
                                             render={({ field }) => 
-                                            <CssTextField fullWidth label="LYM#" variant="outlined" color="primary" {...field} error={!!errors?.lym2} helperText={errors?.lym2?.message} />}
+                                            <CssTextField fullWidth label="LYM#" variant="outlined" color="primary" {...field} />}
                                         />
                                     </Grid>
                                     <Grid item xs={6} sm={3}>
@@ -407,7 +306,7 @@ const AddReport = () => {
                                             control={control}
                                             defaultValue=""
                                             render={({ field }) => 
-                                            <CssTextField fullWidth label="GRA#" variant="outlined" color="primary" {...field} error={!!errors?.gra} helperText={errors?.gra?.message} />}
+                                            <CssTextField fullWidth label="GRA#" variant="outlined" color="primary" {...field} />}
                                         />
                                     </Grid>
                                     <Grid item xs={6} sm={3}>
@@ -416,7 +315,7 @@ const AddReport = () => {
                                             control={control}
                                             defaultValue=""
                                             render={({ field }) => 
-                                            <CssTextField fullWidth label="PLT" variant="outlined" color="primary" {...field} error={!!errors?.plt} helperText={errors?.plt?.message} />}
+                                            <CssTextField fullWidth label="PLT" variant="outlined" color="primary" {...field} />}
                                         />
                                     </Grid>
                                     <Grid item xs={6} sm={3}>
@@ -425,35 +324,19 @@ const AddReport = () => {
                                             control={control}
                                             defaultValue=""
                                             render={({ field }) => 
-                                            <CssTextField fullWidth label="ESR" variant="outlined" color="primary" {...field} error={!!errors?.esr} helperText={errors?.esr?.message} />}
+                                            <CssTextField fullWidth label="ESR" variant="outlined" color="primary" {...field} />}
                                         />
                                     </Grid>
                                 </Grid>
                         </Paper>
                         <Grid container spacing={3}>
                             <Grid item xs={12} sm={3}>
-                                <Button 
-                                    type="reset" 
-                                    fullWidth 
-                                    variant="contained" 
-                                    className={classes.resetbtn}
-                                    onClick={() => {
-                                        reset({
-                                          keepErrors: true,
-                                        });
-                                      }}
-                                >
+                                <Button type="reset" fullWidth variant="contained" className={classes.resetbtn}>
                                     Reset
                                 </Button>
                             </Grid>    
                             <Grid item xs={12} sm={9}>
-                                <Button 
-                                    type="submit" 
-                                    fullWidth 
-                                    variant="contained" 
-                                    color="secondary" 
-                                    className={classes.submitbtn}
-                                >
+                                <Button type="submit" fullWidth variant="contained" color="secondary" className={classes.submitbtn}>
                                     Submit
                                 </Button>
                             </Grid>
@@ -461,13 +344,8 @@ const AddReport = () => {
                     </form>
                 </Grid>
             </Grid>
-            <Snackbar open={successMsg} autoHideDuration={6000} onClose={handleSuccessMsg} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
-                <Alert onClose={handleSuccessMsg} severity="success" color="info" className={classes.cookieAlert}>
-                    The form was submitted successfully.
-                </Alert>
-            </Snackbar>
         </div>
     )
 }
 
-export default AddReport;
+export default EditReport;
