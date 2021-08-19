@@ -38,7 +38,7 @@ function App() {
             contrastText: '#000000',
         },
         info: {
-          main: '#FFFFFF',
+          main: '#0077B6',
         },
         error: {
           main: '#ff4040',

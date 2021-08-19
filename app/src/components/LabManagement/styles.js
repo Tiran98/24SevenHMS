@@ -139,4 +139,15 @@ export default makeStyles((theme) => ({
         textAlign: 'center',
         textTransform: 'uppercase',
     },
+    errorMessage: {
+        color: "#ff0000",
+        fontSize: "15px",
+    },
+    cookieAlert: {
+        width: "800px",
+        fontSize: 18,
+        "& .MuiAlert-icon": {
+            fontSize: 24
+        }
+    }
 }));
