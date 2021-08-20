@@ -373,7 +373,7 @@ const AddEmployee = () => {
                                                     helperText={errors?.hiredate?.message}
                                             />}
                                         />
-                                    </Grid>    
+                                    </Grid>
                                 </Grid>
                         </Paper>
                         <Typography variant="body2" className={classes.note} gutterBottom>
