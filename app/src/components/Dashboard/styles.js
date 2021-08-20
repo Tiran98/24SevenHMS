@@ -12,10 +12,30 @@ export default makeStyles((theme) => ({
         padding: theme.spacing(1),
         marginBottom: theme.spacing(1),
     },
+    paperSubTitle: {
+        backgroundColor: '#0077B6',
+        padding: theme.spacing(1),
+        marginBottom: theme.spacing(1),
+        marginTop: theme.spacing(1),
+    },
     paper: {
         backgroundColor: '#ffffff',
         padding: theme.spacing(5),
         marginBottom: theme.spacing(2),
+    },
+    logo: {
+        height: "100px",
+        marginRight: "20px"
+    },
+    menuButton: {
+        backgroundColor: '#023e8a',
+        height: "108px",
+        color: "#ffffff",
+        fontWeight: "600",
+        fontSize: "18px",
+        '&:hover': {
+            backgroundColor: "#0077B6",
+        },
     },
     form: {
         width: '100%', // Fix IE 11 issue.
@@ -96,6 +116,47 @@ export default makeStyles((theme) => ({
             backgroundColor: "#7d0000",
         },
     },
+    sectionHeader: {
+        paddingTop: 20,
+        paddingBottom: 20,
+        alignItems: 'center',
+        margin: "10px",
+    },
+    modal: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    modelPaper: {
+        width: "800px",
+        backgroundColor: theme.palette.background.paper,
+        border: '2px solid #0077B6',
+        boxShadow: theme.shadows[5],
+        padding: theme.spacing(2, 4, 3),
+    },
+    reportTitle: {
+        fontWeight: 800,
+        color: '#ffffff',
+        textAlign: 'center',
+        textTransform: 'uppercase',
+    },
+    trReport: {
+        fontWeight: 600,
+    },
+    table: {
+        width: "100%",
+        borderSpacing: "10px"
+    },
+    reportSubTitle: {
+        fontWeight: 600,
+        color: '#ffffff',
+        textAlign: 'center',
+        textTransform: 'uppercase',
+    },
+    errorMessage: {
+        color: "#ff0000",
+        fontSize: "15px",
+    },
     cookieAlert: {
         width: "800px",
         color: "#0077B6",
@@ -104,8 +165,9 @@ export default makeStyles((theme) => ({
             fontSize: 24
         }
     },
-    errorMessage: {
-        color: "#ff0000",
-        fontSize: "15px",
-    },
+    clock: {
+        fontWeight: 700,
+        color: "#0077B6",
+        textAlign: 'center',
+    }
 }));

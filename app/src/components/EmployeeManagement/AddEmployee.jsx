@@ -1,13 +1,20 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useForm, Controller } from "react-hook-form";
-import { Radio, RadioGroup, FormLabel, TextField, FormControlLabel, Paper, Button, Grid, Typography } from '@material-ui/core/';
+import { Radio, RadioGroup, FormLabel, TextField, FormControlLabel, Paper, Button, Grid, Typography, Snackbar } from '@material-ui/core/';
 import { withStyles } from '@material-ui/core/styles';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import MenuItem from '@material-ui/core/MenuItem';
+import MuiAlert from '@material-ui/lab/Alert';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
 
 import DateRangeIcon from '@material-ui/icons/DateRange';
 
 import useStyles from './styles';
+
+function Alert(props) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 const marital = [
     {
@@ -55,12 +62,28 @@ const positions = [
     },
 ];
 
+const schema = yup.object().shape({
+    firstName: yup.string().required("First Name is required."),
+    lastName: yup.string().required("Last Name is required."),
+    email: yup.string().required("Email is required.").email("Enter a valid Email."),
+    mobile: yup.string().required("Mobile Number is required.").max(10, "Mobile Number cannot exceed 10 characters."),
+    address1: yup.string().required("Address is required."),
+    dob: yup.string().required("Date of Birth is required."),
+    position: yup.string().required("Position is required."),
+    hiredate: yup.string().required("Hire Date is required."),
+});
+
 const AddEmployee = () => {
     const classes = useStyles();
-    const { control, handleSubmit, reset } = useForm();
+    const { control, handleSubmit, reset, formState: { errors }  } = useForm(
+        {
+            resolver: yupResolver(schema),
+            reValidateMode: 'onSubmit',
+        }
+    );
     const [maritalStatus, setMaritalStatus] = React.useState('default');
     const [position, setPosition] = React.useState('default');
-
+    const [successMsg, setSuccessMsg] = useState(true);
     const [gender, setGender] = useState("");
 
     const CssTextField = withStyles({
@@ -94,6 +117,9 @@ const AddEmployee = () => {
               borderColor: '#0077B6',
             },
           },
+          "& .MuiFormHelperText-root": {
+            color: "#ff0000",
+          },
         },
         input: {
           color: "#1a1a1a"
@@ -101,25 +127,6 @@ const AddEmployee = () => {
     })(TextField);
 
     const onSubmit = (data) => {
-
-        // if(userType == "attendee") {
-        //     formDataNew.append('firstName', data.firstName);
-        //     formDataNew.append('lastName', data.lastName);
-        //     formDataNew.append('email', data.email);
-        //     formDataNew.append('password', data.password);
-        //     formDataNew.append('userType', userType);
-        // } else {
-        //     formDataNew.append('firstName', data.firstName);
-        //     formDataNew.append('lastName', data.lastName);
-        //     formDataNew.append('email', data.email);
-        //     formDataNew.append('password', data.password);
-        //     formDataNew.append('userType', userType);
-        //     formDataNew.append('phone', data.phone);
-        //     formDataNew.append('city', data.city);
-        //     formDataNew.append('researchTitle', data.researchTitle);
-        //     formDataNew.append('workshopTitle', data.workshopTitle);
-        //     formDataNew.append('docs', acceptedFiles[0]);
-        // }
 
         // submitForm(formDataNew);
 
@@ -138,6 +145,15 @@ const AddEmployee = () => {
 
     const handlePosition = (event) => {
         setPosition(event.target.value, console.log(position));
+    };
+
+    const handleSuccessMsg = (event, reason) => {
+
+        if (reason === 'clickaway') {
+          return;
+        }
+    
+        setSuccessMsg(false);
     };
 
     return (
@@ -159,7 +175,15 @@ const AddEmployee = () => {
                                             control={control}
                                             defaultValue=""
                                             render={({ field }) => 
-                                            <CssTextField fullWidth label="First Name" variant="outlined" color="primary" {...field} />}
+                                            <CssTextField 
+                                                fullWidth 
+                                                label="First Name" 
+                                                variant="outlined" 
+                                                color="primary" 
+                                                {...field} 
+                                                error={!!errors?.firstName} 
+                                                helperText={errors?.firstName?.message} 
+                                                />}
                                         />
                                     </Grid>
                                     <Grid item xs={12} sm={6}>
@@ -168,7 +192,15 @@ const AddEmployee = () => {
                                             control={control}
                                             defaultValue=""
                                             render={({ field }) => 
-                                            <CssTextField fullWidth label="Last Name" variant="outlined" color="primary" {...field} />}
+                                            <CssTextField 
+                                                fullWidth 
+                                                label="Last Name" 
+                                                variant="outlined" 
+                                                color="primary"
+                                                {...field}
+                                                error={!!errors?.lastName} 
+                                                helperText={errors?.lastName?.message} 
+                                            />}
                                         />
                                     </Grid>
                                     <Grid item xs={12} sm={6}>
@@ -177,7 +209,15 @@ const AddEmployee = () => {
                                             control={control}
                                             defaultValue=""
                                             render={({ field }) => 
-                                            <CssTextField fullWidth label="Email" variant="outlined" color="primary" {...field} />}
+                                            <CssTextField 
+                                                fullWidth 
+                                                label="Email" 
+                                                variant="outlined" 
+                                                color="primary" 
+                                                {...field}
+                                                error={!!errors?.email} 
+                                                helperText={errors?.email?.message}
+                                            />}
                                         />
                                     </Grid> 
                                     <Grid item xs={12} sm={6}>
@@ -186,7 +226,15 @@ const AddEmployee = () => {
                                             control={control}
                                             defaultValue=""
                                             render={({ field }) => 
-                                            <CssTextField fullWidth label="Mobile Number" variant="outlined" color="primary" {...field} />}
+                                            <CssTextField 
+                                                fullWidth 
+                                                label="Mobile Number" 
+                                                variant="outlined" 
+                                                color="primary" 
+                                                {...field}
+                                                error={!!errors?.mobile} 
+                                                helperText={errors?.mobile?.message}
+                                            />}
                                         />
                                     </Grid>
                                     <Grid item xs={12} sm={6}>
@@ -195,7 +243,15 @@ const AddEmployee = () => {
                                             control={control}
                                             defaultValue=""
                                             render={({ field }) => 
-                                            <CssTextField fullWidth label="Address 1" variant="outlined" color="primary" {...field} />}
+                                            <CssTextField 
+                                                fullWidth 
+                                                label="Address 1" 
+                                                variant="outlined" 
+                                                color="primary" 
+                                                {...field}
+                                                error={!!errors?.address1} 
+                                                helperText={errors?.address1?.message}
+                                            />}
                                         />
                                     </Grid>
                                     <Grid item xs={12} sm={6}>
@@ -209,7 +265,7 @@ const AddEmployee = () => {
                                     </Grid>
                                     <Grid item xs={12} sm={6}>
                                         <FormLabel component="legend" className={classes.radioGoupLabel}>Gender</FormLabel>
-                                        <RadioGroup aria-label="gender" name="gender" row value={gender} onChange={handleRadioChange}>
+                                        <RadioGroup aria-label="gender" name="gender" row value={gender} onChange={handleRadioChange} error={!!errors?.gender} helperText={errors?.gender?.message}>
                                             <FormControlLabel value="male" control={<Radio className={classes.radioGoup} />} label="Male" className={classes.radioGoup} />
                                             <FormControlLabel value="female" control={<Radio className={classes.radioGoup} />} label="Female" className={classes.radioGoup} />
                                             <FormControlLabel value="other" control={<Radio className={classes.radioGoup} />} label="Other" className={classes.radioGoup} />
@@ -238,6 +294,8 @@ const AddEmployee = () => {
                                                           </InputAdornment>
                                                         ),
                                                     }}
+                                                    error={!!errors?.dob} 
+                                                    helperText={errors?.dob?.message}
                                             />}
                                         />
                                     </Grid>
@@ -276,6 +334,9 @@ const AddEmployee = () => {
                                                 value={position}
                                                 onChange={handlePosition}
                                                 variant="outlined"
+                                                error={!!errors?.position} 
+                                                helperText={errors?.position?.message}
+                                                {...field}
                                                 >
                                                 {positions.map((option) => (
                                                     <MenuItem key={option.value} value={option.value}>
@@ -308,6 +369,8 @@ const AddEmployee = () => {
                                                           </InputAdornment>
                                                         ),
                                                     }}
+                                                    error={!!errors?.hiredate} 
+                                                    helperText={errors?.hiredate?.message}
                                             />}
                                         />
                                     </Grid>    
@@ -318,12 +381,28 @@ const AddEmployee = () => {
                         </Typography>
                         <Grid container spacing={3}>
                             <Grid item xs={12} sm={3}>
-                                <Button type="reset" fullWidth variant="contained" className={classes.resetbtn}>
+                                <Button 
+                                    type="reset" 
+                                    fullWidth 
+                                    variant="contained" 
+                                    className={classes.resetbtn}
+                                    onClick={() => {
+                                        reset({
+                                          keepErrors: true,
+                                        });
+                                      }}
+                                >
                                     Reset
                                 </Button>
                             </Grid>    
                             <Grid item xs={12} sm={9}>
-                                <Button type="submit" fullWidth variant="contained" color="secondary" className={classes.submitbtn}>
+                                <Button 
+                                    type="submit" 
+                                    fullWidth 
+                                    variant="contained" 
+                                    color="secondary" 
+                                    className={classes.submitbtn}
+                                >
                                     Submit
                                 </Button>
                             </Grid>
@@ -331,6 +410,11 @@ const AddEmployee = () => {
                     </form>
                 </Grid>
             </Grid>
+            <Snackbar open={successMsg} autoHideDuration={6000} onClose={handleSuccessMsg} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
+                <Alert onClose={handleSuccessMsg} severity="success" color="info" className={classes.cookieAlert}>
+                    The form was submitted successfully.
+                </Alert>
+            </Snackbar>
         </div>
     )
 }
