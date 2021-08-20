@@ -131,4 +131,15 @@ export default makeStyles((theme) => ({
             backgroundColor: "#7d0000",
         },
     },
+    ReportBtn: {
+        marginRight: "20px",
+        padding: "8px",
+        color: "#ffffff",
+        float: 'right',
+        marginTop:-40,
+        backgroundColor: "#5E452C",
+        '&:hover': {
+            backgroundColor: "#3C2004",
+        },
+    },
 }));

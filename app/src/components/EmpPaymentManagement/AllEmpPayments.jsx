@@ -297,6 +297,11 @@ const AllEmpPayments = () => {
                             </Table>
                         </TableContainer>
                 </Grid>
+                <Grid item xs={12}>
+                <Button variant="contained" color="secondary" className={classes.ReportBtn}>
+                    Generate Report
+                </Button>
+                </Grid>
             </Grid>
             <Dialog
                 open={opendlt}
