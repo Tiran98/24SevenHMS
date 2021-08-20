@@ -13,6 +13,7 @@ import LocalHospitalIcon from '@material-ui/icons/LocalHospital';
 import LibraryAddIcon from '@material-ui/icons/LibraryAdd';
 import HelpIcon from '@material-ui/icons/Help';
 import YoutubeSearchedForIcon from '@material-ui/icons/YoutubeSearchedFor';
+import DashboardIcon from '@material-ui/icons/Dashboard';
 
 import useStyles from './styles';
 import logo from '../../assets/logo.png';
@@ -80,6 +81,10 @@ const Navbar = ({ setDrawerState, drawerState }) => {
                 <Toolbar />
                 <div className={classes.drawerContainer}>
                     <List>
+                        <ListItem component={Link} to="/" button >
+                            <ListItemIcon className={classes.navIcon}><DashboardIcon /></ListItemIcon>
+                            <ListItemText primary="Dashboard" />
+                        </ListItem>
                         <ListItem button >
                             <ListItemIcon className={classes.navIcon}><LibraryAddIcon /></ListItemIcon>
                             <ListItemText primary="Channeling Management" />
@@ -96,7 +101,7 @@ const Navbar = ({ setDrawerState, drawerState }) => {
                             <ListItemIcon className={classes.navIcon}><LocalHospitalIcon /></ListItemIcon>
                             <ListItemText primary="Inventory Management" />
                         </ListItem>
-                        <ListItem component={Link} to ="/all-employees" button>
+                        <ListItem component={Link} to="/all-employees" button>
                             <ListItemIcon className={classes.navIcon}><PeopleIcon /></ListItemIcon>
                             <ListItemText primary="Employee Management" />
                         </ListItem>
