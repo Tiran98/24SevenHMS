@@ -115,6 +115,8 @@ export default makeStyles((theme) => ({
     },
     modelPaper: {
         width: "800px",
+        maxHeight: "100vh",
+        overflowY: 'scroll',
         backgroundColor: theme.palette.background.paper,
         border: '2px solid #0077B6',
         boxShadow: theme.shadows[5],
