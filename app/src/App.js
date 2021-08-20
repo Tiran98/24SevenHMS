@@ -16,6 +16,7 @@ import EmployeeLogin from './components/UserAuth/EmployeeLogin';
 import AddReport from './components/LabManagement/AddReport';
 import AllReports from './components/LabManagement/AllReports';
 import EditReport from './components/LabManagement/EditReport';
+import Dashboard from './components/Dashboard/Dashboard';
 
 const drawerWidth = 240;
 
@@ -38,7 +39,7 @@ function App() {
             contrastText: '#000000',
         },
         info: {
-          main: '#0077B6',
+          main: '#CAF0F8',
         },
         error: {
           main: '#ff4040',
@@ -62,7 +63,7 @@ function App() {
         <Switch>
           <div className={classes.content} style={{ marginLeft: drawerWidth * drawerState }}>
             <Toolbar />
-            {/* <Route path="/" exact component={LandingPage} /> */}
+            <Route path="/" exact component={Dashboard} />
             <Route path="/add-employee" exact component={AddEmployee} />
             <Route path="/all-employees" exact component={AllEmployees} />
             <Route path="/add-report" exact component={AddReport} />

@@ -145,6 +145,7 @@ export default makeStyles((theme) => ({
     },
     cookieAlert: {
         width: "800px",
+        color: "#0077B6",
         fontSize: 18,
         "& .MuiAlert-icon": {
             fontSize: 24
