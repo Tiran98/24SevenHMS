@@ -103,16 +103,6 @@ const Dashboard = () => {
                         </Grid>
                     </Paper>
                 </Grid>
-                {/* <Grid item xs>
-                    <Paper className={classes.paper} style={{ backgroundColor: "#023E8A", color: "#ffffff" }}>
-                        <ReactFitText compressor={0.7} >
-                            <div className={classes.clock} style={{ color: "#ffffff" }}>
-                                <Clock format="HH:mm:ss" interval={1000} ticking={true} />
-                            </div>
-                        </ReactFitText>
-                    </Paper>
-                </Grid> */}
-                
             </Grid>
             
         </div>

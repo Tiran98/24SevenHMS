@@ -7,6 +7,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import MuiAlert from '@material-ui/lab/Alert';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+import axios from 'axios';
 
 import DateRangeIcon from '@material-ui/icons/DateRange';
 
@@ -45,7 +46,7 @@ const positions = [
         label: 'Select the position/job title',
     },
     {
-      value: 'single',
+      value: 'doctor',
       label: 'Doctor',
     },
     {
@@ -83,8 +84,10 @@ const AddEmployee = () => {
     );
     const [maritalStatus, setMaritalStatus] = React.useState('default');
     const [position, setPosition] = React.useState('default');
-    const [successMsg, setSuccessMsg] = useState(true);
+    const [successMsg, setSuccessMsg] = useState(false);
     const [gender, setGender] = useState("");
+    const [formData, setFormData] = useState([]);
+    const isFirstRender = useRef(true);
 
     const CssTextField = withStyles({
         root: {
@@ -126,13 +129,42 @@ const AddEmployee = () => {
         }
     })(TextField);
 
+    useEffect(() => {
+        if (isFirstRender.current) {
+            isFirstRender.current = false // toggle flag after first render/mounting
+            return;
+        }
+
+        submitForm(formData);
+    }, [formData])
+
     const onSubmit = (data) => {
+        setFormData({
+            firstName : data.firstName,
+            lastName : data.lastName,
+            email : data.email,
+            mobile : data.mobile,
+            address1 : data.address1,
+            address2 : data.address2,
+            gender : gender,
+            dob : data.dob,
+            marital : data.marital,
+            position : data.position,
+            hiredate : data.hiredate,
+        })
+    }
 
-        // submitForm(formDataNew);
-
-        // for(var pair of formDataNew.entries()) {
-        //         console.log(pair[0]+', '+pair[1]);
-        // }
+    const submitForm = (data) => {
+        axios.post('http://localhost:5000/api/employee', data)
+        .then((response) => {
+          console.log(response);
+          setSuccessMsg(true);
+          reset({
+            keepErrors: true,
+          });
+        }).catch((err) => {
+          console.log(err);
+        })
     }
 
     const handleRadioChange = (event) => {
@@ -312,6 +344,7 @@ const AddEmployee = () => {
                                                 value={maritalStatus}
                                                 onChange={handleMaritalStatus}
                                                 variant="outlined"
+                                                {...field}
                                                 >
                                                 {marital.map((option) => (
                                                     <MenuItem key={option.value} value={option.value}>

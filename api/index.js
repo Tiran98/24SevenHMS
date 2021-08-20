@@ -11,11 +11,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 //Import Routes
-// const authRoute = require('./routes/auth');
-
+const employeeRoute = require('./Routes/employee.route');
 
 //Route Middlewares
-// app.use('/api/user', authRoute);
+app.use('/api/employee', employeeRoute);
 
 mongoose.connect(process.env.DB_CONNECTION, { useUnifiedTopology: true, useNewUrlParser: true })
     .then((result) => console.log('connected to db'))
