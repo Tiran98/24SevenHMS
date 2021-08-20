@@ -20,6 +20,7 @@ import EditReport from './components/LabManagement/EditReport';
 import Dashboard from './components/Dashboard/Dashboard';
 import AddAppointment from './components/AppointmentManagement/AddAppointment';
 import AllAppointments from './components/AppointmentManagement/AllAppointments';
+import UpdateAppointment from './components/AppointmentManagement/UpdateAppointment';
 
 const drawerWidth = 240;
 
@@ -76,6 +77,7 @@ function App() {
             <Route path="/all-emp-payment" exact component={AllEmpPay} />
             <Route path="/add-appointment" exact component={AddAppointment} />
             <Route path="/all-appointments" exact component={AllAppointments} />
+            <Route path="/update-appointment" exact component={UpdateAppointment} />
             <Route exact path="/admin">
                 <AdminLogin 
                   setDrawerState={setDrawerState}

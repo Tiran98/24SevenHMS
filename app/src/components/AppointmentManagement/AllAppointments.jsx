@@ -7,6 +7,9 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import { Link } from 'react-router-dom';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import MuiTableCell from "@material-ui/core/TableCell";
+import Modal from '@material-ui/core/Modal';
+import Backdrop from '@material-ui/core/Backdrop';
+import Fade from '@material-ui/core/Fade';
 
 import SearchIcon from '@material-ui/icons/Search';
 import AddIcon from '@material-ui/icons/Add';
@@ -88,25 +91,27 @@ TablePaginationActions.propTypes = {
 };
 
 const appointment = [
-    { "appID" : "0001", "firstName" : "Vinuri", "lastName" : "Galagoda", "email" : "vinuri@gmail.com", "mobile" : "0771234567", "gender" : "female", "consultant" : "Rikas", "appdate" : "12/02/2021"},
-    { "appID" : "0002", "firstName" : "Vinuri", "lastName" : "Galagoda", "email" : "vinuri@gmail.com", "mobile" : "0771234567", "gender" : "female", "consultant" : "Rikas", "appdate" : "12/02/2021"},
-    { "appID" : "0003", "firstName" : "Vinuri", "lastName" : "Galagoda", "email" : "vinuri@gmail.com", "mobile" : "0771234567", "gender" : "female", "consultant" : "Rikas", "appdate" : "12/02/2021"},
-    { "appID" : "0004", "firstName" : "Vinuri", "lastName" : "Galagoda", "email" : "vinuri@gmail.com", "mobile" : "0771234567", "gender" : "female", "consultant" : "Rikas", "appdate" : "12/02/2021"},
-    { "appID" : "0005", "firstName" : "Vinuri", "lastName" : "Galagoda", "email" : "vinuri@gmail.com", "mobile" : "0771234567", "gender" : "female", "consultant" : "Rikas", "appdate" : "12/02/2021"},
-    { "appID" : "0006", "firstName" : "Vinuri", "lastName" : "Galagoda", "email" : "vinuri@gmail.com", "mobile" : "0771234567", "gender" : "female", "consultant" : "Rikas", "appdate" : "12/02/2021"},
-    { "appID" : "0007", "firstName" : "Vinuri", "lastName" : "Galagoda", "email" : "vinuri@gmail.com", "mobile" : "0771234567", "gender" : "female", "consultant" : "Rikas", "appdate" : "12/02/2021"},
-    { "appID" : "0008", "firstName" : "Vinuri", "lastName" : "Galagoda", "email" : "vinuri@gmail.com", "mobile" : "0771234567", "gender" : "female", "consultant" : "Rikas", "appdate" : "12/02/2021"},
-    { "appID" : "0009", "firstName" : "Vinuri", "lastName" : "Galagoda", "email" : "vinuri@gmail.com", "mobile" : "0771234567", "gender" : "female", "consultant" : "Rikas", "appdate" : "12/02/2021"},
-    { "appID" : "0010", "firstName" : "Vinuri", "lastName" : "Galagoda", "email" : "vinuri@gmail.com", "mobile" : "0771234567", "gender" : "female", "consultant" : "Rikas", "appdate" : "12/02/2021"},
-    { "appID" : "0011", "firstName" : "Vinuri", "lastName" : "Galagoda", "email" : "vinuri@gmail.com", "mobile" : "0771234567", "gender" : "female", "consultant" : "Rikas", "appdate" : "12/02/2021"},
+    { "appID" : "0001", "firstName" : "Vinuri", "lastName" : "Galagoda", "email" : "vinuri@gmail.com", "mobile" : "0771234567", "gender" : "female", "consultant" : "Rikas", "appdate" : "12/02/2021", "apptime" : "4.00 pm - 4.10 pm"},
+    { "appID" : "0002", "firstName" : "Vinuri", "lastName" : "Galagoda", "email" : "vinuri@gmail.com", "mobile" : "0771234567", "gender" : "female", "consultant" : "Rikas", "appdate" : "12/02/2021", "apptime" : "4.00 pm - 4.10 pm"},
+    { "appID" : "0003", "firstName" : "Vinuri", "lastName" : "Galagoda", "email" : "vinuri@gmail.com", "mobile" : "0771234567", "gender" : "female", "consultant" : "Rikas", "appdate" : "12/02/2021", "apptime" : "4.00 pm - 4.10 pm"},
+    { "appID" : "0004", "firstName" : "Vinuri", "lastName" : "Galagoda", "email" : "vinuri@gmail.com", "mobile" : "0771234567", "gender" : "female", "consultant" : "Rikas", "appdate" : "12/02/2021", "apptime" : "4.00 pm - 4.10 pm"},
+    { "appID" : "0005", "firstName" : "Vinuri", "lastName" : "Galagoda", "email" : "vinuri@gmail.com", "mobile" : "0771234567", "gender" : "female", "consultant" : "Rikas", "appdate" : "12/02/2021", "apptime" : "4.00 pm - 4.10 pm"},
+    { "appID" : "0006", "firstName" : "Vinuri", "lastName" : "Galagoda", "email" : "vinuri@gmail.com", "mobile" : "0771234567", "gender" : "female", "consultant" : "Rikas", "appdate" : "12/02/2021", "apptime" : "4.00 pm - 4.10 pm"},
+    { "appID" : "0007", "firstName" : "Vinuri", "lastName" : "Galagoda", "email" : "vinuri@gmail.com", "mobile" : "0771234567", "gender" : "female", "consultant" : "Rikas", "appdate" : "12/02/2021", "apptime" : "4.00 pm - 4.10 pm"},
+    { "appID" : "0008", "firstName" : "Vinuri", "lastName" : "Galagoda", "email" : "vinuri@gmail.com", "mobile" : "0771234567", "gender" : "female", "consultant" : "Rikas", "appdate" : "12/02/2021", "apptime" : "4.00 pm - 4.10 pm"},
+    { "appID" : "0009", "firstName" : "Vinuri", "lastName" : "Galagoda", "email" : "vinuri@gmail.com", "mobile" : "0771234567", "gender" : "female", "consultant" : "Rikas", "appdate" : "12/02/2021", "apptime" : "4.00 pm - 4.10 pm"},
+    { "appID" : "0010", "firstName" : "Vinuri", "lastName" : "Galagoda", "email" : "vinuri@gmail.com", "mobile" : "0771234567", "gender" : "female", "consultant" : "Rikas", "appdate" : "12/02/2021", "apptime" : "4.00 pm - 4.10 pm"},
+    { "appID" : "0011", "firstName" : "Vinuri", "lastName" : "Galagoda", "email" : "vinuri@gmail.com", "mobile" : "0771234567", "gender" : "female", "consultant" : "Rikas", "appdate" : "12/02/2021", "apptime" : "4.00 pm - 4.10 pm"},
 ];
 
 const AllAppointments = () => {
     const classes = useStyles();
+    const [openModal, setOpenModal] = React.useState(true)
     const { control, handleSubmit, reset } = useForm();
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
     const [opendlt, setOpendlt] = React.useState(false);
+    const [reportData, setReportData] = React.useState([]);
 
     const CssTextField = withStyles({
         root: {
@@ -173,6 +178,59 @@ const AllAppointments = () => {
         setPage(0);
     };
 
+    const handleOpenModal = (row) => {
+        setOpenModal(true);
+        // console.log(row);
+        setReportData(row);
+    };
+    
+    const handleCloseModal = () => {
+        setOpenModal(false);
+    };
+
+    const modalBody = (
+        <Fade in={openModal}>
+            <Grid container spacing={3} className={classes.modelPaper}>
+                <Grid item xs={12}>
+                    <Typography variant="h6" id="transition-modal-title" style={{ color: '#0077B6', textAlign: 'center', textTransform: 'uppercase', fontWeight: 800, }} gutterBottom>
+                        24Seven hospital management system
+                    </Typography>
+                    <Paper className={classes.paperTitle}>
+                        <Typography variant="h6" id="transition-modal-title" className={classes.reportTitle}>Appointment Slip</Typography>
+                    </Paper>
+                    <table className={classes.table}>
+                        <tr style={{ fontSize: "18px", color: "#0077B6" }}>
+                            <td className={classes.trReport}>Appointment ID</td>
+                            <td className={classes.trReport}>#0001</td>
+                        </tr>
+                        <tr>
+                            <td className={classes.trReport}>Full Name</td>
+                            <td>Minerva McGonagall</td>
+                            <td className={classes.trReport}>Gender</td>
+                            <td>Female</td>
+                        </tr>
+                        <tr>
+                            <td className={classes.trReport}>Email</td>
+                            <td>minerva@gmail.com</td>
+                            <td className={classes.trReport}>Mobile Number</td>
+                            <td>0774584529</td>
+                        </tr>
+                        <tr>
+                            <td className={classes.trReport}>Name of Consultant</td>
+                            <td>02/08/1990</td>
+                            <td className={classes.trReport}>Date of Appoinment</td>
+                            <td>14/08/2021</td>
+                        </tr>
+                        <tr>
+                            <td className={classes.trReport}>Time of Appointment</td>
+                            <td>06:00 PM</td>
+                        </tr>
+                    </table>
+                </Grid>
+            </Grid>
+        </Fade>
+    );
+
     return (
         <div>
             <Grid container spacing={3}>
@@ -235,6 +293,9 @@ const AllAppointments = () => {
                                             Appointment Date
                                         </TableCell>
                                         <TableCell component="th" className={classes.tableth}>
+                                            Appointment Time
+                                        </TableCell>
+                                        <TableCell component="th" className={classes.tableth}>
                                             Actions
                                         </TableCell>
                                     </TableRow> <br />
@@ -266,8 +327,14 @@ const AllAppointments = () => {
                                                 {row.appdate}
                                             </TableCell>
                                             <TableCell align="left">
-                                                <Button variant="contained" color="secondary" className={classes.tableBtn}>
+                                                {row.apptime}
+                                            </TableCell>
+                                            <TableCell align="left">
+                                                <Button variant="contained" color="secondary" className={classes.tableBtn} onClick={() => handleOpenModal(row)}>
                                                     View
+                                                </Button>
+                                                <Button variant="contained" color="secondary" className={classes.tableBtn}>
+                                                    Update
                                                 </Button>
                                                 <Button variant="contained" className={classes.tableBtnRed} onClick={handleClickOpen}>
                                                     Remove
@@ -330,6 +397,20 @@ const AllAppointments = () => {
                     </DialogActions>
                 </Paper>
             </Dialog>
+            <Modal
+                aria-labelledby="transition-modal-title"
+                aria-describedby="transition-modal-description"
+                className={classes.modal}
+                open={openModal}
+                onClose={handleCloseModal}
+                closeAfterTransition
+                BackdropComponent={Backdrop}
+                BackdropProps={{
+                timeout: 500,
+                }}
+            >
+               {modalBody}
+            </Modal>
             <Grid item xs={12} sm={2}>
                 <Button component={Link} to ="/" fullWidth variant="contained" color="secondary" className={classes.submitbtn}>
                             Generate Report

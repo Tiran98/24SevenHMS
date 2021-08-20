@@ -1,20 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useForm, Controller } from "react-hook-form";
-import { Radio, RadioGroup, FormLabel, TextField, FormControlLabel, Paper, Button, Grid, Typography } from '@material-ui/core/';
+import { Radio, RadioGroup, FormLabel, TextField, FormControlLabel, Paper, Button, Grid, Typography, Divider } from '@material-ui/core/';
 import { withStyles } from '@material-ui/core/styles';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import MenuItem from '@material-ui/core/MenuItem';
-import MuiAlert from '@material-ui/lab/Alert';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
 
 import DateRangeIcon from '@material-ui/icons/DateRange';
 
 import useStyles from './styles';
-
-function Alert(props) {
-    return <MuiAlert elevation={6} variant="filled" {...props} />;
-}
 
 const consultants = [
     {
@@ -70,30 +63,14 @@ const apptime = [
     },
 ];
 
-const schema = yup.object().shape({
-    firstName: yup.string().required("First Name is required."),
-    lastName: yup.string().required("Last Name is required."),
-    email: yup.string().required("Email is required.").email("Enter a valid Email."),
-    mobile: yup.string().required("Mobile Number is required.").max(10, "Mobile Number cannot exceed 10 characters."),
-    dob: yup.string().required("Date of Birth is required."),
-    consultant: yup.string().required("Consultant is required."),
-    appdate: yup.string().required("Appointment Date is required."),
-    apptime: yup.string().required("Appointment Time is required."),
-});
 
-const AddAppointment = () => {
+const UpdateAppointment = () => {
     const classes = useStyles();
-    const { control, handleSubmit, reset, formState: { error } } = useForm(
-        {
-            resolver: yupResolver(schema),
-            reValidateMode: 'onSubmit',
-        }
-
-    );
+    const { control, handleSubmit, reset } = useForm();
+    const [gender, setGender] = useState("");
     const [consultant, setConsultant] = React.useState('default');
     const [time, setTime] = React.useState('default');
-    
-    const [gender, setGender] = useState("");
+
 
     const CssTextField = withStyles({
         root: {
@@ -133,6 +110,17 @@ const AddAppointment = () => {
     })(TextField);
 
     const onSubmit = (data) => {
+
+        // if(userType == "attendee") {
+        //     formDataNew.append('firstName', data.firstName);
+        //     formDataNew.append('lastName', data.lastName);
+        //  
+        // } 
+        // submitForm(formDataNew);
+
+        // for(var pair of formDataNew.entries()) {
+        //         console.log(pair[0]+', '+pair[1]);
+        // }
     }
 
     const handleRadioChange = (event) => {
@@ -152,7 +140,7 @@ const AddAppointment = () => {
             <Grid container spacing={3}>
                 <Grid item xs={12}>
                     <Paper className={classes.paperTitle}>
-                        <Typography variant="h4" className={classes.pageTitle}>Add New Appointment </Typography>
+                        <Typography variant="h4" className={classes.pageTitle}>Edit Appointment Details</Typography>
                     </Paper>
                 </Grid>
                 <Grid item xs={12}>
@@ -162,21 +150,29 @@ const AddAppointment = () => {
                                 <Grid container spacing={2}>
                                     <Grid item xs={12} sm={6}>
                                         <Controller
-                                            name="firstName"
+                                            name="AppointmentID"
                                             control={control}
                                             defaultValue=""
                                             render={({ field }) => 
-                                            <CssTextField fullWidth label="First Name" variant="outlined" color="primary" {...field} />}
+                                            <CssTextField disabled fullWidth label="Appointment ID" variant="outlined" color="primary" {...field} />}
                                         />
                                     </Grid>
                                     <Grid item xs={12} sm={6}>
                                         <Controller
-                                            name="lastName"
+                                            name="fullname"
                                             control={control}
                                             defaultValue=""
                                             render={({ field }) => 
-                                            <CssTextField fullWidth label="Last Name" variant="outlined" color="primary" {...field} />}
+                                            <CssTextField fullWidth label="Name" variant="outlined" color="primary" {...field} />}
                                         />
+                                    </Grid>
+                                    <Grid item xs={12} sm={6}>
+                                        <FormLabel component="legend" className={classes.radioGoupLabel}>Gender</FormLabel>
+                                        <RadioGroup aria-label="gender" name="gender" row value={gender} onChange={handleRadioChange}>
+                                            <FormControlLabel value="male" control={<Radio className={classes.radioGoup} />} label="Male" className={classes.radioGoup} />
+                                            <FormControlLabel value="female" control={<Radio className={classes.radioGoup} />} label="Female" className={classes.radioGoup} />
+                                            <FormControlLabel value="other" control={<Radio className={classes.radioGoup} />} label="Other" className={classes.radioGoup} />
+                                        </RadioGroup>
                                     </Grid>
                                     <Grid item xs={12} sm={6}>
                                         <Controller
@@ -195,14 +191,6 @@ const AddAppointment = () => {
                                             render={({ field }) => 
                                             <CssTextField fullWidth label="Mobile Number" variant="outlined" color="primary" {...field} />}
                                         />
-                                    </Grid>
-                                    <Grid item xs={12} sm={6}>
-                                        <FormLabel component="legend" className={classes.radioGoupLabel}>Gender</FormLabel>
-                                        <RadioGroup aria-label="gender" name="gender" row value={gender} onChange={handleRadioChange}>
-                                            <FormControlLabel value="male" control={<Radio className={classes.radioGoup} />} label="Male" className={classes.radioGoup} />
-                                            <FormControlLabel value="female" control={<Radio className={classes.radioGoup} />} label="Female" className={classes.radioGoup} />
-                                            <FormControlLabel value="other" control={<Radio className={classes.radioGoup} />} label="Other" className={classes.radioGoup} />
-                                        </RadioGroup>
                                     </Grid>
                                     <Grid item xs={12} sm={6}>
                                         <Controller
@@ -311,7 +299,6 @@ const AddAppointment = () => {
                                     </Grid>
                                 </Grid>
                         </Paper>
-                        
                         <Grid container spacing={3}>
                             <Grid item xs={12} sm={3}>
                                 <Button type="reset" fullWidth variant="contained" className={classes.resetbtn}>
@@ -331,5 +318,4 @@ const AddAppointment = () => {
     )
 }
 
-
-export default AddAppointment
+export default UpdateAppointment
