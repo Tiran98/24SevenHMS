@@ -18,6 +18,8 @@ import AllReports from './components/LabManagement/AllReports';
 import AllEmpPay from './components/EmpPaymentManagement/AllEmpPayments'
 import EditReport from './components/LabManagement/EditReport';
 import Dashboard from './components/Dashboard/Dashboard';
+import AddAppointment from './components/AppointmentManagement/AddAppointment';
+import AllAppointments from './components/AppointmentManagement/AllAppointments';
 
 const drawerWidth = 240;
 
@@ -72,6 +74,8 @@ function App() {
             <Route path="/edit-reports" exact component={EditReport} />
             <Route path="/add-emp-payment" exact component={AddEmpPayment} />
             <Route path="/all-emp-payment" exact component={AllEmpPay} />
+            <Route path="/add-appointment" exact component={AddAppointment} />
+            <Route path="/all-appointments" exact component={AllAppointments} />
             <Route exact path="/admin">
                 <AdminLogin 
                   setDrawerState={setDrawerState}
