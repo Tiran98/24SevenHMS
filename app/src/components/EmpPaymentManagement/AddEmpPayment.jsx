@@ -4,10 +4,23 @@ import { FormLabel, TextField, FormControlLabel, Paper, Button, Grid, Typography
 import { withStyles } from '@material-ui/core/styles';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import MenuItem from '@material-ui/core/MenuItem';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
 
 import DateRangeIcon from '@material-ui/icons/DateRange';
 
 import useStyles from './styles';
+
+const schema = yup.object().shape({
+    empType: yup.string().required("Select Employee Type"),
+    employee: yup.string().required("Select Employee"),
+    payAmount: yup.string().required("Payment Amount is required.").max(10, "Mobile Number cannot exceed 10 characters."),
+    payType: yup.string().required("Payment Type is required."),
+    payDate: yup.string().required("Payment Date is required."),
+    payAccount: yup.number().required('You must enter a Account Number').required(),
+    description: yup.number().required('You must enter a Description'),
+    bank: yup.number().required('You must enter a Bank'),
+});
 
 const empTypes = [
     {
@@ -76,7 +89,12 @@ const payTypes = [
 
 const AddEmpPayment = () => {
     const classes = useStyles();
-    const { control, handleSubmit, reset } = useForm();
+    const { control, handleSubmit, reset, formState: { errors }  } = useForm(
+        {
+            resolver: yupResolver(schema),
+            reValidateMode: 'onSubmit',
+        }
+    );
     const [empType, setEmpType] = React.useState('default');
     const [position, setPosition] = React.useState('default');
     const [employee, setEmployee] = React.useState('default');
@@ -149,9 +167,8 @@ const AddEmpPayment = () => {
                     </Paper>
                 </Grid>
                 <Grid item xs={12}>
-                    <form className={classes.form}>
-                        <Paper className={classes.paper}>
-                            
+                    <form onSubmit={handleSubmit(onSubmit)} className={classes.form}>
+                        <Paper className={classes.paper}>   
                                 <Grid container spacing={2}>
                                     <Grid item xs={12} sm={6}>
                                         <Controller
@@ -166,6 +183,8 @@ const AddEmpPayment = () => {
                                                 value={empType}
                                                 onChange={handleEmpType}
                                                 variant="outlined"
+                                                error={!!errors?.empType}
+                                                helperText={errors?.empType?.message}
                                                 >
                                                 {empTypes.map((option) => (
                                                     <MenuItem key={option.value} value={option.value}>
@@ -188,6 +207,8 @@ const AddEmpPayment = () => {
                                                 value={employee}
                                                 onChange={handleEmployee}
                                                 variant="outlined"
+                                                error={!!errors?.employee}
+                                                helperText={errors?.employee?.message}
                                                 >
                                                 {employees.map((option) => (
                                                     <MenuItem key={option.value} value={option.value}>
@@ -204,7 +225,13 @@ const AddEmpPayment = () => {
                                             control={control}
                                             defaultValue=""
                                             render={({ field }) => 
-                                            <CssTextField fullWidth label="Payment Amount" variant="outlined" color="primary" {...field} />}
+                                            <CssTextField 
+                                            fullWidth label="Payment Amount" 
+                                            variant="outlined" 
+                                            color="primary"
+                                            error={!!errors?.payAmount}
+                                                helperText={errors?.payAmount?.message} 
+                                            {...field} />}
                                         />
                                     </Grid> 
                                     <Grid item xs={12} sm={6}>
@@ -220,6 +247,8 @@ const AddEmpPayment = () => {
                                                 value={payType}
                                                 onChange={handlePayType}
                                                 variant="outlined"
+                                                error={!!errors?.payType}
+                                                helperText={errors?.payType?.message} 
                                                 >
                                                 {payTypes.map((option) => (
                                                     <MenuItem key={option.value} value={option.value}>
@@ -241,6 +270,8 @@ const AddEmpPayment = () => {
                                                     type="date"
                                                     variant="outlined"
                                                     color="primary"
+                                                    error={!!errors?.payDate}
+                                                    helperText={errors?.payDate?.message} 
                                                     {...field}
                                                     InputLabelProps={{
                                                         shrink: true,
@@ -261,7 +292,14 @@ const AddEmpPayment = () => {
                                             control={control}
                                             defaultValue=""
                                             render={({ field }) => 
-                                            <CssTextField fullWidth label="Payment Account" variant="outlined" color="primary" {...field} />}
+                                            <CssTextField 
+                                            fullWidth 
+                                            label="Payment Account" 
+                                            variant="outlined" 
+                                            color="primary" 
+                                            error={!!errors?.payAccount}
+                                            helperText={errors?.payAccount?.message} 
+                                            {...field} />}
                                         />
                                     </Grid>
                                     <Grid item xs={12} sm={6}>
@@ -279,6 +317,8 @@ const AddEmpPayment = () => {
                                                 defaultValue="Description"
                                                 color="primary"
                                                 variant="outlined"
+                                                error={!!errors?.description}
+                                                helperText={errors?.description?.message}
                                             />}
                                         />
                                     </Grid>
@@ -288,7 +328,14 @@ const AddEmpPayment = () => {
                                             control={control}
                                             defaultValue=""
                                             render={({ field }) => 
-                                            <CssTextField  fullWidth label="Payment Bank" variant="outlined" color="primary" {...field} />}
+                                            <CssTextField  
+                                            fullWidth 
+                                            label="Payment Bank" 
+                                            variant="outlined" 
+                                            color="primary" 
+                                            error={!!errors?.bank}
+                                            helperText={errors?.bank?.message}
+                                            {...field} />}
                                         />
                                     </Grid>        
                                 </Grid>
