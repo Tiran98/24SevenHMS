@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { useParams } from "react-router-dom";
 import PropTypes from 'prop-types';
 import { TextField, Paper, Button, Grid, Typography, IconButton, Table, TableBody, TableContainer, TableFooter, TablePagination, TableRow, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle  } from '@material-ui/core/';
 import useStyles from './styles';
@@ -16,8 +17,11 @@ const employeeFD = [
 ];
 
 const PaymentDetails = () => {
+    const { id } = useParams();
+    
     const classes = useStyles();
     const [opendlt, setOpendlt] = React.useState(false);
+    const [empPayment, setEmpPayment] = React.useState([]);
 
     const handleClickOpen = () => {
         setOpendlt(true);
@@ -27,13 +31,22 @@ const PaymentDetails = () => {
         setOpendlt(false);
     };
 
+    useEffect(() => {
+        fetch("http://localhost:5000/api/empPay/getPayEmp/"+id).then(res => {
+            if(res.ok){
+                return res.json()
+            }
+        }).then(jsonRes => setEmpPayment(jsonRes));
+
+    }, [])
+
     return (
         <div>
             <Grid container spacing={3}>
                 <Grid item xs={12}>
                     <Paper className={classes.paperTitle}>
                         <Typography variant="h4" className={classes.pageTitle}>Payment Details</Typography>
-                        <Typography variant="h5" className={classes.pageTitleEID}>EID : 0002</Typography>
+                        <Typography variant="h5" className={classes.pageTitleEID}>EID :{id}</Typography>
                     </Paper>
                 </Grid>
                 <Grid item xs={6}>
@@ -78,22 +91,22 @@ const PaymentDetails = () => {
                     <Paper className={classes.detailsPaper}>
                         <h2 style={{marginBottom:10,marginTop:10,marginLeft:10}}>Payment Details</h2>
                         <Grid item xs={12} style={{marginBottom:10,marginLeft:30}}>
-                            <Typography  variant="h6">Payment Date : <span style={{color:'#023e8a'}}>02/05/2021</span></Typography>
+                            <Typography  variant="h6">Payment Date : <span style={{color:'#023e8a'}}>{empPayment.paymentDate}</span></Typography>
                         </Grid>
                         <Grid item xs={12} style={{marginBottom:10,marginLeft:30}}>
-                            <Typography variant="h6">Payment Amount : <span style={{color:'#023e8a'}}>Rs. 80000.00</span></Typography>
+                            <Typography variant="h6">Payment Amount : <span style={{color:'#023e8a'}}>{empPayment.paymentAmount}</span></Typography>
                         </Grid>
                         <Grid item xs={12} style={{marginBottom:10,marginLeft:30}}>
-                            <Typography variant="h6">Payment Type : <span style={{color:'#023e8a'}}>Visa</span></Typography>
+                            <Typography variant="h6">Payment Type : <span style={{color:'#023e8a'}}>{empPayment.paymentType}</span></Typography>
                         </Grid>
                         <Grid item xs={12} style={{marginBottom:10,marginLeft:30}}>
-                            <Typography variant="h6">Payment Account : <span style={{color:'#023e8a'}}>800451178422</span></Typography>
+                            <Typography variant="h6">Payment Account : <span style={{color:'#023e8a'}}>{empPayment.paymentAccount}</span></Typography>
                         </Grid>
                         <Grid item xs={12} style={{marginBottom:10,marginLeft:30}}>
-                            <Typography variant="h6">Payment Bank : <span style={{color:'#023e8a'}}>Commercial Bank</span></Typography>
+                            <Typography variant="h6">Payment Bank : <span style={{color:'#023e8a'}}>{empPayment.paymentBank}</span></Typography>
                         </Grid>
                         <Grid item xs={12} style={{marginBottom:10,marginLeft:30}}>
-                            <Typography variant="h6">Description : <span style={{color:'#023e8a'}}>Full payment for October Month</span></Typography>
+                            <Typography variant="h6">Description : <span style={{color:'#023e8a'}}>{empPayment.description}</span></Typography>
                         </Grid>
                     </Paper>
                     <Grid item xs={12}>

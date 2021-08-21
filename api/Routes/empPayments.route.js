@@ -39,5 +39,14 @@ router.get('/getMaxId', async(req,res) => {
     }catch (err) {
         res.json({ message: err });
     }
-})
+});
+
+router.get('/getPayEmp/:id', async(req,res) => {
+    try{
+        const payEmp = await EmpPayment.findOne({employeeId:req.params.id});
+        res.json(payEmp);
+    }catch (err) {
+        res.json({ message: err});
+    }
+});
 module.exports = router;
