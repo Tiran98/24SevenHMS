@@ -85,7 +85,7 @@ const Navbar = ({ setDrawerState, drawerState }) => {
                             <ListItemIcon className={classes.navIcon}><DashboardIcon /></ListItemIcon>
                             <ListItemText primary="Dashboard" />
                         </ListItem>
-                        <ListItem button >
+                        <ListItem component={Link} to ="/all-appointments" button>
                             <ListItemIcon className={classes.navIcon}><LibraryAddIcon /></ListItemIcon>
                             <ListItemText primary="Channeling Management" />
                         </ListItem>
