@@ -21,4 +21,13 @@ router.post('/addEmpPay', async(req, res) => {
     }
 });
 
+router.get('/viewEmpPay', async(req, res) => {
+
+    try {
+        const empPay = await EmpPayment.find();
+        res.json(empPay);
+    } catch (err) {
+        res.json({ message: err });
+    }
+});
 module.exports = router;
