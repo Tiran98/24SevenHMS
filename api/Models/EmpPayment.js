@@ -1,6 +1,10 @@
 const mongoose = require('mongoose');
 
 const empPaymentSchema = new mongoose.Schema({
+    employeeId: {
+        type: Number,
+        required: true,
+    },
     employeeType: {
         type: String,
         required: true,
