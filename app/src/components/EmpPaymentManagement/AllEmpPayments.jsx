@@ -15,6 +15,7 @@ import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+import axios from 'axios';
 
 import useStyles from './styles';
 
@@ -160,6 +161,7 @@ const AllEmpPayments = () => {
                 return res.json()
             }
         }).then(jsonRes => setEmpPayments(jsonRes));
+
     }, [])
 
     const handleClickOpen = () => {
@@ -248,7 +250,7 @@ const AllEmpPayments = () => {
                                         <>
                                         <TableRow key={row.name} className={classes.tableRow}>
                                             <TableCell component="th" scope="row" style={{ width: 100 }}>
-                                                {row._id}
+                                                {row.employeeId}
                                             </TableCell>
                                             <TableCell component={Link} to="/emp-details" align="left">
                                                 {row.employeeName}
