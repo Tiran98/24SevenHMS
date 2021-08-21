@@ -252,7 +252,7 @@ const AllEmpPayments = () => {
                                             <TableCell component="th" scope="row" style={{ width: 100 }}>
                                                 {row.employeeId}
                                             </TableCell>
-                                            <TableCell component={Link} to="/emp-details" align="left">
+                                            <TableCell component={Link} to={'/emp-details/' + row.employeeId} align="left">
                                                 {row.employeeName}
                                             </TableCell>
                                             <TableCell align="left">
