@@ -1,26 +1,17 @@
-import React, {useState,useEffect,useRef} from 'react'
+import React, {useState} from 'react'
 import { useForm, Controller } from "react-hook-form";
-import { FormLabel, TextField, FormControlLabel, Paper, Button, Grid, Typography } from '@material-ui/core/';
+import { FormLabel, TextField, FormControlLabel, Paper, Button, Grid, Typography, Snackbar } from '@material-ui/core/';
 import { withStyles } from '@material-ui/core/styles';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import MenuItem from '@material-ui/core/MenuItem';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
-import axios from 'axios';
-
+import MuiAlert from '@material-ui/lab/Alert';
 import DateRangeIcon from '@material-ui/icons/DateRange';
 
 import useStyles from './styles';
 
-const schema = yup.object().shape({
-    empType: yup.string().required("Select Employee Type"),
-    employee: yup.string().required("Select Employee"),
-    payAmount: yup.string().required("Payment Amount is required."),
-    payType: yup.string().required("Payment Type is required."),
-    payDate: yup.string().required("Payment Date is required."),
-    payAccount: yup.string().required('You must enter a Account Number'),
-    bank: yup.string().required('You must enter a Bank'),
-});
+function Alert(props) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 const empTypes = [
     {
@@ -87,20 +78,14 @@ const payTypes = [
     },
 ];
 
-const AddEmpPayment = () => {
+const EmpPayUpdate = () => {
     const classes = useStyles();
-    const { control, handleSubmit, reset, formState: { errors }  } = useForm(
-        {
-            resolver: yupResolver(schema),
-            reValidateMode: 'onSubmit',
-        }
-    );
+    const { control, handleSubmit, reset } = useForm();
     const [empType, setEmpType] = React.useState('default');
     const [position, setPosition] = React.useState('default');
     const [employee, setEmployee] = React.useState('default');
     const [payType, setPayType] = React.useState('default');
-    const [formData, setFormData] = useState([]);
-    const isFirstRender = useRef(true);
+    const [successMsg, setSuccessMsg] = useState(true);
 
     const [gender, setGender] = useState("");
 
@@ -141,40 +126,12 @@ const AddEmpPayment = () => {
         }
     })(TextField);
 
-    useEffect(() => {
-        if (isFirstRender.current) {
-            isFirstRender.current = false // toggle flag after first render/mounting
-            return;
-        }
-
-        submitForm(formData);
-    }, [formData])
-
-
     const onSubmit = (data) => {
-        setFormData({
-            employeeType: data.empType,
-            employeeName: data.employee,
-            paymentAmount: data.payAmount,
-            paymentType: data.payType,
-            paymentDate: data.payDate,
-            paymentAccount: data.payAccount,
-            description: data.description,
-            paymentBank: data.bank,
-        })
     }
 
-    const submitForm = (data) => {
-        axios.post('http://localhost:5000/api/empPay/addEmpPay', data)
-        .then((response) => {
-          console.log(response);
-          reset({
-            keepErrors: true,
-          });
-        }).catch((err) => {
-          console.log(err);
-        })
-    }
+    const handleRadioChange = (event) => {
+        setGender(event.target.value, console.log(gender));
+    };
 
     const handleEmpType = (event) => {
         setEmpType(event.target.value, console.log(empType));
@@ -187,18 +144,27 @@ const AddEmpPayment = () => {
     const handlePayType = (event) => {
         setPayType(event.target.value, console.log(payType));
     };
+    const handleSuccessMsg = (event, reason) => {
+
+        if (reason === 'clickaway') {
+          return;
+        }
+    
+        setSuccessMsg(false);
+    };
 
     return (
         <div>
             <Grid container spacing={3}>
                 <Grid item xs={12}>
                     <Paper className={classes.paperTitle}>
-                        <Typography variant="h4" className={classes.pageTitle}>Add Employee Payment Details</Typography>
+                        <Typography variant="h4" className={classes.pageTitle}>Update Employee Payment Details</Typography>
                     </Paper>
                 </Grid>
                 <Grid item xs={12}>
-                    <form onSubmit={handleSubmit(onSubmit)} className={classes.form}>
-                        <Paper className={classes.paper}>   
+                    <form className={classes.form}>
+                        <Paper className={classes.paper}>
+                            
                                 <Grid container spacing={2}>
                                     <Grid item xs={12} sm={6}>
                                         <Controller
@@ -213,9 +179,6 @@ const AddEmpPayment = () => {
                                                 value={empType}
                                                 onChange={handleEmpType}
                                                 variant="outlined"
-                                                {...field}
-                                                // error={!!errors?.empType}
-                                                // helperText={errors?.empType?.message}
                                                 >
                                                 {empTypes.map((option) => (
                                                     <MenuItem key={option.value} value={option.value}>
@@ -238,9 +201,6 @@ const AddEmpPayment = () => {
                                                 value={employee}
                                                 onChange={handleEmployee}
                                                 variant="outlined"
-                                                {...field}
-                                                // error={!!errors?.employee}
-                                                // helperText={errors?.employee?.message}
                                                 >
                                                 {employees.map((option) => (
                                                     <MenuItem key={option.value} value={option.value}>
@@ -257,13 +217,7 @@ const AddEmpPayment = () => {
                                             control={control}
                                             defaultValue=""
                                             render={({ field }) => 
-                                            <CssTextField 
-                                            fullWidth label="Payment Amount" 
-                                            variant="outlined" 
-                                            color="primary"
-                                            error={!!errors?.payAmount}
-                                                helperText={errors?.payAmount?.message} 
-                                            {...field} />}
+                                            <CssTextField fullWidth label="Payment Amount" variant="outlined" color="primary" {...field} />}
                                         />
                                     </Grid> 
                                     <Grid item xs={12} sm={6}>
@@ -279,9 +233,6 @@ const AddEmpPayment = () => {
                                                 value={payType}
                                                 onChange={handlePayType}
                                                 variant="outlined"
-                                                {...field}
-                                                // error={!!errors?.payType}
-                                                // helperText={errors?.payType?.message} 
                                                 >
                                                 {payTypes.map((option) => (
                                                     <MenuItem key={option.value} value={option.value}>
@@ -303,8 +254,6 @@ const AddEmpPayment = () => {
                                                     type="date"
                                                     variant="outlined"
                                                     color="primary"
-                                                    error={!!errors?.payDate}
-                                                    helperText={errors?.payDate?.message} 
                                                     {...field}
                                                     InputLabelProps={{
                                                         shrink: true,
@@ -325,14 +274,7 @@ const AddEmpPayment = () => {
                                             control={control}
                                             defaultValue=""
                                             render={({ field }) => 
-                                            <CssTextField 
-                                            fullWidth 
-                                            label="Payment Account" 
-                                            variant="outlined" 
-                                            color="primary" 
-                                            error={!!errors?.payAccount}
-                                            helperText={errors?.payAccount?.message} 
-                                            {...field} />}
+                                            <CssTextField fullWidth label="Payment Account" variant="outlined" color="primary" {...field} />}
                                         />
                                     </Grid>
                                     <Grid item xs={12} sm={6}>
@@ -350,7 +292,6 @@ const AddEmpPayment = () => {
                                                 defaultValue="Description"
                                                 color="primary"
                                                 variant="outlined"
-                                                {...field}
                                             />}
                                         />
                                     </Grid>
@@ -360,14 +301,7 @@ const AddEmpPayment = () => {
                                             control={control}
                                             defaultValue=""
                                             render={({ field }) => 
-                                            <CssTextField  
-                                            fullWidth 
-                                            label="Payment Bank" 
-                                            variant="outlined" 
-                                            color="primary" 
-                                            error={!!errors?.bank}
-                                            helperText={errors?.bank?.message}
-                                            {...field} />}
+                                            <CssTextField  fullWidth label="Payment Bank" variant="outlined" color="primary" {...field} />}
                                         />
                                     </Grid>        
                                 </Grid>
@@ -382,16 +316,21 @@ const AddEmpPayment = () => {
                                 </Button>
                             </Grid>    
                             <Grid item xs={12} sm={9}>
-                                <Button type="submit" fullWidth variant="contained" color="secondary" className={classes.submitbtn}>
+                                <Button type="submit" onClick={Alert} fullWidth variant="contained" color="secondary" className={classes.submitbtn}>
                                     Submit
                                 </Button>
                             </Grid>
                         </Grid> 
                     </form>
                 </Grid>
-            </Grid>    
+            </Grid>
+            <Snackbar open={successMsg} autoHideDuration={6000} onClose={handleSuccessMsg} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
+                <Alert onClose={handleSuccessMsg} severity="success" color="info" className={classes.cookieAlert}>
+                    The form was Updated successfully.
+                </Alert>
+            </Snackbar>    
         </div>
     )
 }
 
-export default AddEmpPayment
+export default EmpPayUpdate
