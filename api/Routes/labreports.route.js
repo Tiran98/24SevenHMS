@@ -8,6 +8,7 @@ router.post('/', async(req, res) => {
         email: req.body.email,
         mobile: req.body.mobile,
         dob: req.body.dob,
+        gender: req.body.gender,
         datecollected: req.body.datecollected,
         hemoglobin: req.body.hemoglobin,
         rbc: req.body.rbc,
