@@ -184,167 +184,12 @@ const AllReports = () => {
         setOpenModal(false);
     };
 
-    // const modalBody = (
-    //     <Fade in={openModal}>
-    //         <Grid container spacing={3} className={classes.modelPaper}>
-    //             <Grid item xs={12}>
-    //                 <Paper className={classes.paperTitle}>
-    //                     <Typography variant="h6" id="transition-modal-title" className={classes.reportTitle}>Blood Report</Typography>
-    //                 </Paper>
-    //                 <table className={classes.table}>
-    //                     <tr style={{ fontSize: "18px", color: "#0077B6" }}>
-    //                         <td className={classes.trReport}>Report ID</td>
-    //                         <td className={classes.trReport}>#0001</td>
-    //                     </tr>
-    //                     <tr>
-    //                         <td className={classes.trReport}>Full Name</td>
-    //                         <td>Minerva McGonagall</td>
-    //                         <td className={classes.trReport}>Gender</td>
-    //                         <td>Female</td>
-    //                     </tr>
-    //                     <tr>
-    //                         <td className={classes.trReport}>Email</td>
-    //                         <td>minerva@gmail.com</td>
-    //                         <td className={classes.trReport}>Mobile Number</td>
-    //                         <td>0774584529</td>
-    //                     </tr>
-    //                     <tr>
-    //                         <td className={classes.trReport}>Date of Birth</td>
-    //                         <td>02/08/1990</td>
-    //                         <td className={classes.trReport}>Date Collected</td>
-    //                         <td>14/08/2021</td>
-    //                     </tr>
-    //                 </table>
-    //                 <Paper className={classes.paperSubTitle}>
-    //                     <Typography variant="body2" id="transition-modal-title" className={classes.reportSubTitle}>Complete Blood Count</Typography>
-    //                 </Paper>
-    //                 <table className={classes.table}>
-    //                     <tr>
-    //                         <td className={classes.trReport}>Test Name</td>
-    //                         <td className={classes.trReport}>Result</td>
-    //                         <td className={classes.trReport}>Normal Range</td>
-    //                         <td className={classes.trReport}>Units</td>
-    //                     </tr>
-    //                     <tr>
-    //                         <td>Hemoglobin</td>
-    //                         <td>12</td>
-    //                         <td>11.0 - 16.0</td>
-    //                         <td>g/dL</td>
-    //                     </tr>
-    //                     <tr>
-    //                         <td>RBC</td>
-    //                         <td>3.3</td>
-    //                         <td>3.5 - 5.50</td>
-    //                         <td>10^6/uL</td>
-    //                     </tr>
-    //                     <tr>
-    //                         <td>HCT</td>
-    //                         <td>36</td>
-    //                         <td>37.0 - 50.0</td>
-    //                         <td>%</td>
-    //                     </tr>
-    //                     <tr>
-    //                         <td>MCV</td>
-    //                         <td>83</td>
-    //                         <td>82 - 95</td>
-    //                         <td>fl</td>
-    //                     </tr>
-    //                     <tr>
-    //                         <td>MCH</td>
-    //                         <td>28</td>
-    //                         <td>27 - 31</td>
-    //                         <td>pg</td>
-    //                     </tr>
-    //                     <tr>
-    //                         <td>MCHC</td>
-    //                         <td>33</td>
-    //                         <td>32.0 - 36.0</td>
-    //                         <td>g/dL</td>
-    //                     </tr>
-    //                     <tr>
-    //                         <td>RDW-CV</td>
-    //                         <td>12</td>
-    //                         <td>11.5 - 14.5</td>
-    //                         <td>%</td>
-    //                     </tr>
-    //                     <tr>
-    //                         <td>RDW-SD</td>
-    //                         <td>44</td>
-    //                         <td>35 - 56</td>
-    //                         <td>fl</td>
-    //                     </tr>
-    //                     <tr>
-    //                         <td>WBC</td>
-    //                         <td>6.7</td>
-    //                         <td>4.5 - 11</td>
-    //                         <td>10^3/uL</td>
-    //                     </tr>
-    //                     <tr>
-    //                         <td>NEU%</td>
-    //                         <td>60</td>
-    //                         <td>40 - 70</td>
-    //                         <td>%</td>
-    //                     </tr>
-    //                     <tr>
-    //                         <td>LYM%</td>
-    //                         <td>30</td>
-    //                         <td>20 - 45</td>
-    //                         <td>%</td>
-    //                     </tr>
-    //                     <tr>
-    //                         <td>MON%</td>
-    //                         <td>8</td>
-    //                         <td>2 - 10</td>
-    //                         <td>%</td>
-    //                     </tr>
-    //                     <tr>
-    //                         <td>EOS%</td>
-    //                         <td>2</td>
-    //                         <td>1 - 6</td>
-    //                         <td>%</td>
-    //                     </tr>
-    //                     <tr>
-    //                         <td>BAS%</td>
-    //                         <td>0</td>
-    //                         <td>0 - 2</td>
-    //                         <td>%</td>
-    //                     </tr>
-    //                     <tr>
-    //                         <td>LYM#</td>
-    //                         <td>2</td>
-    //                         <td>1.5 - 4.0</td>
-    //                         <td>10^3/uL</td>
-    //                     </tr>
-    //                     <tr>
-    //                         <td>GRA#</td>
-    //                         <td>4.7</td>
-    //                         <td>2.0 - 7.5</td>
-    //                         <td>10^3/uL</td>
-    //                     </tr>
-    //                     <tr>
-    //                         <td>PLT</td>
-    //                         <td>256</td>
-    //                         <td>150 - 450</td>
-    //                         <td>10^3/uL</td>
-    //                     </tr>
-    //                     <tr>
-    //                         <td>ESR</td>
-    //                         <td>2</td>
-    //                         <td>Up to 15</td>
-    //                         <td>mm/hr</td>
-    //                     </tr>
-    //                 </table>
-    //             </Grid>
-    //         </Grid>
-    //     </Fade>
-    // );
-
     const modalBody = (
         <Fade in={openModal}>
             <Grid container spacing={3} className={classes.modelPaper}>
                 <Grid item xs={12}>
                     <Paper className={classes.paperTitle}>
-                        <Typography variant="h6" id="transition-modal-title" className={classes.reportTitle}>Appointment Slip</Typography>
+                        <Typography variant="h6" id="transition-modal-title" className={classes.reportTitle}>Blood Report</Typography>
                     </Paper>
                     <table className={classes.table}>
                         <tr style={{ fontSize: "18px", color: "#0077B6" }}>
@@ -368,6 +213,125 @@ const AllReports = () => {
                             <td>02/08/1990</td>
                             <td className={classes.trReport}>Date Collected</td>
                             <td>14/08/2021</td>
+                        </tr>
+                    </table>
+                    <Paper className={classes.paperSubTitle}>
+                        <Typography variant="body2" id="transition-modal-title" className={classes.reportSubTitle}>Complete Blood Count</Typography>
+                    </Paper>
+                    <table className={classes.table}>
+                        <tr>
+                            <td className={classes.trReport}>Test Name</td>
+                            <td className={classes.trReport}>Result</td>
+                            <td className={classes.trReport}>Normal Range</td>
+                            <td className={classes.trReport}>Units</td>
+                        </tr>
+                        <tr>
+                            <td>Hemoglobin</td>
+                            <td>12</td>
+                            <td>11.0 - 16.0</td>
+                            <td>g/dL</td>
+                        </tr>
+                        <tr>
+                            <td>RBC</td>
+                            <td>3.3</td>
+                            <td>3.5 - 5.50</td>
+                            <td>10^6/uL</td>
+                        </tr>
+                        <tr>
+                            <td>HCT</td>
+                            <td>36</td>
+                            <td>37.0 - 50.0</td>
+                            <td>%</td>
+                        </tr>
+                        <tr>
+                            <td>MCV</td>
+                            <td>83</td>
+                            <td>82 - 95</td>
+                            <td>fl</td>
+                        </tr>
+                        <tr>
+                            <td>MCH</td>
+                            <td>28</td>
+                            <td>27 - 31</td>
+                            <td>pg</td>
+                        </tr>
+                        <tr>
+                            <td>MCHC</td>
+                            <td>33</td>
+                            <td>32.0 - 36.0</td>
+                            <td>g/dL</td>
+                        </tr>
+                        <tr>
+                            <td>RDW-CV</td>
+                            <td>12</td>
+                            <td>11.5 - 14.5</td>
+                            <td>%</td>
+                        </tr>
+                        <tr>
+                            <td>RDW-SD</td>
+                            <td>44</td>
+                            <td>35 - 56</td>
+                            <td>fl</td>
+                        </tr>
+                        <tr>
+                            <td>WBC</td>
+                            <td>6.7</td>
+                            <td>4.5 - 11</td>
+                            <td>10^3/uL</td>
+                        </tr>
+                        <tr>
+                            <td>NEU%</td>
+                            <td>60</td>
+                            <td>40 - 70</td>
+                            <td>%</td>
+                        </tr>
+                        <tr>
+                            <td>LYM%</td>
+                            <td>30</td>
+                            <td>20 - 45</td>
+                            <td>%</td>
+                        </tr>
+                        <tr>
+                            <td>MON%</td>
+                            <td>8</td>
+                            <td>2 - 10</td>
+                            <td>%</td>
+                        </tr>
+                        <tr>
+                            <td>EOS%</td>
+                            <td>2</td>
+                            <td>1 - 6</td>
+                            <td>%</td>
+                        </tr>
+                        <tr>
+                            <td>BAS%</td>
+                            <td>0</td>
+                            <td>0 - 2</td>
+                            <td>%</td>
+                        </tr>
+                        <tr>
+                            <td>LYM#</td>
+                            <td>2</td>
+                            <td>1.5 - 4.0</td>
+                            <td>10^3/uL</td>
+                        </tr>
+                        <tr>
+                            <td>GRA#</td>
+                            <td>4.7</td>
+                            <td>2.0 - 7.5</td>
+                            <td>10^3/uL</td>
+                        </tr>
+                        <tr>
+                            <td>PLT</td>
+                            <td>256</td>
+                            <td>150 - 450</td>
+                            <td>10^3/uL</td>
+                        </tr>
+                        <tr>
+                            <td>ESR</td>
+                            <td>2</td>
+                            <td>Up to 15</td>
+                            <td>mm/hr</td>
                         </tr>
                     </table>
                 </Grid>
