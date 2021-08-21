@@ -82,7 +82,7 @@ function App() {
             <Route path="/all-appointments" exact component={AllAppointments} />
             <Route path="/update-appointment" exact component={UpdateAppointment} />
             <Route path="/emp-details" exact component={PaymentDetails} />
-//             <Route path="/example" exact component={Example} />
+            <Route path="/example" exact component={Example} />
             <Route path="/emp-update" exact component={EmpPaymentDetails} />
             <Route exact path="/admin">
                 <AdminLogin 
