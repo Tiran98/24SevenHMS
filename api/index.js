@@ -12,9 +12,11 @@ app.use(express.json());
 
 //Import Routes
 const employeeRoute = require('./Routes/employee.route');
+const labreportsRoute = require('./Routes/labreports.route');
 
 //Route Middlewares
 app.use('/api/employee', employeeRoute);
+app.use('/api/labreports', labreportsRoute);
 
 mongoose.connect(process.env.DB_CONNECTION, { useUnifiedTopology: true, useNewUrlParser: true })
     .then((result) => console.log('connected to db'))
