@@ -6,6 +6,7 @@ import { withStyles } from '@material-ui/core/styles';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+import axios from 'axios';
 
 import DateRangeIcon from '@material-ui/icons/DateRange';
 
@@ -50,7 +51,9 @@ const AddReport = () => {
         }
     );
     const [gender, setGender] = useState("");
-    const [successMsg, setSuccessMsg] = useState(true);
+    const [successMsg, setSuccessMsg] = useState(false);
+    const [formData, setFormData] = useState([]);
+    const isFirstRender = useRef(true);
 
     const CssTextField = withStyles({
         root: {
@@ -92,21 +95,55 @@ const AddReport = () => {
         }
     })(TextField);
 
+    useEffect(() => {
+        if (isFirstRender.current) {
+            isFirstRender.current = false // toggle flag after first render/mounting
+            return;
+        }
+
+        submitForm(formData);
+    }, [formData])
+
     const onSubmit = (data) => {
-        console.log(data);
+        setFormData({
+            fullname: data.fullname,
+            email: data.email,
+            mobile: data.mobile,
+            dob: data.dob,
+            gender: gender,
+            datecollected: data.datecollected,
+            hemoglobin: data.hemoglobin,
+            rbc: data.rbc,
+            hct: data.hct,
+            mcv: data.mcv,
+            mch: data.mch,
+            mchc: data.mchc,
+            rdwcv: data.rdwcv,
+            rdwsd: data.rdwsd,
+            wbc: data.wbc,
+            neu: data.neu,
+            lym: data.lym,
+            mon: data.mon,
+            eos: data.eos,
+            bas: data.bas,
+            lym2: data.lym2,
+            gra: data.gra,
+            plt: data.plt,
+            esr: data.esr,
+        })
+    }
 
-        // if(userType == "attendee") {
-        //     formDataNew.append('firstName', data.firstName);
-        //     formDataNew.append('lastName', data.lastName);
-        //  
-        // } 
-        // submitForm(formDataNew);
-
-        // for(var pair of formDataNew.entries()) {
-        //         console.log(pair[0]+', '+pair[1]);
-        // }
-
-        setSuccessMsg(true);
+    const submitForm = (data) => {
+        axios.post('http://localhost:5000/api/labreports', data)
+        .then((response) => {
+          console.log(response);
+          setSuccessMsg(true);
+          reset({
+            keepErrors: true,
+          });
+        }).catch((err) => {
+          console.log(err);
+        })
     }
 
     const handleRadioChange = (event) => {
