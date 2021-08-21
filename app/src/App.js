@@ -21,6 +21,9 @@ import Dashboard from './components/Dashboard/Dashboard';
 import AddAppointment from './components/AppointmentManagement/AddAppointment';
 import AllAppointments from './components/AppointmentManagement/AllAppointments';
 import UpdateAppointment from './components/AppointmentManagement/UpdateAppointment';
+import PaymentDetails from './components/EmpPaymentManagement/PaymentDetails';
+import Example from './components/Example/Example';
+import EmpPaymentDetails from './components/EmpPaymentManagement/EmpPayUpdate';
 
 const drawerWidth = 240;
 
@@ -78,6 +81,9 @@ function App() {
             <Route path="/add-appointment" exact component={AddAppointment} />
             <Route path="/all-appointments" exact component={AllAppointments} />
             <Route path="/update-appointment" exact component={UpdateAppointment} />
+            <Route path="/emp-details" exact component={PaymentDetails} />
+//             <Route path="/example" exact component={Example} />
+            <Route path="/emp-update" exact component={EmpPaymentDetails} />
             <Route exact path="/admin">
                 <AdminLogin 
                   setDrawerState={setDrawerState}

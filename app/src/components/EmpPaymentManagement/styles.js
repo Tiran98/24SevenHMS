@@ -4,8 +4,16 @@ export default makeStyles((theme) => ({
     pageTitle: {
         fontWeight: 800,
         color: '#ffffff',
-        textAlign: 'center',
+        textAlign: 'left',
         textTransform: 'uppercase',
+    },
+    pageTitleEID: {
+        fontWeight: 800,
+        color: '#ffffff',
+        textAlign: 'right',
+        textTransform: 'uppercase',
+        marginTop:-40,
+        padding:5
     },
     paperTitle: {
         backgroundColor: '#023e8a',
@@ -96,6 +104,42 @@ export default makeStyles((theme) => ({
         backgroundColor: "#ff4040",
         '&:hover': {
             backgroundColor: "#7d0000",
+        },
+    },
+    detailsPaper: {
+        backgroundColor:"#ffffff"
+    },
+    detailsUpdateBtn: {
+        padding: "8px",
+        width:500,
+        color: "#ffffff",
+        backgroundColor: "#CFC6AC",
+        marginBottom:30,
+        marginTop:70,
+        marginLeft:50,
+        '&:hover': {
+            backgroundColor: "#948A6C",
+        },
+    },
+    detailsDeleteBtn: {
+        padding: "8px",
+        width:500,
+        marginLeft:50,
+        color: "#ffffff",
+        backgroundColor: "#ff4040",
+        '&:hover': {
+            backgroundColor: "#7d0000",
+        },
+    },
+    ReportBtn: {
+        marginRight: "20px",
+        padding: "8px",
+        color: "#ffffff",
+        float: 'right',
+        marginTop:-40,
+        backgroundColor: "#5E452C",
+        '&:hover': {
+            backgroundColor: "#3C2004",
         },
     },
 }));

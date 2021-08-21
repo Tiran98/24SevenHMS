@@ -87,16 +87,16 @@ TablePaginationActions.propTypes = {
     rowsPerPage: PropTypes.number.isRequired,
 };
 
-const employees = [
-    { "empID" : "0001", "firstName" : "Minerva", "lastName" : "McGonagall", "position" : "Doctor", "email" : "minerva@gmail.com", "mobile" : "0774584529"},
-    { "empID" : "0001", "firstName" : "Minerva", "lastName" : "McGonagall", "position" : "Doctor", "email" : "minerva@gmail.com", "mobile" : "0774584529"},
-    { "empID" : "0001", "firstName" : "Minerva", "lastName" : "McGonagall", "position" : "Doctor", "email" : "minerva@gmail.com", "mobile" : "0774584529"},
-    { "empID" : "0001", "firstName" : "Minerva", "lastName" : "McGonagall", "position" : "Doctor", "email" : "minerva@gmail.com", "mobile" : "0774584529"},
-    { "empID" : "0001", "firstName" : "Minerva", "lastName" : "McGonagall", "position" : "Doctor", "email" : "minerva@gmail.com", "mobile" : "0774584529"},
-    { "empID" : "0001", "firstName" : "Minerva", "lastName" : "McGonagall", "position" : "Doctor", "email" : "minerva@gmail.com", "mobile" : "0774584529"},
-    { "empID" : "0001", "firstName" : "Minerva", "lastName" : "McGonagall", "position" : "Doctor", "email" : "minerva@gmail.com", "mobile" : "0774584529"},
-    { "empID" : "0001", "firstName" : "Minerva", "lastName" : "McGonagall", "position" : "Doctor", "email" : "minerva@gmail.com", "mobile" : "0774584529"},
-];
+// const employees = [
+//     { "empID" : "0001", "firstName" : "Minerva", "lastName" : "McGonagall", "position" : "Doctor", "email" : "minerva@gmail.com", "mobile" : "0774584529"},
+//     { "empID" : "0001", "firstName" : "Minerva", "lastName" : "McGonagall", "position" : "Doctor", "email" : "minerva@gmail.com", "mobile" : "0774584529"},
+//     { "empID" : "0001", "firstName" : "Minerva", "lastName" : "McGonagall", "position" : "Doctor", "email" : "minerva@gmail.com", "mobile" : "0774584529"},
+//     { "empID" : "0001", "firstName" : "Minerva", "lastName" : "McGonagall", "position" : "Doctor", "email" : "minerva@gmail.com", "mobile" : "0774584529"},
+//     { "empID" : "0001", "firstName" : "Minerva", "lastName" : "McGonagall", "position" : "Doctor", "email" : "minerva@gmail.com", "mobile" : "0774584529"},
+//     { "empID" : "0001", "firstName" : "Minerva", "lastName" : "McGonagall", "position" : "Doctor", "email" : "minerva@gmail.com", "mobile" : "0774584529"},
+//     { "empID" : "0001", "firstName" : "Minerva", "lastName" : "McGonagall", "position" : "Doctor", "email" : "minerva@gmail.com", "mobile" : "0774584529"},
+//     { "empID" : "0001", "firstName" : "Minerva", "lastName" : "McGonagall", "position" : "Doctor", "email" : "minerva@gmail.com", "mobile" : "0774584529"},
+// ];
 
 const AllEmployees = () => {
     const classes = useStyles();
@@ -104,6 +104,7 @@ const AllEmployees = () => {
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
     const [opendlt, setOpendlt] = React.useState(false);
+    const [employees, setEmployees] = React.useState([]);
 
     const CssTextField = withStyles({
         root: {
@@ -152,6 +153,14 @@ const AllEmployees = () => {
     })(MuiTableCell);
 
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, employees.length - page * rowsPerPage);
+
+    useEffect(() => {
+        fetch("http://localhost:5000/api/employee").then(res => {
+            if(res.ok){
+                return res.json()
+            }
+        }).then(jsonRes => setEmployees(jsonRes));
+    }, [])
 
     const handleClickOpen = () => {
         setOpendlt(true);
@@ -210,7 +219,7 @@ const AllEmployees = () => {
                             <Table className={classes.table}>
                                 <TableBody>
                                     <TableRow component={Paper} className={classes.paper}>
-                                        <TableCell component="th" className={classes.tableth} style={{ width: 100 }}>
+                                        <TableCell component="th" className={classes.tableth} style={{ width: 200 }}>
                                             Employee ID
                                         </TableCell>
                                         <TableCell component="th" className={classes.tableth}>
@@ -235,8 +244,8 @@ const AllEmployees = () => {
                                     ).map((row) => (
                                         <>
                                         <TableRow key={row.name} className={classes.tableRow}>
-                                            <TableCell component="th" scope="row" style={{ width: 100 }}>
-                                                {row.empID}
+                                            <TableCell component="th" scope="row" style={{ width: 200 }}>
+                                                {row._id}
                                             </TableCell>
                                             <TableCell align="left">
                                                 {row.firstName} {row.lastName}

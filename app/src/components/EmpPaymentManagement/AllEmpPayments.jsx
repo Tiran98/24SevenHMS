@@ -241,7 +241,7 @@ const AllEmpPayments = () => {
                                             <TableCell component="th" scope="row" style={{ width: 100 }}>
                                                 {row.empID}
                                             </TableCell>
-                                            <TableCell align="left">
+                                            <TableCell component={Link} to="/emp-details" align="left">
                                                 {row.firstName} {row.lastName}
                                             </TableCell>
                                             <TableCell align="left">
@@ -296,6 +296,11 @@ const AllEmpPayments = () => {
                                 </TableFooter>
                             </Table>
                         </TableContainer>
+                </Grid>
+                <Grid item xs={12}>
+                <Button variant="contained" color="secondary" className={classes.ReportBtn}>
+                    Generate Report
+                </Button>
                 </Grid>
             </Grid>
             <Dialog
