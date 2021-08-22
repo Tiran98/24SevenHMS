@@ -145,6 +145,7 @@ const AddAppointment = () => {
     }, [formData])
 
     const onSubmit = (data) => {
+        console.log(data);
         setFormData({
             firstName : data.firstName,
             lastName : data.lastName,
@@ -215,7 +216,8 @@ const AddAppointment = () => {
                                             <CssTextField fullWidth 
                                             label="First Name" 
                                             variant="outlined" 
-                                            color="primary" {...field}
+                                            color="primary" 
+                                            {...field}
                                             error={!!errors?.firstName}
                                             helperText={errors?.firstName?.message} 
                                             />}
@@ -228,7 +230,8 @@ const AddAppointment = () => {
                                             defaultValue=""
                                             render={({ field }) => 
                                             <CssTextField 
-                                                fullWidth label="Last Name" variant="outlined" color="primary" {...field}
+                                                fullWidth label="Last Name" variant="outlined" color="primary" 
+                                                {...field}
                                                 error={!!errors?.lastName}
                                                 helperText={errors?.lastName?.message}  />}
                                         />
@@ -239,7 +242,8 @@ const AddAppointment = () => {
                                             control={control}
                                             defaultValue=""
                                             render={({ field }) => 
-                                            <CssTextField fullWidth label="Email" variant="outlined" color="primary" {...field}
+                                            <CssTextField fullWidth label="Email" variant="outlined" color="primary" 
+                                            {...field}
                                             error={!!errors?.email}
                                             helperText={errors?.email?.message} />}
                                         />
@@ -250,7 +254,12 @@ const AddAppointment = () => {
                                             control={control}
                                             defaultValue=""
                                             render={({ field }) => 
-                                            <CssTextField fullWidth label="Mobile Number" variant="outlined" color="primary" {...field}
+                                            <CssTextField 
+                                            fullWidth 
+                                            label="Mobile Number" 
+                                            variant="outlined" 
+                                            color="primary" 
+                                            {...field}
                                             error={!!errors?.mobile}
                                             helperText={errors?.mobile?.message} />}
                                         />
@@ -318,7 +327,7 @@ const AddAppointment = () => {
                                     </Grid>
                                     <Grid item xs={12} sm={6}>
                                         <Controller
-                                            name="appointmentdate"
+                                            name="appdate"
                                             control={control}
                                             defaultValue=""
                                             render={({ field }) => 
@@ -347,7 +356,7 @@ const AddAppointment = () => {
                                     
                                     <Grid item xs={12} sm={6}>
                                         <Controller
-                                            name="time"
+                                            name="apptime"
                                             control={control}
                                             defaultValue=""
                                             render={({ field }) => 
@@ -375,7 +384,17 @@ const AddAppointment = () => {
                         
                         <Grid container spacing={3}>
                             <Grid item xs={12} sm={3}>
-                                <Button type="reset" fullWidth variant="contained" className={classes.resetbtn}>
+                                <Button 
+                                    type="reset" 
+                                    fullWidth 
+                                    variant="contained" 
+                                    className={classes.resetbtn}
+                                    onClick={() => {
+                                        reset({
+                                          keepErrors: true,
+                                        });
+                                      }}
+                                >
                                     Reset
                                 </Button>
                             </Grid>    
