@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useHistory } from 'react-router-dom';
 import { Radio, RadioGroup, IconButton , TextField, InputAdornment , Paper, Button, Grid, Typography } from '@material-ui/core/';
 import { useForm, Controller } from "react-hook-form";
 import { withStyles } from '@material-ui/core/styles';
+import axios from 'axios';
 
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
@@ -14,7 +15,11 @@ const EmployeeLogin = ({ setPathName, setDrawerState }) => {
     const classes = useStyles();
     const location = useLocation();
     const { control, handleSubmit } = useForm();
-    const [showPassword, setShowPassword] = React.useState(true);
+    const [showPassword, setShowPassword] = React.useState(false);
+    const [userProfile, setUserProfile] = useState([]);
+    const [formData, setFormData] = useState([]);
+    const isFirstRender = useRef(true);
+    const history = useHistory();
 
     const CssTextField = withStyles({
         root: {
@@ -57,8 +62,19 @@ const EmployeeLogin = ({ setPathName, setDrawerState }) => {
         handleDrawerClose();
     }, []);
 
+    useEffect(() => {
+      console.log(location.pathname);
+      if (isFirstRender.current) {
+        isFirstRender.current = false // toggle flag after first render/mounting
+        return;
+      }
+    
+      submitForm(formData);
+
+    }, [formData]);
+
     const handleDrawerClose = () => {
-        // setPathName(location.pathname);
+        setPathName(location.pathname);
         setDrawerState(false);
     };
 
@@ -66,21 +82,32 @@ const EmployeeLogin = ({ setPathName, setDrawerState }) => {
         setShowPassword(!showPassword);
     };
 
+    useEffect(() => {
+      localStorage.setItem('profile', JSON.stringify(userProfile));
+    }, [userProfile]);
+
     const onSubmit = (data) => {
+      setFormData({
+          email : data.email,
+          password : data.password
+      })
+    }
 
-        // if(userType == "attendee") {
-      
-        //     formDataNew.append('userType', userType);
-        // } else {
-        //     formDataNew.append('firstName', data.firstName);
+    const submitForm = (data) => {
+      // console.log(data);
 
-        // }
+      axios.post('http://localhost:5000/api/user/login',
+      {
+        email : data.email,
+        password : data.password
 
-        // submitForm(formDataNew);
+      }). then((response) => {
+        setUserProfile(response.data);
+        history.push('/home');
+      }).catch((err) => {
+        console.log(err);
+      })
 
-        // for(var pair of formDataNew.entries()) {
-        //         console.log(pair[0]+', '+pair[1]);
-        // }
     }
 
     return (
@@ -140,4 +167,4 @@ const EmployeeLogin = ({ setPathName, setDrawerState }) => {
     )
 }
 
-export default EmployeeLogin
+export default EmployeeLogin;
