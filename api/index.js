@@ -14,11 +14,13 @@ app.use(express.json());
 const employeeRoute = require('./Routes/employee.route');
 const labreportsRoute = require('./Routes/labreports.route');
 const empPaymentRoute = require('./Routes/empPayments.route');
+const authRoute = require('./Routes/auth.route');
 
 //Route Middlewares
 app.use('/api/employee', employeeRoute);
 app.use('/api/labreports', labreportsRoute);
 app.use('/api/empPay', empPaymentRoute);
+app.use('/api/user', authRoute);
 
 mongoose.connect(process.env.DB_CONNECTION, { useUnifiedTopology: true, useNewUrlParser: true })
     .then((result) => console.log('connected to db'))

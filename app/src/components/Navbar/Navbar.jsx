@@ -1,6 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react';
-import clsx from 'clsx';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { Link, useHistory, useLocation } from 'react-router-dom';
 import { AppBar, Toolbar, Typography, Button, Drawer, List, Divider, ListItem, ListItemIcon, ListItemText, IconButton } from '@material-ui/core';
 
@@ -20,22 +18,31 @@ import logo from '../../assets/logo.png';
 
 const Navbar = ({ setDrawerState, drawerState }) => {
     const classes = useStyles();
-    // const location = useLocation();
-    const history = useHistory();
-    const isFirstRender = useRef(true);
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    const [notifications, setNotifications] = useState(["hi"]);
-    const totalItems = notifications.length;
-    const open = Boolean(anchorEl);
-    const theme = useTheme();
-    const [userToken, setUserToken] = useState(JSON.stringify(localStorage.getItem('userToken')));
+    const location = useLocation();
+    const history = useHistory();;
     const [userProfile, setUserProfile] = useState(JSON.parse(localStorage.getItem('profile')));
-    const [userType, setUserType] = useState("admin");
 
-    const handleDrawer = () => {
-        if (drawerState == false) setDrawerState(true);
-        else setDrawerState(false);
+    const handleDrawerOpen = () => {
+        setDrawerState(true);
     };
+    
+    const handleDrawerClose = () => {
+        setDrawerState(false);
+    };
+
+    const logout = () => {
+        localStorage.clear();
+        history.push('/admin');
+    };
+
+    useEffect(() => {
+        // if (isFirstRender.current) {
+        //     isFirstRender.current = false // toggle flag after first render/mounting
+        //     return;
+        // }
+
+        setUserProfile(JSON.parse(localStorage.getItem('profile')));
+    }, [location]);
 
     return (
         <div>
@@ -44,13 +51,13 @@ const Navbar = ({ setDrawerState, drawerState }) => {
                     {drawerState ? 
                         <IconButton
                             color="primary"
-                            onClick={handleDrawer}
+                            onClick={handleDrawerClose}
                         >
                             <CloseIcon />
                         </IconButton> :
                         <IconButton
                             color="primary"
-                            onClick={handleDrawer}
+                            onClick={handleDrawerOpen}
                         >
                             <MenuIcon />
                         </IconButton>
@@ -61,19 +68,21 @@ const Navbar = ({ setDrawerState, drawerState }) => {
                     <div className={classes.grow} />
                     <div className={classes.profile}>
                         <div className={classes.profileType}>
-                            <Typography className={classes.userName} variant="h6">Harry Potter</Typography>
-                            {userType == "attendee" ? 
-                                <Typography className={classes.userType} variant="caption" color="primary">Attendee</Typography>: 
-                            userType == "researcher" ? 
-                                <Typography className={classes.userType} variant="caption" color="primary">Researcher</Typography>:
-                            userType == "workshop_presenter" ? 
-                                <Typography className={classes.userType} variant="caption" color="primary">Workshop Presenter</Typography>:
-                            userType == "admin" ?
+                            <Typography className={classes.userName} variant="h6">{userProfile.firstName} {userProfile.lastName}</Typography>
+                            {userProfile.position == "doctor" ? 
+                                <Typography className={classes.userType} variant="caption" color="primary">Doctor</Typography>: 
+                            userProfile.position == "pharmacist" ? 
+                                <Typography className={classes.userType} variant="caption" color="primary">Pharmacist</Typography>:
+                            userProfile.position == "accountant" ? 
+                                <Typography className={classes.userType} variant="caption" color="primary">Accountant</Typography>:
+                            userProfile.position == "labAssistant" ? 
+                                <Typography className={classes.userType} variant="caption" color="primary">Laboratory Assistant</Typography>:
+                            userProfile.position == "admin" ?
                                 <Typography className={classes.userType} variant="caption" color="primary">Admin</Typography>: null
                             }
                                     
                         </div>
-                        <Button variant="contained" className={classes.logout}>Logout</Button>
+                        <Button variant="contained" className={classes.logout} onClick={logout}>Logout</Button>
                     </div>
                 </Toolbar>
             </AppBar>
@@ -101,17 +110,15 @@ const Navbar = ({ setDrawerState, drawerState }) => {
                             <ListItemIcon className={classes.navIcon}><LocalHospitalIcon /></ListItemIcon>
                             <ListItemText primary="Inventory Management" />
                         </ListItem>
+                        {userProfile.position == "admin" ? 
                         <ListItem component={Link} to="/all-employees" button>
                             <ListItemIcon className={classes.navIcon}><PeopleIcon /></ListItemIcon>
                             <ListItemText primary="Employee Management" />
-                        </ListItem>
+                        </ListItem> :
+                        <></>}
                     </List>
                         <Divider />
                     <List>
-                        {/* <ListItem component={Link} to ="/" button >
-                            <ListItemIcon ><HomeIcon /></ListItemIcon>
-                            <ListItemText primary="Home" />
-                        </ListItem> */}
                         <ListItem button>
                             <ListItemIcon className={classes.navIcon}><InfoIcon /></ListItemIcon>
                             <ListItemText primary="Abouts Us" />

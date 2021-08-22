@@ -58,16 +58,26 @@ function App() {
   const [pathName, setPathName] = React.useState("");
   const classes = useStyles();
 
+  console.log(pathName === "/admin");
+
   return (
     <Router>
       <ThemeProvider theme={theme}>
-        {pathName != "/admin" &&  pathName != "/login"? 
-          <Navbar setDrawerState={setDrawerState} drawerState={drawerState} /> :
-          <></>}
+          {pathName === "/admin"?
+            <></>:
+            <Navbar setDrawerState={setDrawerState} drawerState={drawerState} />}
+          {/* {drawerState ?
+          <Navbar setDrawerState={setDrawerState} drawerState={drawerState} />:
+          <></>} */}
         <Switch>
           <div className={classes.content} style={{ marginLeft: drawerWidth * drawerState }}>
             <Toolbar />
-            <Route path="/" exact component={Dashboard} />
+            <Route exact path="/home">
+                <Dashboard 
+                  setDrawerState={setDrawerState}
+                  setPathName={setPathName}
+                />
+            </Route>
             <Route path="/add-employee" exact component={AddEmployee} />
             <Route path="/all-employees" exact component={AllEmployees} />
             <Route path="/add-report" exact component={AddReport} />
@@ -86,6 +96,7 @@ function App() {
             </Route>
             <Route exact path="/login">
                 <EmployeeLogin 
+                  setDrawerState={setDrawerState}
                   setPathName={setPathName}
                 />
             </Route>
