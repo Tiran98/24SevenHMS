@@ -338,8 +338,8 @@ const AddAppointment = () => {
                                                     variant="outlined"
                                                     color="primary"
                                                     {...field}
-                                                    error={!!errors?.appointmentdate}
-                                                    helperText={errors?.appointmentdate?.message}
+                                                    error={!!errors?.appdate}
+                                                    helperText={errors?.appdate?.message}
                                                     InputLabelProps={{
                                                         shrink: true,
                                                     }}
@@ -368,8 +368,8 @@ const AddAppointment = () => {
                                                 onChange={handleTime}
                                                 variant="outlined"
                                                 {...field}
-                                                error={!!errors?.time}
-                                                helperText={errors?.time?.message}
+                                                error={!!errors?.apptime}
+                                                helperText={errors?.apptime?.message}
                                                 >
                                                 {apptime.map((option) => (
                                                     <MenuItem key={option.value} value={option.value}>
