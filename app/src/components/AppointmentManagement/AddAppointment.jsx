@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useForm, Controller } from "react-hook-form";
-import { Radio, RadioGroup, FormLabel, TextField, FormControlLabel, Paper, Button, Grid, Typography } from '@material-ui/core/';
+import { Radio, RadioGroup, FormLabel, TextField, FormControlLabel, Paper, Button, Grid, Typography, Snackbar } from '@material-ui/core/';
 import { withStyles } from '@material-ui/core/styles';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import MenuItem from '@material-ui/core/MenuItem';
 import MuiAlert from '@material-ui/lab/Alert';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+import axios from 'axios';
 
 import DateRangeIcon from '@material-ui/icons/DateRange';
 
@@ -91,9 +92,11 @@ const AddAppointment = () => {
 
     );
     const [consultant, setConsultant] = React.useState('default');
-    const [time, setTime] = React.useState('default');
-    
+    const [time, setTime] = React.useState('default');    
     const [gender, setGender] = useState("");
+    const [formData, setFormData] = useState([]);
+    const [successMsg, setSuccessMsg] = useState(false);
+    const isFirstRender = useRef(true);
 
     const CssTextField = withStyles({
         root: {
@@ -132,7 +135,40 @@ const AddAppointment = () => {
         }
     })(TextField);
 
+    useEffect(() => {
+        if (isFirstRender.current) {
+            isFirstRender.current = false // toggle flag after first render/mounting
+            return;
+        }
+
+        submitForm(formData);
+    }, [formData])
+
     const onSubmit = (data) => {
+        setFormData({
+            firstName : data.firstName,
+            lastName : data.lastName,
+            email : data.email,
+            mobile : data.mobile,
+            gender : gender,
+            dob : data.dob,
+            consultant : data.consultant,
+            appdate : data.appdate,
+            apptime : data.apptime,
+        })
+    }
+
+    const submitForm = (data) => {
+        axios.post('http://localhost:5000/api/appointment/', data)
+        .then((response) => {
+          console.log(response);
+          setSuccessMsg(true);
+          reset({
+            keepErrors: true,
+          });
+        }).catch((err) => {
+          console.log(err);
+        })
     }
 
     const handleRadioChange = (event) => {
@@ -146,6 +182,16 @@ const AddAppointment = () => {
     const handleTime = (event) => {
         setTime(event.target.value, console.log(time));
     };
+
+    const handleSuccessMsg = (event, reason) => {
+
+        if (reason === 'clickaway') {
+          return;
+        }
+    
+        setSuccessMsg(false);
+    };
+
 
     return (
         <div>
@@ -166,7 +212,11 @@ const AddAppointment = () => {
                                             control={control}
                                             defaultValue=""
                                             render={({ field }) => 
-                                            <CssTextField fullWidth label="First Name" variant="outlined" color="primary" {...field} />}
+                                            <CssTextField fullWidth 
+                                            label="First Name" 
+                                            variant="outlined" 
+                                            color="primary" {...field} 
+                                            />}
                                         />
                                     </Grid>
                                     <Grid item xs={12} sm={6}>
@@ -175,7 +225,8 @@ const AddAppointment = () => {
                                             control={control}
                                             defaultValue=""
                                             render={({ field }) => 
-                                            <CssTextField fullWidth label="Last Name" variant="outlined" color="primary" {...field} />}
+                                            <CssTextField 
+                                                fullWidth label="Last Name" variant="outlined" color="primary" {...field} />}
                                         />
                                     </Grid>
                                     <Grid item xs={12} sm={6}>
@@ -327,9 +378,14 @@ const AddAppointment = () => {
                     </form>
                 </Grid>
             </Grid>
+            <Snackbar open={successMsg} autoHideDuration={6000} onClose={handleSuccessMsg} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
+                <Alert onClose={handleSuccessMsg} severity="success" color="info" className={classes.cookieAlert}>
+                    The form was submitted successfully.
+                </Alert>
+            </Snackbar>
         </div>
     )
 }
 
 
-export default AddAppointment
+export default AddAppointment;
