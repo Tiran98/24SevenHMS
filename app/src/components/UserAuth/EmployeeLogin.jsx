@@ -10,10 +10,10 @@ import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import useStyles from './styles';
 import logo from '../../assets/logoFull.png';
 
-const EmployeeLogin = ({ setPathName }) => {
+const EmployeeLogin = ({ setPathName, setDrawerState }) => {
     const classes = useStyles();
     const location = useLocation();
-    const { control, handleSubmit, reset } = useForm();
+    const { control, handleSubmit } = useForm();
     const [showPassword, setShowPassword] = React.useState(true);
 
     const CssTextField = withStyles({
@@ -58,7 +58,8 @@ const EmployeeLogin = ({ setPathName }) => {
     }, []);
 
     const handleDrawerClose = () => {
-        setPathName(location.pathname);
+        // setPathName(location.pathname);
+        setDrawerState(false);
     };
 
     const handleClickShowPassword = () => {

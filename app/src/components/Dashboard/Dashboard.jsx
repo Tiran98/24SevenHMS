@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import { Radio, RadioGroup, FormLabel, TextField, FormControlLabel, Paper, Button, Grid, Typography, IconButton } from '@material-ui/core/';
 import ReactFitText from 'react-fittext';
 import Clock from 'react-live-clock';
@@ -13,8 +14,18 @@ import LocalHospitalIcon from '@material-ui/icons/LocalHospital';
 import LibraryAddIcon from '@material-ui/icons/LibraryAdd';
 import YoutubeSearchedForIcon from '@material-ui/icons/YoutubeSearchedFor';
 
-const Dashboard = () => {
+const Dashboard = ({ setPathName, drawerState }) => {
     const classes = useStyles();
+    const location = useLocation();
+
+    useEffect(() => {
+        handleDrawerClose();
+    }, []);
+
+    const handleDrawerClose = () => {
+        setPathName(location.pathname);
+        // setDrawerState(true);
+    };
 
     return (
         <div>

@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useLocation } from 'react-router-dom';
-import { Radio, RadioGroup, IconButton , TextField, InputAdornment , Paper, Button, Grid, Typography } from '@material-ui/core/';
+import { useLocation, useHistory } from 'react-router-dom';
+import { IconButton , TextField, InputAdornment , Paper, Button, Grid, Typography } from '@material-ui/core/';
 import { useForm, Controller } from "react-hook-form";
 import { withStyles } from '@material-ui/core/styles';
+import axios from 'axios';
 
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
@@ -10,11 +11,15 @@ import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import useStyles from './styles';
 import logo from '../../assets/logoFull.png';
 
-const AdminLogin = ({ setPathName }) => {
+const AdminLogin = ({ setPathName, setDrawerState }) => {
     const classes = useStyles();
     const location = useLocation();
     const { control, handleSubmit, reset } = useForm();
     const [showPassword, setShowPassword] = React.useState(true);
+    const [userProfile, setUserProfile] = useState([]);
+    const [formData, setFormData] = useState([]);
+    const isFirstRender = useRef(true);
+    const history = useHistory();
 
     const CssTextField = withStyles({
         root: {
@@ -57,7 +62,23 @@ const AdminLogin = ({ setPathName }) => {
         handleDrawerClose();
     }, []);
 
+    useEffect(() => {
+      console.log(location.pathname);
+      if (isFirstRender.current) {
+        isFirstRender.current = false // toggle flag after first render/mounting
+        return;
+      }
+    
+      submitForm(formData);
+
+    }, [formData]);
+
+    useEffect(() => {
+      localStorage.setItem('profile', JSON.stringify(userProfile));
+    }, [userProfile])
+
     const handleDrawerClose = () => {
+        setDrawerState(false);
         setPathName(location.pathname);
     };
 
@@ -66,31 +87,27 @@ const AdminLogin = ({ setPathName }) => {
     };
 
     const onSubmit = (data) => {
+      setFormData({
+          email : data.email,
+          password : data.password
+      })
+    }
 
-        // if(userType == "attendee") {
-        //     formDataNew.append('firstName', data.firstName);
-        //     formDataNew.append('lastName', data.lastName);
-        //     formDataNew.append('email', data.email);
-        //     formDataNew.append('password', data.password);
-        //     formDataNew.append('userType', userType);
-        // } else {
-        //     formDataNew.append('firstName', data.firstName);
-        //     formDataNew.append('lastName', data.lastName);
-        //     formDataNew.append('email', data.email);
-        //     formDataNew.append('password', data.password);
-        //     formDataNew.append('userType', userType);
-        //     formDataNew.append('phone', data.phone);
-        //     formDataNew.append('city', data.city);
-        //     formDataNew.append('researchTitle', data.researchTitle);
-        //     formDataNew.append('workshopTitle', data.workshopTitle);
-        //     formDataNew.append('docs', acceptedFiles[0]);
-        // }
+    const submitForm = (data) => {
+      // console.log(data);
 
-        // submitForm(formDataNew);
+      axios.post('http://localhost:5000/api/user/login',
+      {
+        email : data.email,
+        password : data.password
 
-        // for(var pair of formDataNew.entries()) {
-        //         console.log(pair[0]+', '+pair[1]);
-        // }
+      }). then((response) => {
+        setUserProfile(response.data);
+        history.push('/home');
+      }).catch((err) => {
+        console.log(err);
+      })
+
     }
 
     return (

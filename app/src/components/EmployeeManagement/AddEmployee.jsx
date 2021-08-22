@@ -84,6 +84,7 @@ const AddEmployee = () => {
     );
     const [maritalStatus, setMaritalStatus] = React.useState('default');
     const [position, setPosition] = React.useState('default');
+    const [example, setExample] = React.useState("saSAS");
     const [successMsg, setSuccessMsg] = useState(false);
     const [gender, setGender] = useState("");
     const [formData, setFormData] = useState([]);
@@ -261,7 +262,7 @@ const AddEmployee = () => {
                                             <CssTextField 
                                                 fullWidth 
                                                 label="Mobile Number" 
-                                                variant="outlined" 
+                                                variant="outlined"
                                                 color="primary" 
                                                 {...field}
                                                 error={!!errors?.mobile} 

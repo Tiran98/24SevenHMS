@@ -47,4 +47,25 @@ router.get('/', async(req, res) => {
     }
 });
 
+router.post('/adminLogin', async(req, res) => {
+
+    var emailExist = "";
+    //Checking if the user exist
+    emailExist = await Employee.findOne({ email: req.body.email });
+    if (!emailExist) return res.status(400).send('Email does not exist');
+
+    //Checking password
+    const validPassword = await bcrypt.compare(req.body.password, emailExist.password)
+    if (!validPassword) return res.status(400).send('Email or password is wrong');
+
+    //Create and assign an token
+    const token = jwt.sign({ _id: emailExist._id }, process.env.TOKEN_SECRET);
+    const user = {
+        user: emailExist,
+        token: token,
+    };
+    res.header('auth-token', token).send(user);
+
+});
+
 module.exports = router;
