@@ -90,19 +90,19 @@ TablePaginationActions.propTypes = {
     rowsPerPage: PropTypes.number.isRequired,
 };
 
-const appointment = [
-    { "appID" : "0001", "firstName" : "Vinuri", "lastName" : "Galagoda", "email" : "vinuri@gmail.com", "mobile" : "0771234567", "gender" : "female", "consultant" : "Rikas", "appdate" : "12/02/2021", "apptime" : "4.00 pm - 4.10 pm"},
-    { "appID" : "0002", "firstName" : "Vinuri", "lastName" : "Galagoda", "email" : "vinuri@gmail.com", "mobile" : "0771234567", "gender" : "female", "consultant" : "Rikas", "appdate" : "12/02/2021", "apptime" : "4.00 pm - 4.10 pm"},
-    { "appID" : "0003", "firstName" : "Vinuri", "lastName" : "Galagoda", "email" : "vinuri@gmail.com", "mobile" : "0771234567", "gender" : "female", "consultant" : "Rikas", "appdate" : "12/02/2021", "apptime" : "4.00 pm - 4.10 pm"},
-    { "appID" : "0004", "firstName" : "Vinuri", "lastName" : "Galagoda", "email" : "vinuri@gmail.com", "mobile" : "0771234567", "gender" : "female", "consultant" : "Rikas", "appdate" : "12/02/2021", "apptime" : "4.00 pm - 4.10 pm"},
-    { "appID" : "0005", "firstName" : "Vinuri", "lastName" : "Galagoda", "email" : "vinuri@gmail.com", "mobile" : "0771234567", "gender" : "female", "consultant" : "Rikas", "appdate" : "12/02/2021", "apptime" : "4.00 pm - 4.10 pm"},
-    { "appID" : "0006", "firstName" : "Vinuri", "lastName" : "Galagoda", "email" : "vinuri@gmail.com", "mobile" : "0771234567", "gender" : "female", "consultant" : "Rikas", "appdate" : "12/02/2021", "apptime" : "4.00 pm - 4.10 pm"},
-    { "appID" : "0007", "firstName" : "Vinuri", "lastName" : "Galagoda", "email" : "vinuri@gmail.com", "mobile" : "0771234567", "gender" : "female", "consultant" : "Rikas", "appdate" : "12/02/2021", "apptime" : "4.00 pm - 4.10 pm"},
-    { "appID" : "0008", "firstName" : "Vinuri", "lastName" : "Galagoda", "email" : "vinuri@gmail.com", "mobile" : "0771234567", "gender" : "female", "consultant" : "Rikas", "appdate" : "12/02/2021", "apptime" : "4.00 pm - 4.10 pm"},
-    { "appID" : "0009", "firstName" : "Vinuri", "lastName" : "Galagoda", "email" : "vinuri@gmail.com", "mobile" : "0771234567", "gender" : "female", "consultant" : "Rikas", "appdate" : "12/02/2021", "apptime" : "4.00 pm - 4.10 pm"},
-    { "appID" : "0010", "firstName" : "Vinuri", "lastName" : "Galagoda", "email" : "vinuri@gmail.com", "mobile" : "0771234567", "gender" : "female", "consultant" : "Rikas", "appdate" : "12/02/2021", "apptime" : "4.00 pm - 4.10 pm"},
-    { "appID" : "0011", "firstName" : "Vinuri", "lastName" : "Galagoda", "email" : "vinuri@gmail.com", "mobile" : "0771234567", "gender" : "female", "consultant" : "Rikas", "appdate" : "12/02/2021", "apptime" : "4.00 pm - 4.10 pm"},
-];
+//const appointment = [
+//   { "appID" : "0001", "firstName" : "Vinuri", "lastName" : "Galagoda", "email" : "vinuri@gmail.com", "mobile" : "0771234567", "gender" : "female", "consultant" : "Rikas", "appdate" : "12/02/2021", "apptime" : "4.00 pm - 4.10 pm"},
+//   { "appID" : "0002", "firstName" : "Vinuri", "lastName" : "Galagoda", "email" : "vinuri@gmail.com", "mobile" : "0771234567", "gender" : "female", "consultant" : "Rikas", "appdate" : "12/02/2021", "apptime" : "4.00 pm - 4.10 pm"},
+//   { "appID" : "0003", "firstName" : "Vinuri", "lastName" : "Galagoda", "email" : "vinuri@gmail.com", "mobile" : "0771234567", "gender" : "female", "consultant" : "Rikas", "appdate" : "12/02/2021", "apptime" : "4.00 pm - 4.10 pm"},
+//   { "appID" : "0004", "firstName" : "Vinuri", "lastName" : "Galagoda", "email" : "vinuri@gmail.com", "mobile" : "0771234567", "gender" : "female", "consultant" : "Rikas", "appdate" : "12/02/2021", "apptime" : "4.00 pm - 4.10 pm"},
+//   { "appID" : "0005", "firstName" : "Vinuri", "lastName" : "Galagoda", "email" : "vinuri@gmail.com", "mobile" : "0771234567", "gender" : "female", "consultant" : "Rikas", "appdate" : "12/02/2021", "apptime" : "4.00 pm - 4.10 pm"},
+//   { "appID" : "0006", "firstName" : "Vinuri", "lastName" : "Galagoda", "email" : "vinuri@gmail.com", "mobile" : "0771234567", "gender" : "female", "consultant" : "Rikas", "appdate" : "12/02/2021", "apptime" : "4.00 pm - 4.10 pm"},
+//   { "appID" : "0007", "firstName" : "Vinuri", "lastName" : "Galagoda", "email" : "vinuri@gmail.com", "mobile" : "0771234567", "gender" : "female", "consultant" : "Rikas", "appdate" : "12/02/2021", "apptime" : "4.00 pm - 4.10 pm"},
+//   { "appID" : "0008", "firstName" : "Vinuri", "lastName" : "Galagoda", "email" : "vinuri@gmail.com", "mobile" : "0771234567", "gender" : "female", "consultant" : "Rikas", "appdate" : "12/02/2021", "apptime" : "4.00 pm - 4.10 pm"},
+//   { "appID" : "0009", "firstName" : "Vinuri", "lastName" : "Galagoda", "email" : "vinuri@gmail.com", "mobile" : "0771234567", "gender" : "female", "consultant" : "Rikas", "appdate" : "12/02/2021", "apptime" : "4.00 pm - 4.10 pm"},
+//   { "appID" : "0010", "firstName" : "Vinuri", "lastName" : "Galagoda", "email" : "vinuri@gmail.com", "mobile" : "0771234567", "gender" : "female", "consultant" : "Rikas", "appdate" : "12/02/2021", "apptime" : "4.00 pm - 4.10 pm"},
+//   { "appID" : "0011", "firstName" : "Vinuri", "lastName" : "Galagoda", "email" : "vinuri@gmail.com", "mobile" : "0771234567", "gender" : "female", "consultant" : "Rikas", "appdate" : "12/02/2021", "apptime" : "4.00 pm - 4.10 pm"},
+//];
 
 const AllAppointments = () => {
     const classes = useStyles();
@@ -112,6 +112,7 @@ const AllAppointments = () => {
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
     const [opendlt, setOpendlt] = React.useState(false);
     const [reportData, setReportData] = React.useState([]);
+    const [appointment, setAppointment] = React.useState([]);
 
     const CssTextField = withStyles({
         root: {
@@ -161,6 +162,14 @@ const AllAppointments = () => {
 
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, appointment.length - page * rowsPerPage);
 
+    useEffect(() => {
+        fetch("http://localhost:5000/api/appointment").then(res => {
+            if(res.ok){
+                return res.json()
+            }
+        }).then(jsonRes => setAppointment(jsonRes));
+    }, [])
+    
     const handleClickOpen = () => {
         setOpendlt(true);
     };
@@ -201,29 +210,29 @@ const AllAppointments = () => {
                     <table className={classes.table}>
                         <tr style={{ fontSize: "18px", color: "#0077B6" }}>
                             <td className={classes.trReport}>Appointment ID</td>
-                            <td className={classes.trReport}>#0001</td>
+                            <td className={classes.trReport}>{reportData._id}</td>
                         </tr>
                         <tr>
                             <td className={classes.trReport}>Full Name</td>
-                            <td>Minerva McGonagall</td>
+                            <td>{reportData.firstName} {reportData.lastName}</td>
                             <td className={classes.trReport}>Gender</td>
-                            <td>Female</td>
+                            <td>{reportData.gender}</td>
                         </tr>
                         <tr>
                             <td className={classes.trReport}>Email</td>
-                            <td>minerva@gmail.com</td>
+                            <td>{reportData.email}</td>
                             <td className={classes.trReport}>Mobile Number</td>
-                            <td>0774584529</td>
+                            <td>{reportData.mobile}</td>
                         </tr>
                         <tr>
                             <td className={classes.trReport}>Name of Consultant</td>
-                            <td>02/08/1990</td>
+                            <td>{reportData.consultant}</td>
                             <td className={classes.trReport}>Date of Appoinment</td>
-                            <td>14/08/2021</td>
+                            <td>{reportData.appdate}</td>
                         </tr>
                         <tr>
                             <td className={classes.trReport}>Time of Appointment</td>
-                            <td>06:00 PM</td>
+                            <td>{reportData.apptime}</td>
                         </tr>
                     </table>
                 </Grid>
@@ -306,7 +315,7 @@ const AllAppointments = () => {
                                         <>
                                         <TableRow key={row.name} className={classes.tableRow}>
                                             <TableCell component="th" scope="row" style={{ width: 100 }}>
-                                                {row.appID}
+                                                {row._id}
                                             </TableCell>
                                             <TableCell align="left">
                                                 {row.firstName} {row.lastName}
