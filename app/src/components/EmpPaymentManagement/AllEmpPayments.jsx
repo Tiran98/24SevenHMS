@@ -15,6 +15,7 @@ import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+import axios from 'axios';
 
 import useStyles from './styles';
 
@@ -104,6 +105,7 @@ const AllEmpPayments = () => {
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
     const [opendlt, setOpendlt] = React.useState(false);
+    const [empPayments, setEmpPayments] = React.useState([]);
 
     const CssTextField = withStyles({
         root: {
@@ -152,6 +154,15 @@ const AllEmpPayments = () => {
     })(MuiTableCell);
 
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, employeeFD.length - page * rowsPerPage);
+
+    useEffect(() => {
+        fetch("http://localhost:5000/api/empPay/viewEmpPay").then(res => {
+            if(res.ok){
+                return res.json()
+            }
+        }).then(jsonRes => setEmpPayments(jsonRes));
+
+    }, [])
 
     const handleClickOpen = () => {
         setOpendlt(true);
@@ -233,22 +244,22 @@ const AllEmpPayments = () => {
                                         </TableCell>
                                     </TableRow> <br />
                                     {(rowsPerPage > 0
-                                        ? employeeFD.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                        : employeeFD
+                                        ? empPayments.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                        : empPayments
                                     ).map((row) => (
                                         <>
                                         <TableRow key={row.name} className={classes.tableRow}>
                                             <TableCell component="th" scope="row" style={{ width: 100 }}>
-                                                {row.empID}
+                                                {row.employeeId}
                                             </TableCell>
-                                            <TableCell component={Link} to="/emp-details" align="left">
-                                                {row.firstName} {row.lastName}
-                                            </TableCell>
-                                            <TableCell align="left">
-                                                {row.position}
+                                            <TableCell component={Link} to={'/emp-details/' + row.employeeId} align="left">
+                                                {row.employeeName}
                                             </TableCell>
                                             <TableCell align="left">
-                                                {row.paymentAmt}
+                                                {row.paymentType}
+                                            </TableCell>
+                                            <TableCell align="left">
+                                                {row.paymentAmount}
                                             </TableCell>
                                             <TableCell align="left">
                                                 {row.paymentType}

@@ -101,6 +101,7 @@ const AddEmpPayment = () => {
     const [payType, setPayType] = React.useState('default');
     const [formData, setFormData] = useState([]);
     const isFirstRender = useRef(true);
+    const [nextId, setNextId] = useState("");
 
     const [gender, setGender] = useState("");
 
@@ -142,17 +143,40 @@ const AddEmpPayment = () => {
     })(TextField);
 
     useEffect(() => {
+        getMaxId();
+
         if (isFirstRender.current) {
             isFirstRender.current = false // toggle flag after first render/mounting
             return;
         }
-
+       
         submitForm(formData);
     }, [formData])
 
+    const getMaxId = () => {
+        axios
+        .get("http://localhost:5000/api/empPay/getMaxId")
+        .then((response) => {
+            console.log(response.data.employeeId);
+          if(response.data.employeeId == null)
+          {
+            setNextId(1);
+          }else{
+            setNextId(response.data.employeeId + 1);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      }
+
 
     const onSubmit = (data) => {
+
+        var codeId = document.getElementById("empId").value
+
         setFormData({
+            employeeId: nextId,
             employeeType: data.empType,
             employeeName: data.employee,
             paymentAmount: data.payAmount,
@@ -386,6 +410,9 @@ const AddEmpPayment = () => {
                                     Submit
                                 </Button>
                             </Grid>
+                            {/* <Grid item xs={12}>
+                                <h1 id="empId" name="empId">{nextId}</h1>
+                            </Grid> */}
                         </Grid> 
                     </form>
                 </Grid>

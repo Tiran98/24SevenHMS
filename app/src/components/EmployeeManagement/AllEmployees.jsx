@@ -87,17 +87,6 @@ TablePaginationActions.propTypes = {
     rowsPerPage: PropTypes.number.isRequired,
 };
 
-// const employees = [
-//     { "empID" : "0001", "firstName" : "Minerva", "lastName" : "McGonagall", "position" : "Doctor", "email" : "minerva@gmail.com", "mobile" : "0774584529"},
-//     { "empID" : "0001", "firstName" : "Minerva", "lastName" : "McGonagall", "position" : "Doctor", "email" : "minerva@gmail.com", "mobile" : "0774584529"},
-//     { "empID" : "0001", "firstName" : "Minerva", "lastName" : "McGonagall", "position" : "Doctor", "email" : "minerva@gmail.com", "mobile" : "0774584529"},
-//     { "empID" : "0001", "firstName" : "Minerva", "lastName" : "McGonagall", "position" : "Doctor", "email" : "minerva@gmail.com", "mobile" : "0774584529"},
-//     { "empID" : "0001", "firstName" : "Minerva", "lastName" : "McGonagall", "position" : "Doctor", "email" : "minerva@gmail.com", "mobile" : "0774584529"},
-//     { "empID" : "0001", "firstName" : "Minerva", "lastName" : "McGonagall", "position" : "Doctor", "email" : "minerva@gmail.com", "mobile" : "0774584529"},
-//     { "empID" : "0001", "firstName" : "Minerva", "lastName" : "McGonagall", "position" : "Doctor", "email" : "minerva@gmail.com", "mobile" : "0774584529"},
-//     { "empID" : "0001", "firstName" : "Minerva", "lastName" : "McGonagall", "position" : "Doctor", "email" : "minerva@gmail.com", "mobile" : "0774584529"},
-// ];
-
 const AllEmployees = () => {
     const classes = useStyles();
     const { control, handleSubmit, reset } = useForm();

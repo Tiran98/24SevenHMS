@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { useForm, Controller } from "react-hook-form";
 import { TextField, Paper, Button, Grid, Typography, IconButton, Table, TableBody, TableContainer, TableFooter, TablePagination, TableRow, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle  } from '@material-ui/core/';
 import { withStyles } from '@material-ui/core/styles';
 import InputAdornment from '@material-ui/core/InputAdornment';
@@ -90,23 +89,13 @@ TablePaginationActions.propTypes = {
     rowsPerPage: PropTypes.number.isRequired,
 };
 
-const reports = [
-    { "reportID" : "0001", "fullName" : "Minerva McGonagall", "gender" : "Female", "email" : "minerva@gmail.com", "mobile" : "0774584529", "dob" : "02/08/1990", "dateCollected" : "14/08/2021"},
-    { "reportID" : "0001", "fullName" : "Minerva", "gender" : "Female", "email" : "minerva@gmail.com", "mobile" : "0774584529", "dob" : "02/08/1990", "dateCollected" : "14/08/2021"},
-    { "reportID" : "0001", "fullName" : "Minerva McGonagall", "gender" : "Female", "email" : "minerva@gmail.com", "mobile" : "0774584529", "dob" : "02/08/1990", "dateCollected" : "14/08/2021"},
-    { "reportID" : "0001", "fullName" : "Minerva McGonagall", "gender" : "Female", "email" : "minerva@gmail.com", "mobile" : "0774584529", "dob" : "02/08/1990", "dateCollected" : "14/08/2021"},
-    { "reportID" : "0001", "fullName" : "Minerva McGonagall", "gender" : "Female", "email" : "minerva@gmail.com", "mobile" : "0774584529", "dob" : "02/08/1990", "dateCollected" : "14/08/2021"},
-    { "reportID" : "0001", "fullName" : "Minerva McGonagall", "gender" : "Female", "email" : "minerva@gmail.com", "mobile" : "0774584529", "dob" : "02/08/1990", "dateCollected" : "14/08/2021"},
-    { "reportID" : "0001", "fullName" : "Minerva McGonagall", "gender" : "Female", "email" : "minerva@gmail.com", "mobile" : "0774584529", "dob" : "02/08/1990", "dateCollected" : "14/08/2021"},
-];
-
 const AllReports = () => {
     const classes = useStyles();
     const [openModal, setOpenModal] = React.useState(false)
-    const { control, handleSubmit, reset } = useForm();
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
     const [opendlt, setOpendlt] = React.useState(false);
+    const [reports, setReports] = React.useState([]);
     const [reportData, setReportData] = React.useState([]);
 
     const CssTextField = withStyles({
@@ -157,6 +146,14 @@ const AllReports = () => {
 
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, reports.length - page * rowsPerPage);
 
+    useEffect(() => {
+        fetch("http://localhost:5000/api/labreports").then(res => {
+            if(res.ok){
+                return res.json()
+            }
+        }).then(jsonRes => setReports(jsonRes));
+    }, [])
+
     const handleClickOpen = () => {
         setOpendlt(true);
     };
@@ -194,25 +191,25 @@ const AllReports = () => {
                     <table className={classes.table}>
                         <tr style={{ fontSize: "18px", color: "#0077B6" }}>
                             <td className={classes.trReport}>Report ID</td>
-                            <td className={classes.trReport}>#0001</td>
+                            <td className={classes.trReport}>{reportData._id}</td>
                         </tr>
                         <tr>
                             <td className={classes.trReport}>Full Name</td>
-                            <td>Minerva McGonagall</td>
+                            <td>{reportData.fullname}</td>
                             <td className={classes.trReport}>Gender</td>
-                            <td>Female</td>
+                            <td>{reportData.gender}</td>
                         </tr>
                         <tr>
                             <td className={classes.trReport}>Email</td>
-                            <td>minerva@gmail.com</td>
+                            <td>{reportData.email}</td>
                             <td className={classes.trReport}>Mobile Number</td>
-                            <td>0774584529</td>
+                            <td>{reportData.mobile}</td>
                         </tr>
                         <tr>
                             <td className={classes.trReport}>Date of Birth</td>
-                            <td>02/08/1990</td>
+                            <td>{reportData.dob}</td>
                             <td className={classes.trReport}>Date Collected</td>
-                            <td>14/08/2021</td>
+                            <td>{reportData.datecollected}</td>
                         </tr>
                     </table>
                     <Paper className={classes.paperSubTitle}>
@@ -227,109 +224,109 @@ const AllReports = () => {
                         </tr>
                         <tr>
                             <td>Hemoglobin</td>
-                            <td>12</td>
+                            <td>{reportData.hemoglobin}</td>
                             <td>11.0 - 16.0</td>
                             <td>g/dL</td>
                         </tr>
                         <tr>
                             <td>RBC</td>
-                            <td>3.3</td>
+                            <td>{reportData.rbc}</td>
                             <td>3.5 - 5.50</td>
                             <td>10^6/uL</td>
                         </tr>
                         <tr>
                             <td>HCT</td>
-                            <td>36</td>
+                            <td>{reportData.hct}</td>
                             <td>37.0 - 50.0</td>
                             <td>%</td>
                         </tr>
                         <tr>
                             <td>MCV</td>
-                            <td>83</td>
+                            <td>{reportData.mcv}</td>
                             <td>82 - 95</td>
                             <td>fl</td>
                         </tr>
                         <tr>
                             <td>MCH</td>
-                            <td>28</td>
+                            <td>{reportData.mch}</td>
                             <td>27 - 31</td>
                             <td>pg</td>
                         </tr>
                         <tr>
                             <td>MCHC</td>
-                            <td>33</td>
+                            <td>{reportData.mchc}</td>
                             <td>32.0 - 36.0</td>
                             <td>g/dL</td>
                         </tr>
                         <tr>
                             <td>RDW-CV</td>
-                            <td>12</td>
+                            <td>{reportData.rdwcv}</td>
                             <td>11.5 - 14.5</td>
                             <td>%</td>
                         </tr>
                         <tr>
                             <td>RDW-SD</td>
-                            <td>44</td>
+                            <td>{reportData.rdwsd}</td>
                             <td>35 - 56</td>
                             <td>fl</td>
                         </tr>
                         <tr>
                             <td>WBC</td>
-                            <td>6.7</td>
+                            <td>{reportData.wbc}</td>
                             <td>4.5 - 11</td>
                             <td>10^3/uL</td>
                         </tr>
                         <tr>
                             <td>NEU%</td>
-                            <td>60</td>
+                            <td>{reportData.neu}</td>
                             <td>40 - 70</td>
                             <td>%</td>
                         </tr>
                         <tr>
                             <td>LYM%</td>
-                            <td>30</td>
+                            <td>{reportData.lym}</td>
                             <td>20 - 45</td>
                             <td>%</td>
                         </tr>
                         <tr>
                             <td>MON%</td>
-                            <td>8</td>
+                            <td>{reportData.mon}</td>
                             <td>2 - 10</td>
                             <td>%</td>
                         </tr>
                         <tr>
                             <td>EOS%</td>
-                            <td>2</td>
+                            <td>{reportData.eos}</td>
                             <td>1 - 6</td>
                             <td>%</td>
                         </tr>
                         <tr>
                             <td>BAS%</td>
-                            <td>0</td>
+                            <td>{reportData.bas}</td>
                             <td>0 - 2</td>
                             <td>%</td>
                         </tr>
                         <tr>
                             <td>LYM#</td>
-                            <td>2</td>
+                            <td>{reportData.lym2}</td>
                             <td>1.5 - 4.0</td>
                             <td>10^3/uL</td>
                         </tr>
                         <tr>
                             <td>GRA#</td>
-                            <td>4.7</td>
+                            <td>{reportData.gra}</td>
                             <td>2.0 - 7.5</td>
                             <td>10^3/uL</td>
                         </tr>
                         <tr>
                             <td>PLT</td>
-                            <td>256</td>
+                            <td>{reportData.plt}</td>
                             <td>150 - 450</td>
                             <td>10^3/uL</td>
                         </tr>
                         <tr>
                             <td>ESR</td>
-                            <td>2</td>
+                            <td>{reportData.esr}</td>
                             <td>Up to 15</td>
                             <td>mm/hr</td>
                         </tr>
@@ -379,7 +376,7 @@ const AllReports = () => {
                             <Table className={classes.table}>
                                 <TableBody>
                                     <TableRow component={Paper} className={classes.paper}>
-                                        <TableCell component="th" className={classes.tableth} style={{ width: 100 }}>
+                                        <TableCell component="th" className={classes.tableth} style={{ width: 200 }}>
                                             Report ID
                                         </TableCell>
                                         <TableCell component="th" className={classes.tableth}>
@@ -410,11 +407,11 @@ const AllReports = () => {
                                     ).map((row) => (
                                         <>
                                         <TableRow key={row.name} className={classes.tableRow}>
-                                            <TableCell component="th" scope="row" style={{ width: 100 }}>
-                                                {row.reportID}
+                                            <TableCell component="th" scope="row" style={{ width: 200 }}>
+                                                {row._id}
                                             </TableCell>
                                             <TableCell align="left">
-                                                {row.fullName}
+                                                {row.fullname}
                                             </TableCell>
                                             <TableCell align="left">
                                                 {row.gender}
@@ -429,7 +426,7 @@ const AllReports = () => {
                                                 {row.dob}
                                             </TableCell>
                                             <TableCell align="left">
-                                                {row.dateCollected}
+                                                {row.datecollected}
                                             </TableCell>
                                             <TableCell align="left">
                                                 <Button variant="contained" color="secondary" className={classes.tableBtn} onClick={() => handleOpenModal(row)}>
