@@ -84,7 +84,7 @@ const schema = yup.object().shape({
 
 const AddAppointment = () => {
     const classes = useStyles();
-    const { control, handleSubmit, reset, formState: { error } } = useForm(
+    const { control, handleSubmit, reset, formState: { errors } } = useForm(
         {
             resolver: yupResolver(schema),
             reValidateMode: 'onSubmit',
@@ -159,7 +159,7 @@ const AddAppointment = () => {
     }
 
     const submitForm = (data) => {
-        axios.post('http://localhost:5000/api/appointment/', data)
+        axios.post('http://localhost:5000/api/appointment/addApp', data)
         .then((response) => {
           console.log(response);
           setSuccessMsg(true);
@@ -172,15 +172,15 @@ const AddAppointment = () => {
     }
 
     const handleRadioChange = (event) => {
-        setGender(event.target.value, console.log(gender));
+        setGender(event.target.value);
     };
 
     const handleConsultant = (event) => {
-        setConsultant(event.target.value, console.log(consultant));
+        setConsultant(event.target.value);
     };
 
     const handleTime = (event) => {
-        setTime(event.target.value, console.log(time));
+        setTime(event.target.value);
     };
 
     const handleSuccessMsg = (event, reason) => {
@@ -215,7 +215,9 @@ const AddAppointment = () => {
                                             <CssTextField fullWidth 
                                             label="First Name" 
                                             variant="outlined" 
-                                            color="primary" {...field} 
+                                            color="primary" {...field}
+                                            error={!!errors?.firstName}
+                                            helperText={errors?.firstName?.message} 
                                             />}
                                         />
                                     </Grid>
@@ -226,7 +228,9 @@ const AddAppointment = () => {
                                             defaultValue=""
                                             render={({ field }) => 
                                             <CssTextField 
-                                                fullWidth label="Last Name" variant="outlined" color="primary" {...field} />}
+                                                fullWidth label="Last Name" variant="outlined" color="primary" {...field}
+                                                error={!!errors?.lastName}
+                                                helperText={errors?.lastName?.message}  />}
                                         />
                                     </Grid>
                                     <Grid item xs={12} sm={6}>
@@ -235,7 +239,9 @@ const AddAppointment = () => {
                                             control={control}
                                             defaultValue=""
                                             render={({ field }) => 
-                                            <CssTextField fullWidth label="Email" variant="outlined" color="primary" {...field} />}
+                                            <CssTextField fullWidth label="Email" variant="outlined" color="primary" {...field}
+                                            error={!!errors?.email}
+                                            helperText={errors?.email?.message} />}
                                         />
                                     </Grid> 
                                     <Grid item xs={12} sm={6}>
@@ -244,7 +250,9 @@ const AddAppointment = () => {
                                             control={control}
                                             defaultValue=""
                                             render={({ field }) => 
-                                            <CssTextField fullWidth label="Mobile Number" variant="outlined" color="primary" {...field} />}
+                                            <CssTextField fullWidth label="Mobile Number" variant="outlined" color="primary" {...field}
+                                            error={!!errors?.mobile}
+                                            helperText={errors?.mobile?.message} />}
                                         />
                                     </Grid>
                                     <Grid item xs={12} sm={6}>
@@ -268,6 +276,8 @@ const AddAppointment = () => {
                                                     variant="outlined"
                                                     color="primary"
                                                     {...field}
+                                                    error={!!errors?.dob}
+                                                    helperText={errors?.dob?.message}
                                                     InputLabelProps={{
                                                         shrink: true,
                                                     }}
@@ -294,6 +304,9 @@ const AddAppointment = () => {
                                                 value={consultant}
                                                 onChange={handleConsultant}
                                                 variant="outlined"
+                                                {...field}
+                                                error={!!errors?.consultant}
+                                                helperText={errors?.consultant?.message}
                                                 >
                                                 {consultants.map((option) => (
                                                     <MenuItem key={option.value} value={option.value}>
@@ -309,12 +322,6 @@ const AddAppointment = () => {
                                             control={control}
                                             defaultValue=""
                                             render={({ field }) => 
-                                                <Grid item xs={12} sm={6}>
-                                        <Controller
-                                            name="appointmentdate"
-                                            control={control}
-                                            defaultValue=""
-                                            render={({ field }) => 
                                                 <CssTextField
                                                     fullWidth
                                                     label="Date of Appointment"
@@ -322,6 +329,8 @@ const AddAppointment = () => {
                                                     variant="outlined"
                                                     color="primary"
                                                     {...field}
+                                                    error={!!errors?.appointmentdate}
+                                                    helperText={errors?.appointmentdate?.message}
                                                     InputLabelProps={{
                                                         shrink: true,
                                                     }}
@@ -335,9 +344,7 @@ const AddAppointment = () => {
                                             />}
                                         />
                                     </Grid>    
-                                    }
-                                        />
-                                    </Grid>    
+                                    
                                     <Grid item xs={12} sm={6}>
                                         <Controller
                                             name="time"
@@ -351,6 +358,9 @@ const AddAppointment = () => {
                                                 value={time}
                                                 onChange={handleTime}
                                                 variant="outlined"
+                                                {...field}
+                                                error={!!errors?.time}
+                                                helperText={errors?.time?.message}
                                                 >
                                                 {apptime.map((option) => (
                                                     <MenuItem key={option.value} value={option.value}>

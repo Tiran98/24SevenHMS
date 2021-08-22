@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const Appointment = require('../Models/Appointment');
 
-router.post('/', async(req, res) => {
+router.post('/addApp', async(req, res) => {
 
     const appointment = new Appointment({
         firstName: req.body.firstName,
