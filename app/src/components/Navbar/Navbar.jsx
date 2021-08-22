@@ -21,6 +21,8 @@ const Navbar = ({ setDrawerState, drawerState }) => {
     const location = useLocation();
     const history = useHistory();;
     const [userProfile, setUserProfile] = useState(JSON.parse(localStorage.getItem('profile')));
+    const [userType, setUserType] = useState("");
+    const [userName, setUserName] = useState("Admin");
 
     const handleDrawerOpen = () => {
         setDrawerState(true);
@@ -32,7 +34,7 @@ const Navbar = ({ setDrawerState, drawerState }) => {
 
     const logout = () => {
         localStorage.clear();
-        history.push('/admin');
+        history.push('/login');
     };
 
     useEffect(() => {
@@ -42,6 +44,10 @@ const Navbar = ({ setDrawerState, drawerState }) => {
         // }
 
         setUserProfile(JSON.parse(localStorage.getItem('profile')));
+        if (userProfile) {
+            setUserType(userProfile.position);
+            setUserName(userProfile.firstName + " " + userProfile.lastName);
+        }
     }, [location]);
 
     return (
@@ -68,16 +74,16 @@ const Navbar = ({ setDrawerState, drawerState }) => {
                     <div className={classes.grow} />
                     <div className={classes.profile}>
                         <div className={classes.profileType}>
-                            <Typography className={classes.userName} variant="h6">{userProfile.firstName} {userProfile.lastName}</Typography>
-                            {userProfile.position == "doctor" ? 
+                            <Typography className={classes.userName} variant="h6">{userName}</Typography>
+                            {userType == "doctor" ? 
                                 <Typography className={classes.userType} variant="caption" color="primary">Doctor</Typography>: 
-                            userProfile.position == "pharmacist" ? 
+                            userType == "pharmacist" ? 
                                 <Typography className={classes.userType} variant="caption" color="primary">Pharmacist</Typography>:
-                            userProfile.position == "accountant" ? 
+                            userType == "accountant" ? 
                                 <Typography className={classes.userType} variant="caption" color="primary">Accountant</Typography>:
-                            userProfile.position == "labAssistant" ? 
+                            userType == "labAssistant" ? 
                                 <Typography className={classes.userType} variant="caption" color="primary">Laboratory Assistant</Typography>:
-                            userProfile.position == "admin" ?
+                            userType == "admin" ?
                                 <Typography className={classes.userType} variant="caption" color="primary">Admin</Typography>: null
                             }
                                     
@@ -90,7 +96,7 @@ const Navbar = ({ setDrawerState, drawerState }) => {
                 <Toolbar />
                 <div className={classes.drawerContainer}>
                     <List>
-                        <ListItem component={Link} to="/" button >
+                        <ListItem component={Link} to="/home" button >
                             <ListItemIcon className={classes.navIcon}><DashboardIcon /></ListItemIcon>
                             <ListItemText primary="Dashboard" />
                         </ListItem>
@@ -110,7 +116,7 @@ const Navbar = ({ setDrawerState, drawerState }) => {
                             <ListItemIcon className={classes.navIcon}><LocalHospitalIcon /></ListItemIcon>
                             <ListItemText primary="Inventory Management" />
                         </ListItem>
-                        {userProfile.position == "admin" ? 
+                        {userType == "admin" ? 
                         <ListItem component={Link} to="/all-employees" button>
                             <ListItemIcon className={classes.navIcon}><PeopleIcon /></ListItemIcon>
                             <ListItemText primary="Employee Management" />

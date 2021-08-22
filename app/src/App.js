@@ -61,12 +61,12 @@ function App() {
   const [pathName, setPathName] = React.useState("");
   const classes = useStyles();
 
-  console.log(pathName === "/admin");
+  console.log(pathName === "/login");
 
   return (
     <Router>
       <ThemeProvider theme={theme}>
-          {pathName === "/admin"?
+            {pathName === "/admin" || pathName === "/login" ?
             <></>:
             <Navbar setDrawerState={setDrawerState} drawerState={drawerState} />}
           {/* {drawerState ?

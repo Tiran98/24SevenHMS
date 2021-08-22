@@ -364,7 +364,7 @@ const AllAppointments = () => {
                                     <TableRow>
                                         <TablePagination
                                         rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
-                                        colSpan={6}
+                                        colSpan={9}
                                         style={{ borderBottom:"none" }}
                                         count={appointment.length}
                                         rowsPerPage={rowsPerPage}

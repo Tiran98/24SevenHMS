@@ -1,11 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useHistory, useLocation } from 'react-router-dom';
-import { Radio, RadioGroup, FormLabel, TextField, FormControlLabel, Paper, Button, Grid, Typography, IconButton } from '@material-ui/core/';
+import { Paper, Button, Grid, Typography } from '@material-ui/core/';
 import ReactFitText from 'react-fittext';
 import Clock from 'react-live-clock';
 import "moment-timezone";
 import '@natscale/react-calendar/dist/main.css';
-import { Calendar } from '@natscale/react-calendar';
 
 import useStyles from './styles';
 import logo from '../../assets/logo.png';
@@ -14,7 +13,7 @@ import LocalHospitalIcon from '@material-ui/icons/LocalHospital';
 import LibraryAddIcon from '@material-ui/icons/LibraryAdd';
 import YoutubeSearchedForIcon from '@material-ui/icons/YoutubeSearchedFor';
 
-const Dashboard = ({ setPathName, drawerState }) => {
+const Dashboard = ({ setPathName }) => {
     const classes = useStyles();
     const location = useLocation();
 
@@ -24,7 +23,6 @@ const Dashboard = ({ setPathName, drawerState }) => {
 
     const handleDrawerClose = () => {
         setPathName(location.pathname);
-        // setDrawerState(true);
     };
 
     return (
@@ -70,6 +68,7 @@ const Dashboard = ({ setPathName, drawerState }) => {
                             <Grid item xs={6}>
                                 <Button
                                     fullWidth
+                                    component={Link} to ="/all-appointments"
                                     variant="contained"
                                     size="large"
                                     className={classes.menuButton}
@@ -80,6 +79,7 @@ const Dashboard = ({ setPathName, drawerState }) => {
                             </Grid>
                             <Grid item xs={6}>
                                 <Button
+                                    component={Link} to ="/all-emp-payment"
                                     fullWidth
                                     variant="contained"
                                     size="large"
@@ -92,6 +92,7 @@ const Dashboard = ({ setPathName, drawerState }) => {
                             <Grid item xs={6}>
                                 <Button
                                     fullWidth
+                                    component={Link} to ="/all-reports"
                                     variant="contained"
                                     size="large"
                                     className={classes.menuButton}
@@ -103,6 +104,7 @@ const Dashboard = ({ setPathName, drawerState }) => {
                             <Grid item xs={6}>
                                 <Button
                                     fullWidth
+
                                     variant="contained"
                                     size="large"
                                     className={classes.menuButton}

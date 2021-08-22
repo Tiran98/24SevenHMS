@@ -15,7 +15,7 @@ const AdminLogin = ({ setPathName, setDrawerState }) => {
     const classes = useStyles();
     const location = useLocation();
     const { control, handleSubmit, reset } = useForm();
-    const [showPassword, setShowPassword] = React.useState(true);
+    const [showPassword, setShowPassword] = React.useState(false);
     const [userProfile, setUserProfile] = useState([]);
     const [formData, setFormData] = useState([]);
     const isFirstRender = useRef(true);
@@ -63,7 +63,7 @@ const AdminLogin = ({ setPathName, setDrawerState }) => {
     }, []);
 
     useEffect(() => {
-      console.log(location.pathname);
+      localStorage.setItem('profile', JSON.stringify(userProfile));
       if (isFirstRender.current) {
         isFirstRender.current = false // toggle flag after first render/mounting
         return;
@@ -75,7 +75,7 @@ const AdminLogin = ({ setPathName, setDrawerState }) => {
 
     useEffect(() => {
       localStorage.setItem('profile', JSON.stringify(userProfile));
-    }, [userProfile])
+    }, [userProfile]);
 
     const handleDrawerClose = () => {
         setDrawerState(false);
@@ -96,7 +96,7 @@ const AdminLogin = ({ setPathName, setDrawerState }) => {
     const submitForm = (data) => {
       // console.log(data);
 
-      axios.post('http://localhost:5000/api/user/login',
+      axios.post('http://localhost:5000/api/user/adminlogin',
       {
         email : data.email,
         password : data.password
