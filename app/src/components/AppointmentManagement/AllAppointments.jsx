@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useForm, Controller } from "react-hook-form";
 import { TextField, Paper, Button, Grid, Typography, IconButton, Table, TableBody, TableContainer, TableFooter, TablePagination, TableRow, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle  } from '@material-ui/core/';
@@ -7,6 +7,9 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import { Link } from 'react-router-dom';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import MuiTableCell from "@material-ui/core/TableCell";
+import Modal from '@material-ui/core/Modal';
+import Backdrop from '@material-ui/core/Backdrop';
+import Fade from '@material-ui/core/Fade';
 
 import SearchIcon from '@material-ui/icons/Search';
 import AddIcon from '@material-ui/icons/Add';
@@ -15,7 +18,6 @@ import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
-import axios from 'axios';
 
 import useStyles from './styles';
 
@@ -88,24 +90,29 @@ TablePaginationActions.propTypes = {
     rowsPerPage: PropTypes.number.isRequired,
 };
 
-const employeeFD = [
-    { "empID" : "0001", "firstName" : "Minerva", "lastName" : "McGonagall", "position" : "Doctor", "paymentAmt" : "Rs.80000.00", "paymentType" : "Visa", "paymentDate" : "22.10.2021"},
-    { "empID" : "0001", "firstName" : "Minerva", "lastName" : "McGonagall", "position" : "Doctor", "paymentAmt" : "Rs.80000.00", "paymentType" : "Visa", "paymentDate" : "22.10.2021"},
-    { "empID" : "0001", "firstName" : "Minerva", "lastName" : "McGonagall", "position" : "Doctor", "paymentAmt" : "Rs.80000.00", "paymentType" : "Visa", "paymentDate" : "22.10.2021"},
-    { "empID" : "0001", "firstName" : "Minerva", "lastName" : "McGonagall", "position" : "Doctor", "paymentAmt" : "Rs.80000.00", "paymentType" : "Visa", "paymentDate" : "22.10.2021"},
-    { "empID" : "0001", "firstName" : "Minerva", "lastName" : "McGonagall", "position" : "Doctor", "paymentAmt" : "Rs.80000.00", "paymentType" : "Visa", "paymentDate" : "22.10.2021"},
-    { "empID" : "0001", "firstName" : "Minerva", "lastName" : "McGonagall", "position" : "Doctor", "paymentAmt" : "Rs.80000.00", "paymentType" : "Visa", "paymentDate" : "22.10.2021"},
-    { "empID" : "0001", "firstName" : "Minerva", "lastName" : "McGonagall", "position" : "Doctor", "paymentAmt" : "Rs.80000.00", "paymentType" : "Visa", "paymentDate" : "22.10.2021"},
-    { "empID" : "0001", "firstName" : "Minerva", "lastName" : "McGonagall", "position" : "Doctor", "paymentAmt" : "Rs.80000.00", "paymentType" : "Visa", "paymentDate" : "22.10.2021"},
-];
+//const appointment = [
+//   { "appID" : "0001", "firstName" : "Vinuri", "lastName" : "Galagoda", "email" : "vinuri@gmail.com", "mobile" : "0771234567", "gender" : "female", "consultant" : "Rikas", "appdate" : "12/02/2021", "apptime" : "4.00 pm - 4.10 pm"},
+//   { "appID" : "0002", "firstName" : "Vinuri", "lastName" : "Galagoda", "email" : "vinuri@gmail.com", "mobile" : "0771234567", "gender" : "female", "consultant" : "Rikas", "appdate" : "12/02/2021", "apptime" : "4.00 pm - 4.10 pm"},
+//   { "appID" : "0003", "firstName" : "Vinuri", "lastName" : "Galagoda", "email" : "vinuri@gmail.com", "mobile" : "0771234567", "gender" : "female", "consultant" : "Rikas", "appdate" : "12/02/2021", "apptime" : "4.00 pm - 4.10 pm"},
+//   { "appID" : "0004", "firstName" : "Vinuri", "lastName" : "Galagoda", "email" : "vinuri@gmail.com", "mobile" : "0771234567", "gender" : "female", "consultant" : "Rikas", "appdate" : "12/02/2021", "apptime" : "4.00 pm - 4.10 pm"},
+//   { "appID" : "0005", "firstName" : "Vinuri", "lastName" : "Galagoda", "email" : "vinuri@gmail.com", "mobile" : "0771234567", "gender" : "female", "consultant" : "Rikas", "appdate" : "12/02/2021", "apptime" : "4.00 pm - 4.10 pm"},
+//   { "appID" : "0006", "firstName" : "Vinuri", "lastName" : "Galagoda", "email" : "vinuri@gmail.com", "mobile" : "0771234567", "gender" : "female", "consultant" : "Rikas", "appdate" : "12/02/2021", "apptime" : "4.00 pm - 4.10 pm"},
+//   { "appID" : "0007", "firstName" : "Vinuri", "lastName" : "Galagoda", "email" : "vinuri@gmail.com", "mobile" : "0771234567", "gender" : "female", "consultant" : "Rikas", "appdate" : "12/02/2021", "apptime" : "4.00 pm - 4.10 pm"},
+//   { "appID" : "0008", "firstName" : "Vinuri", "lastName" : "Galagoda", "email" : "vinuri@gmail.com", "mobile" : "0771234567", "gender" : "female", "consultant" : "Rikas", "appdate" : "12/02/2021", "apptime" : "4.00 pm - 4.10 pm"},
+//   { "appID" : "0009", "firstName" : "Vinuri", "lastName" : "Galagoda", "email" : "vinuri@gmail.com", "mobile" : "0771234567", "gender" : "female", "consultant" : "Rikas", "appdate" : "12/02/2021", "apptime" : "4.00 pm - 4.10 pm"},
+//   { "appID" : "0010", "firstName" : "Vinuri", "lastName" : "Galagoda", "email" : "vinuri@gmail.com", "mobile" : "0771234567", "gender" : "female", "consultant" : "Rikas", "appdate" : "12/02/2021", "apptime" : "4.00 pm - 4.10 pm"},
+//   { "appID" : "0011", "firstName" : "Vinuri", "lastName" : "Galagoda", "email" : "vinuri@gmail.com", "mobile" : "0771234567", "gender" : "female", "consultant" : "Rikas", "appdate" : "12/02/2021", "apptime" : "4.00 pm - 4.10 pm"},
+//];
 
-const AllEmpPayments = () => {
+const AllAppointments = () => {
     const classes = useStyles();
+    const [openModal, setOpenModal] = React.useState(false)
     const { control, handleSubmit, reset } = useForm();
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
     const [opendlt, setOpendlt] = React.useState(false);
-    const [empPayments, setEmpPayments] = React.useState([]);
+    const [reportData, setReportData] = React.useState([]);
+    const [appointment, setAppointment] = React.useState([]);
 
     const CssTextField = withStyles({
         root: {
@@ -153,17 +160,16 @@ const AllEmpPayments = () => {
         }
     })(MuiTableCell);
 
-    const emptyRows = rowsPerPage - Math.min(rowsPerPage, employeeFD.length - page * rowsPerPage);
+    const emptyRows = rowsPerPage - Math.min(rowsPerPage, appointment.length - page * rowsPerPage);
 
     useEffect(() => {
-        fetch("http://localhost:5000/api/empPay/viewEmpPay").then(res => {
+        fetch("http://localhost:5000/api/appointment").then(res => {
             if(res.ok){
                 return res.json()
             }
-        }).then(jsonRes => setEmpPayments(jsonRes));
-
+        }).then(jsonRes => setAppointment(jsonRes));
     }, [])
-
+    
     const handleClickOpen = () => {
         setOpendlt(true);
     };
@@ -181,15 +187,68 @@ const AllEmpPayments = () => {
         setPage(0);
     };
 
+    const handleOpenModal = (row) => {
+        setOpenModal(true);
+        // console.log(row);
+        setReportData(row);
+    };
+    
+    const handleCloseModal = () => {
+        setOpenModal(false);
+    };
+
+    const modalBody = (
+        <Fade in={openModal}>
+            <Grid container spacing={3} className={classes.modelPaper}>
+                <Grid item xs={12}>
+                    <Typography variant="h6" id="transition-modal-title" style={{ color: '#0077B6', textAlign: 'center', textTransform: 'uppercase', fontWeight: 800, }} gutterBottom>
+                        24Seven hospital management system
+                    </Typography>
+                    <Paper className={classes.paperTitle}>
+                        <Typography variant="h6" id="transition-modal-title" className={classes.reportTitle}>Appointment Slip</Typography>
+                    </Paper>
+                    <table className={classes.table}>
+                        <tr style={{ fontSize: "18px", color: "#0077B6" }}>
+                            <td className={classes.trReport}>Appointment ID</td>
+                            <td className={classes.trReport}>{reportData._id}</td>
+                        </tr>
+                        <tr>
+                            <td className={classes.trReport}>Full Name</td>
+                            <td>{reportData.firstName} {reportData.lastName}</td>
+                            <td className={classes.trReport}>Gender</td>
+                            <td>{reportData.gender}</td>
+                        </tr>
+                        <tr>
+                            <td className={classes.trReport}>Email</td>
+                            <td>{reportData.email}</td>
+                            <td className={classes.trReport}>Mobile Number</td>
+                            <td>{reportData.mobile}</td>
+                        </tr>
+                        <tr>
+                            <td className={classes.trReport}>Name of Consultant</td>
+                            <td>{reportData.consultant}</td>
+                            <td className={classes.trReport}>Date of Appoinment</td>
+                            <td>{reportData.appdate}</td>
+                        </tr>
+                        <tr>
+                            <td className={classes.trReport}>Time of Appointment</td>
+                            <td>{reportData.apptime}</td>
+                        </tr>
+                    </table>
+                </Grid>
+            </Grid>
+        </Fade>
+    );
+
     return (
         <div>
             <Grid container spacing={3}>
                 <Grid item xs={12}>
                     <Paper className={classes.paperTitle}>
-                        <Typography variant="h4" className={classes.pageTitle}>All Employee Payments</Typography>
+                        <Typography variant="h4" className={classes.pageTitle}>All Appointments</Typography>
                     </Paper>
                 </Grid>
-                <Grid container spacing={3} justifyContent="flex-end" alignItems="center" style={{ padding: "12px",marginLeft:"-95px" }}>
+                <Grid container spacing={3} justifyContent="flex-end" alignItems="center" style={{ padding: "12px" }}>
                     <Grid item xs={12} sm={4}>
                         <CssTextField
                             fullWidth
@@ -211,8 +270,8 @@ const AllEmpPayments = () => {
                         />
                     </Grid>
                     <Grid item xs={12} sm={2}>
-                        <Button component={Link} to ="/add-emp-payment" fullWidth variant="contained" startIcon={<AddIcon />} color="secondary" className={classes.submitbtn}>
-                            Add New Employee Payment
+                        <Button component={Link} to ="/add-appointment" fullWidth variant="contained" startIcon={<AddIcon />} color="secondary" className={classes.submitbtn}>
+                            Add New Appointment
                         </Button>
                     </Grid>
                 </Grid>
@@ -222,54 +281,69 @@ const AllEmpPayments = () => {
                                 <TableBody>
                                     <TableRow component={Paper} className={classes.paper}>
                                         <TableCell component="th" className={classes.tableth} style={{ width: 100 }}>
-                                            Employee ID
+                                            Appointment ID
                                         </TableCell>
                                         <TableCell component="th" className={classes.tableth}>
                                             Full Name
                                         </TableCell>
                                         <TableCell component="th" className={classes.tableth}>
-                                            Position/Job Title
+                                            Email
                                         </TableCell>
                                         <TableCell component="th" className={classes.tableth}>
-                                            Payment Amount 
+                                            Mobile Number
                                         </TableCell>
                                         <TableCell component="th" className={classes.tableth}>
-                                            Payment Type
+                                            Gender
                                         </TableCell>
                                         <TableCell component="th" className={classes.tableth}>
-                                            Payment Date
+                                            Consultant Name
+                                        </TableCell>
+                                        <TableCell component="th" className={classes.tableth}>
+                                            Appointment Date
+                                        </TableCell>
+                                        <TableCell component="th" className={classes.tableth}>
+                                            Appointment Time
                                         </TableCell>
                                         <TableCell component="th" className={classes.tableth}>
                                             Actions
                                         </TableCell>
                                     </TableRow> <br />
                                     {(rowsPerPage > 0
-                                        ? empPayments.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                        : empPayments
+                                        ? appointment.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                        : appointment
                                     ).map((row) => (
                                         <>
                                         <TableRow key={row.name} className={classes.tableRow}>
                                             <TableCell component="th" scope="row" style={{ width: 100 }}>
-                                                {row.employeeId}
-                                            </TableCell>
-                                            <TableCell component={Link} to={'/emp-details/' + row.employeeId} align="left">
-                                                {row.employeeName}
+                                                {row._id}
                                             </TableCell>
                                             <TableCell align="left">
-                                                {row.paymentType}
+                                                {row.firstName} {row.lastName}
                                             </TableCell>
                                             <TableCell align="left">
-                                                {row.paymentAmount}
+                                                {row.email}
                                             </TableCell>
                                             <TableCell align="left">
-                                                {row.paymentType}
+                                                {row.mobile}
                                             </TableCell>
                                             <TableCell align="left">
-                                                {row.paymentDate}
+                                                {row.gender}
                                             </TableCell>
                                             <TableCell align="left">
+                                                {row.consultant}
+                                            </TableCell>
+                                            <TableCell align="left">
+                                                {row.appdate}
+                                            </TableCell>
+                                            <TableCell align="left">
+                                                {row.apptime}
+                                            </TableCell>
+                                            <TableCell align="left">
+                                                <Button variant="contained" color="secondary" className={classes.tableBtn} onClick={() => handleOpenModal(row)}>
+                                                    View
+                                                </Button>
                                                 <Button variant="contained" color="secondary" className={classes.tableBtn}>
-                                                    Message
+                                                    Update
                                                 </Button>
                                                 <Button variant="contained" className={classes.tableBtnRed} onClick={handleClickOpen}>
                                                     Remove
@@ -292,7 +366,7 @@ const AllEmpPayments = () => {
                                         rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
                                         colSpan={6}
                                         style={{ borderBottom:"none" }}
-                                        count={employeeFD.length}
+                                        count={appointment.length}
                                         rowsPerPage={rowsPerPage}
                                         page={page}
                                         SelectProps={{
@@ -307,11 +381,6 @@ const AllEmpPayments = () => {
                                 </TableFooter>
                             </Table>
                         </TableContainer>
-                </Grid>
-                <Grid item xs={12}>
-                <Button variant="contained" color="secondary" className={classes.ReportBtn}>
-                    Generate Report
-                </Button>
                 </Grid>
             </Grid>
             <Dialog
@@ -337,8 +406,27 @@ const AllEmpPayments = () => {
                     </DialogActions>
                 </Paper>
             </Dialog>
+            <Modal
+                aria-labelledby="transition-modal-title"
+                aria-describedby="transition-modal-description"
+                className={classes.modal}
+                open={openModal}
+                onClose={handleCloseModal}
+                closeAfterTransition
+                BackdropComponent={Backdrop}
+                BackdropProps={{
+                timeout: 500,
+                }}
+            >
+               {modalBody}
+            </Modal>
+            <Grid item xs={12} sm={2}>
+                <Button component={Link} to ="/" fullWidth variant="contained" color="secondary" className={classes.submitbtn}>
+                            Generate Report
+                </Button>
+            </Grid>
         </div>
     )
 }
 
-export default AllEmpPayments
+export default AllAppointments;

@@ -1,40 +1,40 @@
 const mongoose = require('mongoose');
 
-const empPaymentSchema = new mongoose.Schema({
-    employeeId: {
-        type: Number,
-        required: true,
-    },
-    employeeType: {
+const appointmentSchema = new mongoose.Schema({
+    firstName: {
         type: String,
         required: true,
     },
-    employeeName: {
+    lastName: {
         type: String,
         required: true,
     },
-    paymentAmount: {
+    email: {
         type: String,
         required: true,
     },
-    paymentType: {
+    mobile: {
         type: String,
         required: true,
     },
-    paymentDate: {
+    gender: {
+        type: String,
+    },
+    dob: {
+        type: String,
+    },
+    consultant: {
         type: String,
         required: true,
     },
-    paymentAccount: {
+    appdate: {
         type: String,
         required: true,
     },
-    description: {
+    apptime: {
         type: String,
-    },
-    paymentBank: {
-        type: String,
+        required: true,
     },
 }, { timestamps: true });
 
-module.exports = mongoose.model('EmpPayment', empPaymentSchema);
+module.exports = mongoose.model('Appointment', appointmentSchema);
