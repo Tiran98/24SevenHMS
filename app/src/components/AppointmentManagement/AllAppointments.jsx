@@ -106,7 +106,7 @@ TablePaginationActions.propTypes = {
 
 const AllAppointments = () => {
     const classes = useStyles();
-    const [openModal, setOpenModal] = React.useState(true)
+    const [openModal, setOpenModal] = React.useState(false)
     const { control, handleSubmit, reset } = useForm();
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
