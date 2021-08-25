@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { TextField, Paper, Button, Grid, Typography, IconButton, Table, TableBody, TableContainer, TableFooter, TablePagination, TableRow, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle  } from '@material-ui/core/';
 import useStyles from './styles';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+import { Link } from 'react-router-dom';
 
 const employeeFD = [
     { "empID" : "0001", "firstName" : "Minerva", "lastName" : "McGonagall", "position" : "Doctor", "paymentAmt" : "Rs.80000.00", "paymentType" : "Visa", "paymentDate" : "22.10.2021"},
@@ -53,37 +54,37 @@ const PaymentDetails = () => {
                     <Paper className={classes.detailsPaper}>
                         <h2 style={{marginBottom:10,marginTop:10,marginLeft:10}}>Employee Details</h2>
                         <Grid item xs={12} style={{marginBottom:10,marginLeft:30}}>
-                            <Typography  variant="h6">First Name : <span style={{color:'#023e8a'}}>Remus</span></Typography>
+                            <Typography  variant="h6">First Name : <span style={{color:'#023e8a'}}>Mohomad</span></Typography>
                         </Grid>
                         <Grid item xs={12} style={{marginBottom:10,marginLeft:30}}>
-                            <Typography variant="h6">Last Name : <span style={{color:'#023e8a'}}>Lupin</span></Typography>
+                            <Typography variant="h6">Last Name : <span style={{color:'#023e8a'}}>Rikas</span></Typography>
                         </Grid>
                         <Grid item xs={12} style={{marginBottom:10,marginLeft:30}}>
-                            <Typography variant="h6">Email : <span style={{color:'#023e8a'}}>Remus.lupin@gmail.com</span></Typography>
+                            <Typography variant="h6">Email : <span style={{color:'#023e8a'}}>Rikas.MRM@gmail.com</span></Typography>
                         </Grid>
                         <Grid item xs={12} style={{marginBottom:10,marginLeft:30}}>
-                            <Typography variant="h6">Mobile Number : <span style={{color:'#023e8a'}}>+94772245632</span></Typography>
+                            <Typography variant="h6">Mobile Number : <span style={{color:'#023e8a'}}>+94778541254</span></Typography>
                         </Grid>
                         <Grid item xs={12} style={{marginBottom:10,marginLeft:30}}>
-                            <Typography variant="h6">Address 1 : <span style={{color:'#023e8a'}}>London</span></Typography>
+                            <Typography variant="h6">Address 1 : <span style={{color:'#023e8a'}}>Anurdhapura</span></Typography>
                         </Grid>
                         <Grid item xs={12} style={{marginBottom:10,marginLeft:30}}>
-                            <Typography variant="h6">Address 2 : <span style={{color:'#023e8a'}}>England</span></Typography>
+                            <Typography variant="h6">Address 2 : <span style={{color:'#023e8a'}}>Lane 09</span></Typography>
                         </Grid>
                         <Grid item xs={12} style={{marginBottom:10,marginLeft:30}}>
                             <Typography variant="h6">Gender : <span style={{color:'#023e8a'}}>Male</span></Typography>
                         </Grid>
                         <Grid item xs={12} style={{marginBottom:10,marginLeft:30}}>
-                            <Typography variant="h6">Marital Status : <span style={{color:'#023e8a'}}>Married</span></Typography>
+                            <Typography variant="h6">Marital Status : <span style={{color:'#023e8a'}}>Unmarried</span></Typography>
                         </Grid>
                         <Grid item xs={12} style={{marginBottom:10,marginLeft:30}}>
-                            <Typography variant="h6">Date of Birth : <span style={{color:'#023e8a'}}>10/03/1960</span></Typography>
+                            <Typography variant="h6">Date of Birth : <span style={{color:'#023e8a'}}>10/03/1998</span></Typography>
                         </Grid>
                         <Grid item xs={12} style={{marginBottom:10,marginLeft:30}}>
-                            <Typography variant="h6">Position/Job Title : <span style={{color:'#023e8a'}}>Doctor</span></Typography>
+                            <Typography variant="h6">Position/Job Title : <span style={{color:'#023e8a'}}>Reciptionist</span></Typography>
                         </Grid>
                         <Grid item xs={12} style={{marginBottom:20,marginLeft:30}}>
-                            <Typography variant="h6">Date of Hire : <span style={{color:'#023e8a'}}>02/05/2021</span></Typography>
+                            <Typography variant="h6">Date of Hire : <span style={{color:'#023e8a'}}>02/05/2020</span></Typography>
                         </Grid>
                     </Paper>
                 </Grid>
@@ -110,7 +111,7 @@ const PaymentDetails = () => {
                         </Grid>
                     </Paper>
                     <Grid item xs={12}>
-                        <Button variant="contained" color="secondary" className={classes.detailsUpdateBtn}>
+                        <Button component={Link} to={'/emp-update'} variant="contained" color="secondary" className={classes.detailsUpdateBtn}>
                         Update Payment Details
                         </Button>
                     </Grid>

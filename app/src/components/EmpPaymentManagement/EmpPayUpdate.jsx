@@ -6,12 +6,24 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import MenuItem from '@material-ui/core/MenuItem';
 import MuiAlert from '@material-ui/lab/Alert';
 import DateRangeIcon from '@material-ui/icons/DateRange';
-
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
 import useStyles from './styles';
 
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
+
+const schema = yup.object().shape({
+    empType: yup.string().required("Select Employee Type"),
+    employee: yup.string().required("Select Employee"),
+    payAmount: yup.string().required("Payment Amount is required."),
+    payType: yup.string().required("Payment Type is required."),
+    payDate: yup.string().required("Payment Date is required."),
+    payAccount: yup.string().required('You must enter a Account Number'),
+    bank: yup.string().required('You must enter a Bank'),
+    description: yup.string().required('You must enter a Description'),
+});
 
 const empTypes = [
     {
@@ -42,23 +54,22 @@ const employees = [
         label: 'Select the Employee',
     },
     {
-      value: 'Tiran',
-      label: 'Tiran',
+      value: 'Tiran Hettiarachchi',
+      label: 'Tiran Hettiarachchi',
     },
     {
-      value: 'Vinuri',
-      label: 'Vinuri',
+      value: 'Vinuri Galagoda',
+      label: 'Vinuri Galagoda',
     },
     {
-      value: 'Sanda',
-      label: 'Sanda',
+      value: 'Dananjaya Sadakelum',
+      label: 'Dananjaya Sadakelum',
     },
     {
-      value: 'Rikas',
-      label: 'Rikas',
+      value: 'Mohomad Rikas',
+      label: 'Mohomad Rikas',
     },
 ];
-
 const payTypes = [
     {
         value: 'default',
@@ -80,7 +91,12 @@ const payTypes = [
 
 const EmpPayUpdate = () => {
     const classes = useStyles();
-    const { control, handleSubmit, reset } = useForm();
+    const { control, handleSubmit, reset, formState: { errors }  } = useForm(
+        {
+            resolver: yupResolver(schema),
+            reValidateMode: 'onSubmit',
+        }
+    );
     const [empType, setEmpType] = React.useState('default');
     const [position, setPosition] = React.useState('default');
     const [employee, setEmployee] = React.useState('default');
@@ -129,9 +145,11 @@ const EmpPayUpdate = () => {
     const onSubmit = (data) => {
     }
 
-    const handleRadioChange = (event) => {
-        setGender(event.target.value, console.log(gender));
-    };
+    const submitForm = (data) => {
+        reset({
+            keepErrors: true,
+        });
+    }
 
     const handleEmpType = (event) => {
         setEmpType(event.target.value, console.log(empType));
@@ -162,9 +180,8 @@ const EmpPayUpdate = () => {
                     </Paper>
                 </Grid>
                 <Grid item xs={12}>
-                    <form className={classes.form}>
+                    <form onSubmit={handleSubmit(onSubmit)} className={classes.form}>
                         <Paper className={classes.paper}>
-                            
                                 <Grid container spacing={2}>
                                     <Grid item xs={12} sm={6}>
                                         <Controller
@@ -179,6 +196,8 @@ const EmpPayUpdate = () => {
                                                 value={empType}
                                                 onChange={handleEmpType}
                                                 variant="outlined"
+                                                error={!!errors?.empType}
+                                                helperText={errors?.empType?.message}
                                                 >
                                                 {empTypes.map((option) => (
                                                     <MenuItem key={option.value} value={option.value}>
@@ -201,6 +220,8 @@ const EmpPayUpdate = () => {
                                                 value={employee}
                                                 onChange={handleEmployee}
                                                 variant="outlined"
+                                                error={!!errors?.employee}
+                                                helperText={errors?.employee?.message}
                                                 >
                                                 {employees.map((option) => (
                                                     <MenuItem key={option.value} value={option.value}>
@@ -217,7 +238,10 @@ const EmpPayUpdate = () => {
                                             control={control}
                                             defaultValue=""
                                             render={({ field }) => 
-                                            <CssTextField fullWidth label="Payment Amount" variant="outlined" color="primary" {...field} />}
+                                            <CssTextField fullWidth label="Payment Amount" variant="outlined" color="primary"
+                                            error={!!errors?.payAmount}
+                                            helperText={errors?.payAmount?.message} 
+                                            {...field} />}
                                         />
                                     </Grid> 
                                     <Grid item xs={12} sm={6}>
@@ -233,6 +257,9 @@ const EmpPayUpdate = () => {
                                                 value={payType}
                                                 onChange={handlePayType}
                                                 variant="outlined"
+                                                error={!!errors?.payType}
+                                                helperText={errors?.payType?.message}
+                                                {...field}
                                                 >
                                                 {payTypes.map((option) => (
                                                     <MenuItem key={option.value} value={option.value}>
@@ -254,6 +281,8 @@ const EmpPayUpdate = () => {
                                                     type="date"
                                                     variant="outlined"
                                                     color="primary"
+                                                    error={!!errors?.payDate}
+                                                    helperText={errors?.payDate?.message} 
                                                     {...field}
                                                     InputLabelProps={{
                                                         shrink: true,
@@ -274,7 +303,10 @@ const EmpPayUpdate = () => {
                                             control={control}
                                             defaultValue=""
                                             render={({ field }) => 
-                                            <CssTextField fullWidth label="Payment Account" variant="outlined" color="primary" {...field} />}
+                                            <CssTextField fullWidth label="Payment Account" variant="outlined" color="primary" 
+                                            error={!!errors?.payAccount}
+                                            helperText={errors?.payAccount?.message}
+                                            {...field} />}
                                         />
                                     </Grid>
                                     <Grid item xs={12} sm={6}>
@@ -289,9 +321,12 @@ const EmpPayUpdate = () => {
                                                 fullWidth
                                                 multiline
                                                 rows={4}
-                                                defaultValue="Description"
+                                                defaultValue=""
                                                 color="primary"
                                                 variant="outlined"
+                                                error={!!errors?.description}
+                                                helperText={errors?.description?.message} 
+                                                {...field}
                                             />}
                                         />
                                     </Grid>
@@ -301,7 +336,10 @@ const EmpPayUpdate = () => {
                                             control={control}
                                             defaultValue=""
                                             render={({ field }) => 
-                                            <CssTextField  fullWidth label="Payment Bank" variant="outlined" color="primary" {...field} />}
+                                            <CssTextField  fullWidth label="Payment Bank" variant="outlined" color="primary"
+                                            error={!!errors?.bank}
+                                            helperText={errors?.bank?.message}
+                                            {...field} />}
                                         />
                                     </Grid>        
                                 </Grid>
@@ -311,24 +349,24 @@ const EmpPayUpdate = () => {
                         </Typography>
                         <Grid container spacing={3}>
                             <Grid item xs={12} sm={3}>
-                                <Button type="reset" fullWidth variant="contained" className={classes.resetbtn}>
+                                <Button type="reset" fullWidth variant="contained" className={classes.resetbtn}
+                                onClick={() => {
+                                    reset({
+                                      keepErrors: true,
+                                    });
+                                  }}>
                                     Reset
                                 </Button>
                             </Grid>    
                             <Grid item xs={12} sm={9}>
-                                <Button type="submit" onClick={Alert} fullWidth variant="contained" color="secondary" className={classes.submitbtn}>
+                                <Button type="submit" fullWidth variant="contained" color="secondary" className={classes.submitbtn}>
                                     Submit
                                 </Button>
                             </Grid>
                         </Grid> 
                     </form>
                 </Grid>
-            </Grid>
-            <Snackbar open={successMsg} autoHideDuration={6000} onClose={handleSuccessMsg} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
-                <Alert onClose={handleSuccessMsg} severity="success" color="info" className={classes.cookieAlert}>
-                    The form was Updated successfully.
-                </Alert>
-            </Snackbar>    
+            </Grid>  
         </div>
     )
 }

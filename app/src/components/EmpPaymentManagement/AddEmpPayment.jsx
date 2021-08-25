@@ -1,11 +1,13 @@
 import React, {useState,useEffect,useRef} from 'react'
 import { useForm, Controller } from "react-hook-form";
+import { useLocation, useHistory } from 'react-router-dom';
 import { FormLabel, TextField, FormControlLabel, Paper, Button, Grid, Typography } from '@material-ui/core/';
 import { withStyles } from '@material-ui/core/styles';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import MenuItem from '@material-ui/core/MenuItem';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 import DateRangeIcon from '@material-ui/icons/DateRange';
@@ -20,6 +22,7 @@ const schema = yup.object().shape({
     payDate: yup.string().required("Payment Date is required."),
     payAccount: yup.string().required('You must enter a Account Number'),
     bank: yup.string().required('You must enter a Bank'),
+    description: yup.string().required('You must enter a Description'),
 });
 
 const empTypes = [
@@ -51,20 +54,20 @@ const employees = [
         label: 'Select the Employee',
     },
     {
-      value: 'Tiran',
-      label: 'Tiran',
+      value: 'Tiran Hettiarachchi',
+      label: 'Tiran Hettiarachchi',
     },
     {
-      value: 'Vinuri',
-      label: 'Vinuri',
+      value: 'Vinuri Galagoda',
+      label: 'Vinuri Galagoda',
     },
     {
-      value: 'Sanda',
-      label: 'Sanda',
+      value: 'Dananjaya Sadakelum',
+      label: 'Dananjaya Sadakelum',
     },
     {
-      value: 'Rikas',
-      label: 'Rikas',
+      value: 'Mohomad Rikas',
+      label: 'Mohomad Rikas',
     },
 ];
 
@@ -104,6 +107,7 @@ const AddEmpPayment = () => {
     const [nextId, setNextId] = useState("");
 
     const [gender, setGender] = useState("");
+    const history = useHistory();
 
     const CssTextField = withStyles({
         root: {
@@ -192,6 +196,7 @@ const AddEmpPayment = () => {
         axios.post('http://localhost:5000/api/empPay/addEmpPay', data)
         .then((response) => {
           console.log(response);
+          history.push('/all-emp-payment');
           reset({
             keepErrors: true,
           });
@@ -237,9 +242,9 @@ const AddEmpPayment = () => {
                                                 value={empType}
                                                 onChange={handleEmpType}
                                                 variant="outlined"
+                                                error={!!errors?.empType}
+                                                helperText={errors?.empType?.message}
                                                 {...field}
-                                                // error={!!errors?.empType}
-                                                // helperText={errors?.empType?.message}
                                                 >
                                                 {empTypes.map((option) => (
                                                     <MenuItem key={option.value} value={option.value}>
@@ -262,6 +267,8 @@ const AddEmpPayment = () => {
                                                 value={employee}
                                                 onChange={handleEmployee}
                                                 variant="outlined"
+                                                error={!!errors?.employee}
+                                                helperText={errors?.employee?.message}
                                                 {...field}
                                                 // error={!!errors?.employee}
                                                 // helperText={errors?.employee?.message}
@@ -286,7 +293,7 @@ const AddEmpPayment = () => {
                                             variant="outlined" 
                                             color="primary"
                                             error={!!errors?.payAmount}
-                                                helperText={errors?.payAmount?.message} 
+                                            helperText={errors?.payAmount?.message} 
                                             {...field} />}
                                         />
                                     </Grid> 
@@ -303,6 +310,8 @@ const AddEmpPayment = () => {
                                                 value={payType}
                                                 onChange={handlePayType}
                                                 variant="outlined"
+                                                error={!!errors?.payType}
+                                                helperText={errors?.payType?.message}
                                                 {...field}
                                                 // error={!!errors?.payType}
                                                 // helperText={errors?.payType?.message} 
@@ -371,9 +380,11 @@ const AddEmpPayment = () => {
                                                 fullWidth
                                                 multiline
                                                 rows={4}
-                                                defaultValue="Description"
+                                                defaultValue=""
                                                 color="primary"
                                                 variant="outlined"
+                                                error={!!errors?.description}
+                                                helperText={errors?.description?.message} 
                                                 {...field}
                                             />}
                                         />
@@ -401,7 +412,13 @@ const AddEmpPayment = () => {
                         </Typography>
                         <Grid container spacing={3}>
                             <Grid item xs={12} sm={3}>
-                                <Button type="reset" fullWidth variant="contained" className={classes.resetbtn}>
+                                <Button type="reset" fullWidth variant="contained" 
+                                className={classes.resetbtn}
+                                onClick={() => {
+                                  reset({
+                                    keepErrors: true,
+                                  });
+                                }}>
                                     Reset
                                 </Button>
                             </Grid>    
@@ -410,9 +427,9 @@ const AddEmpPayment = () => {
                                     Submit
                                 </Button>
                             </Grid>
-                            {/* <Grid item xs={12}>
+                            <Grid hidden='ture' item xs={12}>
                                 <h1 id="empId" name="empId">{nextId}</h1>
-                            </Grid> */}
+                            </Grid>
                         </Grid> 
                     </form>
                 </Grid>
