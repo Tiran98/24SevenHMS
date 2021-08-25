@@ -268,8 +268,8 @@ const AllEmpPayments = () => {
                                                 {row.paymentDate}
                                             </TableCell>
                                             <TableCell align="left">
-                                                <Button variant="contained" color="secondary" className={classes.tableBtn}>
-                                                    Message
+                                                <Button component={Link} to={'/emp-details/' + row.employeeId} variant="contained" color="secondary" className={classes.tableBtn}>
+                                                    Update
                                                 </Button>
                                                 <Button variant="contained" className={classes.tableBtnRed} onClick={handleClickOpen}>
                                                     Remove
