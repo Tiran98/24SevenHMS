@@ -16,9 +16,9 @@ import useStyles from './styles';
 
 const schema = yup.object().shape({
     productType: yup.string().required("Select Product Type"),
-    productName: yup.string().required("Enter the Products Name"),
+    productName: yup.string().required("Enter the Product Name"),
     quantity: yup.string().required("Enter the Quantity"),
-    pricePeritem: yup.string().required("Expire the Price"),
+    pricePeritem: yup.string().required("Enter the Price"),
     manfDate: yup.string().required("Manufacture Date is required."),
     expDate: yup.string().required("Expire Date is required."),
     brand: yup.string().required("You must enter the Products brand"),
@@ -303,7 +303,7 @@ const AddInventory = () => {
                                             render={({ field }) => 
                                                 <CssTextField
                                                     fullWidth
-                                                    label="Expire Date"
+                                                    label="Expiration Date"
                                                     type="date"
                                                     variant="outlined"
                                                     color="primary"
