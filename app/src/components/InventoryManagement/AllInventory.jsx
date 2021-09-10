@@ -1,21 +1,11 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React from 'react'
 
-
-class AllInventory extends Component {
-    render() {
-        return (
-            <div>
-                
-            </div>
-        );
-    }
+const AllInventory = () => {
+    return (
+        <div>
+            <h1>Rikas</h1>
+        </div>
+    )
 }
 
-
-AllInventory.propTypes = {
-
-};
-
-
-export default AllInventory;
+export default AllInventory
