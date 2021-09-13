@@ -435,7 +435,7 @@ const AllReports = () => {
                                                 <Button variant="contained" color="secondary" className={classes.tableBtn}>
                                                     Print
                                                 </Button>
-                                                <Button variant="contained" color="secondary" className={classes.tableBtn}>
+                                                <Button component={Link} to="/edit-reports" variant="contained" color="secondary" className={classes.tableBtn}>
                                                     Edit
                                                 </Button>
                                                 <Button variant="contained" className={classes.tableBtnRed} onClick={handleClickOpen}>
