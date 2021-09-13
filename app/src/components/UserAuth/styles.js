@@ -5,7 +5,7 @@ export default makeStyles((theme) => ({
         backgroundColor: '#023E8A',
         padding: theme.spacing(5),
         marginBottom: theme.spacing(2),
-        minWidth: 400,
+        width: 500,
         textAlign: "center",
     },
     pageTitle: {
@@ -42,5 +42,9 @@ export default makeStyles((theme) => ({
     },
     visibilityBtn: {
         color: '#cccccc',
-    }
+    },
+    errorMsg: {
+        color: "#ff0000",
+        marginLeft: 10,
+    },
 }));

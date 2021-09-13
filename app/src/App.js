@@ -67,8 +67,6 @@ function App() {
   const [pathName, setPathName] = React.useState("");
   const classes = useStyles();
 
-  console.log(pathName === "/login");
-
   return (
     <Router>
       <ThemeProvider theme={theme}>
@@ -80,7 +78,7 @@ function App() {
           <></>} */}
         <Switch>
           <div className={classes.content} style={{ marginLeft: drawerWidth * drawerState }}>
-            <Toolbar />
+            <Toolbar /> 
             <Route exact path="/home">
                 <Dashboard 
                   setDrawerState={setDrawerState}
