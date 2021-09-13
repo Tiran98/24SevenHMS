@@ -49,4 +49,22 @@ router.get('/', async(req, res) => {
     }
 });
 
+router.delete('/', async(req, res) => {
+
+    LabReports.remove(req.params.labReportID, (err, data) => {
+        if (err) {
+            if (err.kind == "not_found") {
+                res.status(404).send({
+                    message: `Not found Lab Report with id ${req.params.labReportID}.`
+                });
+            } else {
+                res.status(500).send({
+                    message: "Could not delete Lab Report with id " + req.params.labReportID
+                });
+            }
+        } else res.send({ message: `Lab Report was deleted Successfully!` });
+    });
+
+});
+
 module.exports = router;

@@ -68,4 +68,22 @@ router.post('/adminLogin', async(req, res) => {
 
 });
 
+router.delete('/empDelete', async(req, res) => {
+
+    Employee.remove(req.params.empID, (err, data) => {
+        if (err) {
+            if (err.kind == "not_found") {
+                res.status(404).send({
+                    message: `Not found Employee with id ${req.params.empID}.`
+                });
+            } else {
+                res.status(500).send({
+                    message: "Could not delete Employee with id " + req.params.empID
+                });
+            }
+        } else res.send({ message: `Employee was deleted Successfully!` });
+    });
+
+});
+
 module.exports = router;
