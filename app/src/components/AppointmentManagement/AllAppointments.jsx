@@ -342,7 +342,7 @@ const AllAppointments = () => {
                                                 <Button variant="contained" color="secondary" className={classes.tableBtn} onClick={() => handleOpenModal(row)}>
                                                     View
                                                 </Button>
-                                                <Button variant="contained" color="secondary" className={classes.tableBtn}>
+                                                <Button component={Link} to ="/update-appointment" variant="contained" color="secondary" className={classes.tableBtn}>
                                                     Update
                                                 </Button>
                                                 <Button variant="contained" className={classes.tableBtnRed} onClick={handleClickOpen}>
