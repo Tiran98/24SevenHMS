@@ -51,7 +51,7 @@ router.get('/', async(req, res) => {
 
 router.delete('/', async(req, res) => {
 
-    LabReports.remove(req.params.labReportID, (err, data) => {
+    LabReports.deleteOne(req.params.labReportID, (err, data) => {
         if (err) {
             if (err.kind == "not_found") {
                 res.status(404).send({
