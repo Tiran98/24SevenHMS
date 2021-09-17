@@ -16,6 +16,7 @@ const labreportsRoute = require('./Routes/labreports.route');
 const empPaymentRoute = require('./Routes/empPayments.route');
 const authRoute = require('./Routes/auth.route');
 const appointmentRoute = require('./Routes/appointment.route');
+const inventoryRoute = require('./Routes/inventory.route');
 
 //Route Middlewares
 app.use('/api/employee', employeeRoute);
@@ -23,6 +24,7 @@ app.use('/api/labreports', labreportsRoute);
 app.use('/api/empPay', empPaymentRoute);
 app.use('/api/user', authRoute);
 app.use('/api/appointment', appointmentRoute);
+app.use('/api/invMngmnt', inventoryRoute);
 
 mongoose.connect("mongodb+srv://admin:admin123@24sevencluster1.g6rjb.mongodb.net/24sevendb?retryWrites=true&w=majority", { useUnifiedTopology: true, useNewUrlParser: true })
     .then((result) => console.log('connected to db'))

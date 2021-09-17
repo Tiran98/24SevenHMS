@@ -88,24 +88,24 @@ TablePaginationActions.propTypes = {
     rowsPerPage: PropTypes.number.isRequired,
 };
 
-const employeeFD = [
-    { "empID" : "0001", "firstName" : "Minerva", "lastName" : "McGonagall", "position" : "Doctor", "paymentAmt" : "Rs.80000.00", "paymentType" : "Visa", "paymentDate" : "22.10.2021"},
-    { "empID" : "0001", "firstName" : "Minerva", "lastName" : "McGonagall", "position" : "Doctor", "paymentAmt" : "Rs.80000.00", "paymentType" : "Visa", "paymentDate" : "22.10.2021"},
-    { "empID" : "0001", "firstName" : "Minerva", "lastName" : "McGonagall", "position" : "Doctor", "paymentAmt" : "Rs.80000.00", "paymentType" : "Visa", "paymentDate" : "22.10.2021"},
-    { "empID" : "0001", "firstName" : "Minerva", "lastName" : "McGonagall", "position" : "Doctor", "paymentAmt" : "Rs.80000.00", "paymentType" : "Visa", "paymentDate" : "22.10.2021"},
-    { "empID" : "0001", "firstName" : "Minerva", "lastName" : "McGonagall", "position" : "Doctor", "paymentAmt" : "Rs.80000.00", "paymentType" : "Visa", "paymentDate" : "22.10.2021"},
-    { "empID" : "0001", "firstName" : "Minerva", "lastName" : "McGonagall", "position" : "Doctor", "paymentAmt" : "Rs.80000.00", "paymentType" : "Visa", "paymentDate" : "22.10.2021"},
-    { "empID" : "0001", "firstName" : "Minerva", "lastName" : "McGonagall", "position" : "Doctor", "paymentAmt" : "Rs.80000.00", "paymentType" : "Visa", "paymentDate" : "22.10.2021"},
-    { "empID" : "0001", "firstName" : "Minerva", "lastName" : "McGonagall", "position" : "Doctor", "paymentAmt" : "Rs.80000.00", "paymentType" : "Visa", "paymentDate" : "22.10.2021"},
+const inventoryFD = [
+    { "productId" : "0001", "firstName" : "Minerva", "lastName" : "McGonagall", "position" : "Doctor", "paymentAmt" : "Rs.80000.00", "paymentType" : "Visa", "paymentDate" : "22.10.2021"},
+    { "productId" : "0001", "firstName" : "Minerva", "lastName" : "McGonagall", "position" : "Doctor", "paymentAmt" : "Rs.80000.00", "paymentType" : "Visa", "paymentDate" : "22.10.2021"},
+    { "productId" : "0001", "firstName" : "Minerva", "lastName" : "McGonagall", "position" : "Doctor", "paymentAmt" : "Rs.80000.00", "paymentType" : "Visa", "paymentDate" : "22.10.2021"},
+    { "productId" : "0001", "firstName" : "Minerva", "lastName" : "McGonagall", "position" : "Doctor", "paymentAmt" : "Rs.80000.00", "paymentType" : "Visa", "paymentDate" : "22.10.2021"},
+    { "productId" : "0001", "firstName" : "Minerva", "lastName" : "McGonagall", "position" : "Doctor", "paymentAmt" : "Rs.80000.00", "paymentType" : "Visa", "paymentDate" : "22.10.2021"},
+    { "productId" : "0001", "firstName" : "Minerva", "lastName" : "McGonagall", "position" : "Doctor", "paymentAmt" : "Rs.80000.00", "paymentType" : "Visa", "paymentDate" : "22.10.2021"},
+    { "productId" : "0001", "firstName" : "Minerva", "lastName" : "McGonagall", "position" : "Doctor", "paymentAmt" : "Rs.80000.00", "paymentType" : "Visa", "paymentDate" : "22.10.2021"},
+    { "productId" : "0001", "firstName" : "Minerva", "lastName" : "McGonagall", "position" : "Doctor", "paymentAmt" : "Rs.80000.00", "paymentType" : "Visa", "paymentDate" : "22.10.2021"},
 ];
 
-const AllEmpPayments = () => {
+const AllInventory = () => {
     const classes = useStyles();
     const { control, handleSubmit, reset } = useForm();
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
     const [opendlt, setOpendlt] = React.useState(false);
-    const [empPayments, setEmpPayments] = React.useState([]);
+    const [inventory, setInventory] = React.useState([]);
 
     const CssTextField = withStyles({
         root: {
@@ -153,14 +153,14 @@ const AllEmpPayments = () => {
         }
     })(MuiTableCell);
 
-    const emptyRows = rowsPerPage - Math.min(rowsPerPage, employeeFD.length - page * rowsPerPage);
+    const emptyRows = rowsPerPage - Math.min(rowsPerPage, inventoryFD.length - page * rowsPerPage);
 
     useEffect(() => {
-        fetch("http://localhost:5000/api/invMngmnt/viewInvMngmnt").then(res => {
+        fetch("http://localhost:5000/api/InvMngmnt/viewInvMngmnt").then(res => {
             if(res.ok){
                 return res.json()
             }
-        }).then(jsonRes => setEmpPayments(jsonRes));
+        }).then(jsonRes => setInventory(jsonRes));
 
     }, [])
 
@@ -186,14 +186,14 @@ const AllEmpPayments = () => {
             <Grid container spacing={3}>
                 <Grid item xs={12}>
                     <Paper className={classes.paperTitle}>
-                        <Typography variant="h4" className={classes.pageTitle}>INVENTORY LIST</Typography>
+                        <Typography variant="h4" className={classes.pageTitle}>Inventory List</Typography>
                     </Paper>
                 </Grid>
                 <Grid container spacing={3} justifyContent="flex-end" alignItems="center" style={{ padding: "12px",marginLeft:"-95px" }}>
                     <Grid item xs={12} sm={4}>
                         <CssTextField
                             fullWidth
-                            label="Search Items"
+                            label="Search Item"
                             variant="outlined"
                             color="primary"
                             InputLabelProps={{
@@ -212,7 +212,7 @@ const AllEmpPayments = () => {
                     </Grid>
                     <Grid item xs={12} sm={2}>
                         <Button component={Link} to ="/add-inventory" fullWidth variant="contained" startIcon={<AddIcon />} color="secondary" className={classes.submitbtn}>
-                            Add New Item
+                            Add New Product
                         </Button>
                     </Grid>
                 </Grid>
@@ -222,53 +222,71 @@ const AllEmpPayments = () => {
                                 <TableBody>
                                     <TableRow component={Paper} className={classes.paper}>
                                         <TableCell component="th" className={classes.tableth} style={{ width: 100 }}>
-                                            Item ID
+                                            Product ID
                                         </TableCell>
                                         <TableCell component="th" className={classes.tableth}>
                                             Name
                                         </TableCell>
                                         <TableCell component="th" className={classes.tableth}>
+                                            Type
+                                        </TableCell>
+                                        <TableCell component="th" className={classes.tableth}>
+                                            Description
+                                        </TableCell>
+                                        <TableCell component="th" className={classes.tableth}>
                                             Brand
                                         </TableCell>
                                         <TableCell component="th" className={classes.tableth}>
-                                            Description 
+                                            Quantity
                                         </TableCell>
                                         <TableCell component="th" className={classes.tableth}>
-                                            Payment Type
+                                            Mnf-Date
                                         </TableCell>
                                         <TableCell component="th" className={classes.tableth}>
-                                            Payment Date
+                                            Exp-Date
+                                        </TableCell>
+                                        <TableCell component="th" className={classes.tableth}>
+                                            Price
                                         </TableCell>
                                         <TableCell component="th" className={classes.tableth}>
                                             Actions
                                         </TableCell>
                                     </TableRow> <br />
                                     {(rowsPerPage > 0
-                                        ? empPayments.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                        : empPayments
+                                        ? inventory.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                        : inventory
                                     ).map((row) => (
                                         <>
                                         <TableRow key={row.name} className={classes.tableRow}>
                                             <TableCell component="th" scope="row" style={{ width: 100 }}>
-                                                {row.employeeId}
+                                                {row.productId}
                                             </TableCell>
-                                            <TableCell component={Link} to={'/emp-details/' + row.employeeId} align="left">
-                                                {row.employeeName}
-                                            </TableCell>
-                                            <TableCell align="left">
-                                                {row.paymentType}
+                                            <TableCell component={Link} to={'/details-inventory/' + row.productId} align="left">
+                                                {row.productName}
                                             </TableCell>
                                             <TableCell align="left">
-                                                {row.paymentAmount}
+                                                {row.productType}
                                             </TableCell>
                                             <TableCell align="left">
-                                                {row.paymentType}
+                                                {row.description}
                                             </TableCell>
                                             <TableCell align="left">
-                                                {row.paymentDate}
+                                                {row.brand}
                                             </TableCell>
                                             <TableCell align="left">
-                                                <Button component={Link} to={'/emp-details/' + row.employeeId} variant="contained" color="secondary" className={classes.tableBtn}>
+                                                {row.quantity}
+                                            </TableCell>
+                                            <TableCell align="left">
+                                                {row.manufactureDate}
+                                            </TableCell>
+                                            <TableCell align="left">
+                                                {row.expiredDate}
+                                            </TableCell>
+                                            <TableCell align="left">
+                                                {row.pricePerItem}
+                                            </TableCell>
+                                            <TableCell align="left">
+                                                <Button component={Link} to={'/details-inventory/' + row.productId} variant="contained" color="secondary" className={classes.tableBtn}>
                                                     Update
                                                 </Button>
                                                 <Button variant="contained" className={classes.tableBtnRed} onClick={handleClickOpen}>
@@ -290,9 +308,9 @@ const AllEmpPayments = () => {
                                     <TableRow>
                                         <TablePagination
                                         rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
-                                        colSpan={6}
+                                        colSpan={12}
                                         style={{ borderBottom:"none" }}
-                                        count={employeeFD.length}
+                                        count={inventoryFD.length}
                                         rowsPerPage={rowsPerPage}
                                         page={page}
                                         SelectProps={{
@@ -308,7 +326,7 @@ const AllEmpPayments = () => {
                             </Table>
                         </TableContainer>
                 </Grid>
-                <Grid item xs={12}>
+                <Grid item xs={12} sm={2}>
                 <Button variant="contained" color="secondary" className={classes.ReportBtn}>
                     Generate Report
                 </Button>
@@ -341,4 +359,4 @@ const AllEmpPayments = () => {
     )
 }
 
-export default AllEmpPayments
+export default AllInventory
