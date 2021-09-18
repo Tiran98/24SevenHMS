@@ -89,7 +89,7 @@ function App() {
             <Route path="/all-employees" exact component={AllEmployees} />
             <Route path="/add-report" exact component={AddReport} />
             <Route path="/all-reports" exact component={AllReports} />
-            <Route path="/edit-reports" exact component={EditReport} />
+            <Route path="/edit-reports/:id" exact component={EditReport} />
             <Route path="/add-emp-payment" exact component={AddEmpPayment} />
             <Route path="/all-emp-payment" exact component={AllEmpPay} />
             <Route path="/add-appointment" exact component={AddAppointment} />

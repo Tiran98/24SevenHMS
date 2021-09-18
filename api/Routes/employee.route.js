@@ -2,6 +2,7 @@ const router = require('express').Router();
 const Employee = require('../Models/Employee');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+var mongodb = require('mongodb');
 
 router.post('/', async(req, res) => {
 
@@ -47,24 +48,38 @@ router.get('/', async(req, res) => {
     }
 });
 
-router.post('/adminLogin', async(req, res) => {
+// router.post('/adminLogin', async(req, res) => {
 
-    var emailExist = "";
-    //Checking if the user exist
-    emailExist = await Employee.findOne({ email: req.body.email });
-    if (!emailExist) return res.status(400).send('Email does not exist');
+//     var emailExist = "";
+//     //Checking if the user exist
+//     emailExist = await Employee.findOne({ email: req.body.email });
+//     if (!emailExist) return res.status(400).send('Email does not exist');
 
-    //Checking password
-    const validPassword = await bcrypt.compare(req.body.password, emailExist.password)
-    if (!validPassword) return res.status(400).send('Email or password is wrong');
+//     //Checking password
+//     const validPassword = await bcrypt.compare(req.body.password, emailExist.password)
+//     if (!validPassword) return res.status(400).send('Email or password is wrong');
 
-    //Create and assign an token
-    const token = jwt.sign({ _id: emailExist._id }, process.env.TOKEN_SECRET);
-    const user = {
-        user: emailExist,
-        token: token,
-    };
-    res.header('auth-token', token).send(user);
+//     //Create and assign an token
+//     const token = jwt.sign({ _id: emailExist._id }, process.env.TOKEN_SECRET);
+//     const user = {
+//         user: emailExist,
+//         token: token,
+//     };
+//     res.header('auth-token', token).send(user);
+
+// });
+
+router.delete('/empdelete/:id', async(req, res) => {
+
+    // try {
+    //     const employee = await Employee.findOne({ _id: req.params.id });
+    //     res.json(employee);
+    // } catch (err) {
+    //     res.json({ message: err });
+    // }
+    Employee.deleteOne({ _id: req.params.id })
+        .then(thing => res.status(200).send(thing))
+        .catch(error => res.status(400).send({ error: error.message }));
 
 });
 

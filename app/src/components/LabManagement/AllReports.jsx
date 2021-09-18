@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { TextField, Paper, Button, Grid, Typography, IconButton, Table, TableBody, TableContainer, TableFooter, TablePagination, TableRow, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle  } from '@material-ui/core/';
+import { useHistory } from "react-router-dom";
+import { TextField, Paper, Button, Grid, Typography, IconButton, Table, TableBody, TableContainer, TableFooter, TablePagination, TableRow, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Snackbar  } from '@material-ui/core/';
 import { withStyles } from '@material-ui/core/styles';
+import axios from 'axios';
+import MuiAlert from '@material-ui/lab/Alert';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import { Link } from 'react-router-dom';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
@@ -19,6 +22,10 @@ import LastPageIcon from '@material-ui/icons/LastPage';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 
 import useStyles from './styles';
+
+function Alert(props) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 const useStyles1 = makeStyles((theme) => ({
     root: {
@@ -91,12 +98,15 @@ TablePaginationActions.propTypes = {
 
 const AllReports = () => {
     const classes = useStyles();
+    const history = useHistory();
     const [openModal, setOpenModal] = React.useState(false)
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
     const [opendlt, setOpendlt] = React.useState(false);
     const [reports, setReports] = React.useState([]);
     const [reportData, setReportData] = React.useState([]);
+    const [selectedItem, setSelectedItem] = React.useState("");
+    const [successMsg, setSuccessMsg] = useState(false);
 
     const CssTextField = withStyles({
         root: {
@@ -152,10 +162,45 @@ const AllReports = () => {
                 return res.json()
             }
         }).then(jsonRes => setReports(jsonRes));
-    }, [])
+    }, [selectedItem])
 
-    const handleClickOpen = () => {
+    const handleClickOpen = (row) => {
         setOpendlt(true);
+        setSelectedItem(row._id);
+    };
+
+    const handleEditPage = (row) => {
+        history.push(`/edit-reports/${row._id}`);
+    };
+
+    const deleteItem = () => {
+        fetch(`http://localhost:5000/api/labreports/labdelete/${selectedItem}`, { method: 'DELETE' })
+        .then(async response => {
+            const data = await response.json();
+
+            // check for error response
+            if (!response.ok) {
+                // get error message from body or default to response status
+                const error = (data && data.message) || response.status;
+                return Promise.reject(error);
+            }
+            setSuccessMsg(true);
+            setSelectedItem("");
+            handleClose();
+        })
+        .catch(error => {
+            console.log(error);
+            console.error('There was an error!', error);
+        });
+    };
+
+    const handleSuccessMsg = (event, reason) => {
+
+        if (reason === 'clickaway') {
+          return;
+        }
+    
+        setSuccessMsg(false);
     };
     
     const handleClose = () => {
@@ -435,10 +480,10 @@ const AllReports = () => {
                                                 <Button variant="contained" color="secondary" className={classes.tableBtn}>
                                                     Print
                                                 </Button>
-                                                <Button component={Link} to="/edit-reports" variant="contained" color="secondary" className={classes.tableBtn}>
+                                                <Button onClick={() => handleEditPage(row)} variant="contained" color="secondary" className={classes.tableBtn}>
                                                     Edit
                                                 </Button>
-                                                <Button variant="contained" className={classes.tableBtnRed} onClick={handleClickOpen}>
+                                                <Button variant="contained" className={classes.tableBtnRed} onClick={() => handleClickOpen(row)}>
                                                     Remove
                                                 </Button>
                                             </TableCell>
@@ -493,7 +538,7 @@ const AllReports = () => {
                         <Button onClick={handleClose} variant="contained"color="secondary" className={classes.dialogBtn}>
                             Cancel
                         </Button>
-                        <Button onClick={handleClose} variant="contained" className={classes.dialogBtnRed} autoFocus>
+                        <Button onClick={deleteItem} variant="contained" className={classes.dialogBtnRed} autoFocus>
                             Yes, Delete it
                         </Button>
                     </DialogActions>
@@ -513,6 +558,11 @@ const AllReports = () => {
             >
                {modalBody}
             </Modal>
+            <Snackbar open={successMsg} autoHideDuration={6000} onClose={handleSuccessMsg} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
+                <Alert onClose={handleSuccessMsg} severity="error" color="error" className={classes.cookieAlertError}>
+                    Lab report successfully deleted.
+                </Alert>
+            </Snackbar>
         </div>
     )
 }
