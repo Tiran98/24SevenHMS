@@ -3,6 +3,7 @@ const EmpPayment = require('../Models/EmpPayment');
 
 router.post('/addEmpPay', async(req, res) => {
     const empPayment = new EmpPayment({
+        paymentId:req.body.paymentId,
         employeeId: req.body.employeeId,
         employeeType: req.body.employeeType,
         employeeName: req.body.employeeName,
@@ -34,19 +35,34 @@ router.get('/viewEmpPay', async(req, res) => {
 
 router.get('/getMaxId', async(req,res) => {
     try {
-        const maxId = await EmpPayment.findOne().sort('-employeeId');
+        var maxId = await EmpPayment.findOne().sort('-paymentId');
+        if (maxId == null){
+            maxId = 0;
+        }
         res.json(maxId);
     }catch (err) {
         res.json({ message: err });
     }
 });
 
-router.get('/getPayEmp/:id', async(req,res) => {
+router.get('/getPayEmp/:paymentId', async(req,res) => {
     try{
-        const payEmp = await EmpPayment.findOne({employeeId:req.params.id});
+        const payEmp = await EmpPayment.findOne({paymentId:req.params.paymentId});
         res.json(payEmp);
     }catch (err) {
         res.json({ message: err});
     }
 });
+
+router.delete('/deleteEmpPay/:paymentId', async(req,res) => {
+    try{
+        await EmpPayment.findOneAndDelete({paymentId:req.params.paymentId});
+                res.status(200).json({
+                    message: data
+                })
+    }
+    catch (err){
+        res.json({message: err})
+    }
+})
 module.exports = router;

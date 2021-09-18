@@ -106,6 +106,7 @@ const AllEmpPayments = () => {
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
     const [opendlt, setOpendlt] = React.useState(false);
     const [empPayments, setEmpPayments] = React.useState([]);
+    const [paymentId, setPaymentId] = useState("");
 
     const CssTextField = withStyles({
         root: {
@@ -164,8 +165,25 @@ const AllEmpPayments = () => {
 
     }, [])
 
-    const handleClickOpen = () => {
+    const deletePayment = () => {
+        console.log(paymentId)
+        axios
+        .delete("http://localhost:5000/api/empPay/deleteEmpPay/" + paymentId)
+        .then((res) => {
+            if(res.status == 200){
+                console.log("Payment Deleted Successfully");
+            }
+        })
+        .catch((err) => {
+            console.log(err)
+        })
+
+        handleClose();
+    }
+
+    const handleClickOpen = (payId) => {
         setOpendlt(true);
+        setPaymentId(payId);
     };
     
     const handleClose = () => {
@@ -222,6 +240,9 @@ const AllEmpPayments = () => {
                                 <TableBody>
                                     <TableRow component={Paper} className={classes.paper}>
                                         <TableCell component="th" className={classes.tableth} style={{ width: 100 }}>
+                                            Payment ID
+                                        </TableCell>
+                                        <TableCell component="th" className={classes.tableth}>
                                             Employee ID
                                         </TableCell>
                                         <TableCell component="th" className={classes.tableth}>
@@ -248,8 +269,11 @@ const AllEmpPayments = () => {
                                         : empPayments
                                     ).map((row) => (
                                         <>
-                                        <TableRow key={row.name} className={classes.tableRow}>
+                                        <TableRow key={row.paymentId} className={classes.tableRow}>
                                             <TableCell component="th" scope="row" style={{ width: 100 }}>
+                                                {row.paymentId}
+                                            </TableCell>
+                                            <TableCell component="th" scope="row">
                                                 {row.employeeId}
                                             </TableCell>
                                             <TableCell component={Link} to={'/emp-details/' + row.employeeId} align="left">
@@ -271,7 +295,7 @@ const AllEmpPayments = () => {
                                                 <Button component={Link} to={'/emp-details/' + row.employeeId} variant="contained" color="secondary" className={classes.tableBtn}>
                                                     Update
                                                 </Button>
-                                                <Button variant="contained" className={classes.tableBtnRed} onClick={handleClickOpen}>
+                                                <Button variant="contained" className={classes.tableBtnRed} onClick={() => handleClickOpen(row.paymentId)}>
                                                     Remove
                                                 </Button>
                                             </TableCell>
@@ -331,7 +355,7 @@ const AllEmpPayments = () => {
                         <Button onClick={handleClose} variant="contained"color="secondary" className={classes.dialogBtn}>
                             Cancel
                         </Button>
-                        <Button onClick={handleClose} variant="contained" className={classes.dialogBtnRed} autoFocus>
+                        <Button onClick={deletePayment} variant="contained" className={classes.dialogBtnRed} autoFocus>
                             Yes, Delete it
                         </Button>
                     </DialogActions>
