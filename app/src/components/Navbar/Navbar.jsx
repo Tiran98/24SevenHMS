@@ -112,7 +112,7 @@ const Navbar = ({ setDrawerState, drawerState }) => {
                             <ListItemIcon className={classes.navIcon}><YoutubeSearchedForIcon /></ListItemIcon>
                             <ListItemText primary="Laboratory Management" />
                         </ListItem>
-                        <ListItem button>
+                        <ListItem component={Link} to ="/all-inventory" button>
                             <ListItemIcon className={classes.navIcon}><LocalHospitalIcon /></ListItemIcon>
                             <ListItemText primary="Inventory Management" />
                         </ListItem>

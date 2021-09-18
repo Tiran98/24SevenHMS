@@ -18,6 +18,8 @@ const EmployeeLogin = ({ setPathName, setDrawerState }) => {
     const [showPassword, setShowPassword] = React.useState(false);
     const [userProfile, setUserProfile] = useState([]);
     const [formData, setFormData] = useState([]);
+    const [errorMsg, setErrorMsg] = useState("");
+    const [error, setError] = useState(false);
     const isFirstRender = useRef(true);
     const history = useHistory();
 
@@ -63,7 +65,6 @@ const EmployeeLogin = ({ setPathName, setDrawerState }) => {
     }, []);
 
     useEffect(() => {
-      console.log(location.pathname);
       if (isFirstRender.current) {
         isFirstRender.current = false // toggle flag after first render/mounting
         return;
@@ -94,8 +95,6 @@ const EmployeeLogin = ({ setPathName, setDrawerState }) => {
     }
 
     const submitForm = (data) => {
-      // console.log(data);
-
       axios.post('http://localhost:5000/api/user/login',
       {
         email : data.email,
@@ -105,7 +104,9 @@ const EmployeeLogin = ({ setPathName, setDrawerState }) => {
         setUserProfile(response.data);
         history.push('/home');
       }).catch((err) => {
-        console.log(err);
+        console.log(err.response.data);
+        setErrorMsg(err.response.data);
+        setError(true);
       })
 
     }
@@ -129,7 +130,7 @@ const EmployeeLogin = ({ setPathName, setDrawerState }) => {
                                     control={control}
                                     defaultValue=""
                                     render={({ field }) => 
-                                    <CssTextField fullWidth label="Email" variant="outlined" color="primary" {...field} />}
+                                    <CssTextField fullWidth label="Email" variant="outlined" color="primary" {...field} error={error}/>}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -144,6 +145,7 @@ const EmployeeLogin = ({ setPathName, setDrawerState }) => {
                                         label="Password" 
                                         variant="outlined" 
                                         color="primary" 
+                                        error={error}
                                         {...field}
                                         InputProps={{
                                             endAdornment: (
@@ -156,6 +158,7 @@ const EmployeeLogin = ({ setPathName, setDrawerState }) => {
                                         }}/>}
                                 />
                             </Grid>
+                            <Typography variant="caption" className={classes.errorMsg} >{errorMsg}</Typography>
                         </Grid>
                         <Button type="submit" fullWidth variant="contained" className={classes.submitbtn}>
                             Submit

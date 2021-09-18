@@ -129,6 +129,9 @@ const AddAppointment = () => {
               borderColor: '#0077B6',
             },
           },
+          "& .MuiFormHelperText-root": {
+            color: "#ff0000",
+          },
         },
         input: {
           color: "#1a1a1a"

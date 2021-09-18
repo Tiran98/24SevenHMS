@@ -25,6 +25,12 @@ import PaymentDetails from './components/EmpPaymentManagement/PaymentDetails';
 import Example from './components/Example/Example';
 import EmpPaymentDetails from './components/EmpPaymentManagement/EmpPayUpdate';
 
+import AllInventory from './components/InventoryManagement/AllInventory';
+import AddInventory from './components/InventoryManagement/AddInventory';
+import InventoryDetails from './components/InventoryManagement/InventoryDetails';
+import IventoryUpdate from './components/InventoryManagement/IventoryUpdate';
+
+
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -61,8 +67,6 @@ function App() {
   const [pathName, setPathName] = React.useState("");
   const classes = useStyles();
 
-  console.log(pathName === "/login");
-
   return (
     <Router>
       <ThemeProvider theme={theme}>
@@ -74,7 +78,7 @@ function App() {
           <></>} */}
         <Switch>
           <div className={classes.content} style={{ marginLeft: drawerWidth * drawerState }}>
-            <Toolbar />
+            <Toolbar /> 
             <Route exact path="/home">
                 <Dashboard 
                   setDrawerState={setDrawerState}
@@ -94,6 +98,13 @@ function App() {
             <Route path="/emp-details/:id" exact component={PaymentDetails} />
             <Route path="/example" exact component={Example} />
             <Route path="/emp-update" exact component={EmpPaymentDetails} />
+            
+            <Route path="/all-inventory" exact component={AllInventory} />
+            <Route path="/add-inventory" exact component={AddInventory} />
+            <Route path="/update-inventory" exact component={InventoryDetails} />
+            <Route path="/details-inventory" exact component={IventoryUpdate} />
+
+
             <Route exact path="/admin">
                 <AdminLogin 
                   setDrawerState={setDrawerState}
