@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import PropTypes from 'prop-types';
 import { TextField, Paper, Button, Grid, Typography, IconButton, Table, TableBody, TableContainer, TableFooter, TablePagination, TableRow, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle  } from '@material-ui/core/';
 import useStyles from './styles';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 const employeeFD = [
     { "empID" : "0001", "firstName" : "Minerva", "lastName" : "McGonagall", "position" : "Doctor", "paymentAmt" : "Rs.80000.00", "paymentType" : "Visa", "paymentDate" : "22.10.2021"},
@@ -18,18 +19,23 @@ const employeeFD = [
 ];
 
 const PaymentDetails = () => {
-    const { id } = useParams();
     
     const classes = useStyles();
+    const history = useHistory()
     const [opendlt, setOpendlt] = React.useState(false);
     const [empPayment, setEmpPayment] = React.useState([]);
+    const [paymentId, setPaymentId] = useState("");
+
+    const { id } = useParams();
 
     const handleClickOpen = () => {
         setOpendlt(true);
+        setPaymentId(id);
     };
     
     const handleClose = () => {
         setOpendlt(false);
+        history.push('/all-emp-payment')
     };
 
     useEffect(() => {
@@ -41,13 +47,29 @@ const PaymentDetails = () => {
 
     }, [])
 
+    const deletePayment = () => {
+        console.log(paymentId)
+        axios
+        .delete("http://localhost:5000/api/empPay/deleteEmpPay/" + paymentId)
+        .then((res) => {
+            if(res.status == 200){
+                console.log("Payment Deleted Successfully");
+            }
+        })
+        .catch((err) => {
+            console.log(err)
+        })
+
+        handleClose();
+    }
+
     return (
         <div>
             <Grid container spacing={3}>
                 <Grid item xs={12}>
                     <Paper className={classes.paperTitle}>
                         <Typography variant="h4" className={classes.pageTitle}>Payment Details</Typography>
-                        <Typography variant="h5" className={classes.pageTitleEID}>EID :{id}</Typography>
+                        <Typography variant="h5" className={classes.pageTitleEID}>PID :{id}</Typography>
                     </Paper>
                 </Grid>
                 <Grid item xs={6}>
@@ -139,7 +161,7 @@ const PaymentDetails = () => {
                         <Button onClick={handleClose} variant="contained"color="secondary" className={classes.dialogBtn}>
                             Cancel
                         </Button>
-                        <Button onClick={handleClose} variant="contained" className={classes.dialogBtnRed} autoFocus>
+                        <Button onClick={deletePayment} variant="contained" className={classes.dialogBtnRed} autoFocus>
                             Yes, Delete it
                         </Button>
                     </DialogActions>

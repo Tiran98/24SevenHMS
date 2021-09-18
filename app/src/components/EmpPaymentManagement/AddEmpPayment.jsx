@@ -161,12 +161,12 @@ const AddEmpPayment = () => {
         axios
         .get("http://localhost:5000/api/empPay/getMaxId")
         .then((response) => {
-            console.log(response.data.employeeId);
-          if(response.data.employeeId == null)
+          if(response.data.paymentId == null)
           {
             setNextId(1);
           }else{
-            setNextId(response.data.employeeId + 1);
+            console.log(response.data.paymentId);
+            setNextId(response.data.paymentId + 1);
           }
         })
         .catch((error) => {
@@ -177,9 +177,10 @@ const AddEmpPayment = () => {
 
     const onSubmit = (data) => {
 
-        var codeId = document.getElementById("empId").value
+        var codeId = document.getElementById("payId").value
 
         setFormData({
+            paymentId:nextId,
             employeeId: nextId,
             employeeType: data.empType,
             employeeName: data.employee,
@@ -428,7 +429,7 @@ const AddEmpPayment = () => {
                                 </Button>
                             </Grid>
                             <Grid hidden='ture' item xs={12}>
-                                <h1 id="empId" name="empId">{nextId}</h1>
+                                <h1 id="payId" name="payId">{nextId}</h1>
                             </Grid>
                         </Grid> 
                     </form>
