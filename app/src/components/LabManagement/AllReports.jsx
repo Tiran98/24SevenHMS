@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { useHistory } from "react-router-dom";
 import { TextField, Paper, Button, Grid, Typography, IconButton, Table, TableBody, TableContainer, TableFooter, TablePagination, TableRow, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Snackbar  } from '@material-ui/core/';
 import { withStyles } from '@material-ui/core/styles';
+import axios from 'axios';
 import MuiAlert from '@material-ui/lab/Alert';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import { Link } from 'react-router-dom';
@@ -96,6 +98,7 @@ TablePaginationActions.propTypes = {
 
 const AllReports = () => {
     const classes = useStyles();
+    const history = useHistory();
     const [openModal, setOpenModal] = React.useState(false)
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -161,15 +164,17 @@ const AllReports = () => {
         }).then(jsonRes => setReports(jsonRes));
     }, [selectedItem])
 
-    console.log(reports);
-
     const handleClickOpen = (row) => {
         setOpendlt(true);
         setSelectedItem(row._id);
     };
 
+    const handleEditPage = (row) => {
+        history.push(`/edit-reports/${row._id}`);
+    };
+
     const deleteItem = () => {
-        fetch(`http://localhost:5000/api/labreports/?labReportID=${selectedItem}`, { method: 'DELETE' })
+        fetch(`http://localhost:5000/api/labreports/labdelete/${selectedItem}`, { method: 'DELETE' })
         .then(async response => {
             const data = await response.json();
 
@@ -475,7 +480,7 @@ const AllReports = () => {
                                                 <Button variant="contained" color="secondary" className={classes.tableBtn}>
                                                     Print
                                                 </Button>
-                                                <Button component={Link} to="/edit-reports" variant="contained" color="secondary" className={classes.tableBtn}>
+                                                <Button onClick={() => handleEditPage(row)} variant="contained" color="secondary" className={classes.tableBtn}>
                                                     Edit
                                                 </Button>
                                                 <Button variant="contained" className={classes.tableBtnRed} onClick={() => handleClickOpen(row)}>

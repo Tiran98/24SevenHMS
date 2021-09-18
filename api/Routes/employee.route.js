@@ -2,6 +2,7 @@ const router = require('express').Router();
 const Employee = require('../Models/Employee');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+var mongodb = require('mongodb');
 
 router.post('/', async(req, res) => {
 
@@ -68,21 +69,17 @@ router.get('/', async(req, res) => {
 
 // });
 
-router.delete('/empDelete', async(req, res) => {
+router.delete('/empdelete/:id', async(req, res) => {
 
-    Employee.remove(req.params.empID, (err, data) => {
-        if (err) {
-            if (err.kind == "not_found") {
-                res.status(404).send({
-                    message: `Not found Employee with id ${req.params.empID}.`
-                });
-            } else {
-                res.status(500).send({
-                    message: "Could not delete Employee with id " + req.params.empID
-                });
-            }
-        } else res.send({ message: `Employee was deleted Successfully!` });
-    });
+    // try {
+    //     const employee = await Employee.findOne({ _id: req.params.id });
+    //     res.json(employee);
+    // } catch (err) {
+    //     res.json({ message: err });
+    // }
+    Employee.deleteOne({ _id: req.params.id })
+        .then(thing => res.status(200).send(thing))
+        .catch(error => res.status(400).send({ error: error.message }));
 
 });
 

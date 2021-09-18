@@ -49,22 +49,31 @@ router.get('/', async(req, res) => {
     }
 });
 
-router.delete('/', async(req, res) => {
+router.get('/labfind/:id', async(req, res) => {
+    try {
+        const labreport = await LabReports.findById(req.params.id);
+        res.json(labreport);
+    } catch (err) {
+        res.json({ message: err });
+    }
+});
 
-    LabReports.deleteOne(req.params.labReportID, (err, data) => {
-        if (err) {
-            if (err.kind == "not_found") {
-                res.status(404).send({
-                    message: `Not found Lab Report with id ${req.params.labReportID}.`
-                });
-            } else {
-                res.status(500).send({
-                    message: "Could not delete Lab Report with id " + req.params.labReportID
-                });
-            }
-        } else res.send({ message: `Lab Report was deleted Successfully!` });
-    });
+router.delete('/labdelete/:id', async(req, res) => {
 
+    LabReports.deleteOne({ _id: req.params.id })
+        .then(thing => res.status(200).send(thing))
+        .catch(error => res.status(400).send({ error: error.message }));
+
+});
+
+router.put('/labupdate/:id', async(req, res) => {
+
+    try {
+        const savedReport = await LabReports.findOneAndUpdate({ _id: req.params.id }, req.body, { useFindAndModify: false, new: true });
+        res.json(savedReport);
+    } catch (err) {
+        res.json({ message: err });
+    }
 });
 
 module.exports = router;
