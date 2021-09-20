@@ -181,7 +181,7 @@ const AddEmpPayment = () => {
 
         setFormData({
             paymentId:nextId,
-            employeeId: nextId,
+            employeeId: '1',
             employeeType: data.empType,
             employeeName: data.employee,
             paymentAmount: data.payAmount,
