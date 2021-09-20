@@ -170,6 +170,7 @@ const PaymentDetails = () => {
     const [opendlt, setOpendlt] = React.useState(false);
     const [empPayment, setEmpPayment] = React.useState([]);
     const [paymentId, setPaymentId] = useState("");
+    const [formData, setFormData] = useState([]);
 
     const { id } = useParams();
 
@@ -212,6 +213,45 @@ const PaymentDetails = () => {
         handleClose();
     }
     const onSubmit = (data) => {
+        // setFormData({
+        //     paymentId:paymentId,
+        //     employeeId: '1',
+        //     employeeType: data.empType,
+        //     employeeName: data.employee,
+        //     paymentAmount: data.payAmount,
+        //     paymentType: data.payType,
+        //     paymentDate: data.payDate,
+        //     paymentAccount: data.payAccount,
+        //     description: data.description,
+        //     paymentBank: data.bank,
+        // })
+
+        const dataFromForm =  [{
+            paymentId:id,
+            employeeId: '1',
+            employeeType: data.empType,
+            employeeName: data.employee,
+            paymentAmount: data.payAmount,
+            paymentType: data.payType,
+            paymentDate: data.payDate,
+            paymentAccount: data.payAccount,
+            description: data.description,
+            paymentBank: data.bank,
+          }]
+
+        console.log(dataFromForm)
+
+        axios
+        .post("http://localhost:5000/api/empPay/updateEmpPay", dataFromForm)
+        .then((res) => {
+            if(res.status == 200){
+                console.log("Payment Updated Successfully");
+                history.push('/all-emp-payment');
+            }
+        })
+        .catch((err) => {
+            console.log(err)
+        })
     }
 
     const submitForm = (data) => {
@@ -360,7 +400,7 @@ const PaymentDetails = () => {
                     </Paper>
                 </Grid>
                 <Grid item xs={12}>
-                    <form className={classes.form}>
+                    <form onSubmit={handleSubmit(onSubmit)} className={classes.form}>
                         <Paper className={classes.paper}>
                                 <Grid container spacing={2}>
                                     <Grid item xs={12} sm={6}>
