@@ -19,7 +19,7 @@ import logo from '../../assets/logo.png';
 const Navbar = ({ setDrawerState, drawerState }) => {
     const classes = useStyles();
     const location = useLocation();
-    const history = useHistory();;
+    const history = useHistory();
     const [userProfile, setUserProfile] = useState(JSON.parse(localStorage.getItem('profile')));
     const [userType, setUserType] = useState("");
     const [userName, setUserName] = useState("Admin");

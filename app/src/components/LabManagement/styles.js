@@ -152,5 +152,13 @@ export default makeStyles((theme) => ({
         "& .MuiAlert-icon": {
             fontSize: 24
         }
+    },
+    cookieAlertError: {
+        width: "800px",
+        color: "#ffffff",
+        fontSize: 18,
+        "& .MuiAlert-icon": {
+            fontSize: 24
+        }
     }
 }));
