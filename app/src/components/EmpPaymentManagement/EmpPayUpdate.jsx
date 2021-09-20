@@ -1,4 +1,5 @@
 import React, {useState} from 'react'
+import { useParams, useHistory } from "react-router-dom";
 import { useForm, Controller } from "react-hook-form";
 import { FormLabel, TextField, FormControlLabel, Paper, Button, Grid, Typography, Snackbar } from '@material-ui/core/';
 import { withStyles } from '@material-ui/core/styles';
@@ -90,6 +91,7 @@ const payTypes = [
 ];
 
 const EmpPayUpdate = () => {
+    const { empDetails } = useParams();
     const classes = useStyles();
     const { control, handleSubmit, reset, formState: { errors }  } = useForm(
         {
@@ -198,6 +200,7 @@ const EmpPayUpdate = () => {
                                                 variant="outlined"
                                                 error={!!errors?.empType}
                                                 helperText={errors?.empType?.message}
+                                                defaultValue = {empDetails.paymentType}
                                                 >
                                                 {empTypes.map((option) => (
                                                     <MenuItem key={option.value} value={option.value}>
