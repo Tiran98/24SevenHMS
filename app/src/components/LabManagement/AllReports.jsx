@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { useHistory } from "react-router-dom";
 import { TextField, Paper, Button, Grid, Typography, IconButton, Table, TableBody, TableContainer, TableFooter, TablePagination, TableRow, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Snackbar  } from '@material-ui/core/';
 import { withStyles } from '@material-ui/core/styles';
+import Pdf from "react-to-pdf";
 import axios from 'axios';
 import MuiAlert from '@material-ui/lab/Alert';
 import InputAdornment from '@material-ui/core/InputAdornment';
@@ -14,6 +15,7 @@ import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
 
 import SearchIcon from '@material-ui/icons/Search';
+import GetAppIcon from '@material-ui/icons/GetApp';
 import AddIcon from '@material-ui/icons/Add';
 import FirstPageIcon from '@material-ui/icons/FirstPage';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
@@ -26,6 +28,8 @@ import useStyles from './styles';
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
+
+const refPrint = React.createRef();
 
 const useStyles1 = makeStyles((theme) => ({
     root: {
@@ -96,10 +100,21 @@ TablePaginationActions.propTypes = {
     rowsPerPage: PropTypes.number.isRequired,
 };
 
-const AllReports = () => {
+function printSingleReport() {
+    return (
+        <div ref={refPrint}>
+            <h1>Hello CodeSandbox</h1>
+            <h2>Start editing to see some magic happen!</h2>
+            <p>This is a demo how to create a save to PDF button</p>
+        </div>
+    )
+};
+
+const AllReports = ({ children, filename, targetRef }) => {
     const classes = useStyles();
     const history = useHistory();
-    const [openModal, setOpenModal] = React.useState(false)
+    const [openModal, setOpenModal] = React.useState(false);
+    const [openModalReport, setOpenModalReport] = React.useState(false);
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
     const [opendlt, setOpendlt] = React.useState(false);
@@ -205,6 +220,7 @@ const AllReports = () => {
     
     const handleClose = () => {
         setOpendlt(false);
+        setOpenModalReport(false);
     };
 
     const handleChangePage = (event, newPage) => {
@@ -228,161 +244,170 @@ const AllReports = () => {
 
     const modalBody = (
         <Fade in={openModal}>
-            <Grid container spacing={3} className={classes.modelPaper}>
-                <Grid item xs={12}>
-                    <Paper className={classes.paperTitle}>
-                        <Typography variant="h6" id="transition-modal-title" className={classes.reportTitle}>Blood Report</Typography>
-                    </Paper>
-                    <table className={classes.table}>
-                        <tr style={{ fontSize: "18px", color: "#0077B6" }}>
-                            <td className={classes.trReport}>Report ID</td>
-                            <td className={classes.trReport}>{reportData._id}</td>
-                        </tr>
-                        <tr>
-                            <td className={classes.trReport}>Full Name</td>
-                            <td>{reportData.fullname}</td>
-                            <td className={classes.trReport}>Gender</td>
-                            <td>{reportData.gender}</td>
-                        </tr>
-                        <tr>
-                            <td className={classes.trReport}>Email</td>
-                            <td>{reportData.email}</td>
-                            <td className={classes.trReport}>Mobile Number</td>
-                            <td>{reportData.mobile}</td>
-                        </tr>
-                        <tr>
-                            <td className={classes.trReport}>Date of Birth</td>
-                            <td>{reportData.dob}</td>
-                            <td className={classes.trReport}>Date Collected</td>
-                            <td>{reportData.datecollected}</td>
-                        </tr>
-                    </table>
-                    <Paper className={classes.paperSubTitle}>
-                        <Typography variant="body2" id="transition-modal-title" className={classes.reportSubTitle}>Complete Blood Count</Typography>
-                    </Paper>
-                    <table className={classes.table}>
-                        <tr>
-                            <td className={classes.trReport}>Test Name</td>
-                            <td className={classes.trReport}>Result</td>
-                            <td className={classes.trReport}>Normal Range</td>
-                            <td className={classes.trReport}>Units</td>
-                        </tr>
-                        <tr>
-                            <td>Hemoglobin</td>
-                            <td>{reportData.hemoglobin}</td>
-                            <td>11.0 - 16.0</td>
-                            <td>g/dL</td>
-                        </tr>
-                        <tr>
-                            <td>RBC</td>
-                            <td>{reportData.rbc}</td>
-                            <td>3.5 - 5.50</td>
-                            <td>10^6/uL</td>
-                        </tr>
-                        <tr>
-                            <td>HCT</td>
-                            <td>{reportData.hct}</td>
-                            <td>37.0 - 50.0</td>
-                            <td>%</td>
-                        </tr>
-                        <tr>
-                            <td>MCV</td>
-                            <td>{reportData.mcv}</td>
-                            <td>82 - 95</td>
-                            <td>fl</td>
-                        </tr>
-                        <tr>
-                            <td>MCH</td>
-                            <td>{reportData.mch}</td>
-                            <td>27 - 31</td>
-                            <td>pg</td>
-                        </tr>
-                        <tr>
-                            <td>MCHC</td>
-                            <td>{reportData.mchc}</td>
-                            <td>32.0 - 36.0</td>
-                            <td>g/dL</td>
-                        </tr>
-                        <tr>
-                            <td>RDW-CV</td>
-                            <td>{reportData.rdwcv}</td>
-                            <td>11.5 - 14.5</td>
-                            <td>%</td>
-                        </tr>
-                        <tr>
-                            <td>RDW-SD</td>
-                            <td>{reportData.rdwsd}</td>
-                            <td>35 - 56</td>
-                            <td>fl</td>
-                        </tr>
-                        <tr>
-                            <td>WBC</td>
-                            <td>{reportData.wbc}</td>
-                            <td>4.5 - 11</td>
-                            <td>10^3/uL</td>
-                        </tr>
-                        <tr>
-                            <td>NEU%</td>
-                            <td>{reportData.neu}</td>
-                            <td>40 - 70</td>
-                            <td>%</td>
-                        </tr>
-                        <tr>
-                            <td>LYM%</td>
-                            <td>{reportData.lym}</td>
-                            <td>20 - 45</td>
-                            <td>%</td>
-                        </tr>
-                        <tr>
-                            <td>MON%</td>
-                            <td>{reportData.mon}</td>
-                            <td>2 - 10</td>
-                            <td>%</td>
-                        </tr>
-                        <tr>
-                            <td>EOS%</td>
-                            <td>{reportData.eos}</td>
-                            <td>1 - 6</td>
-                            <td>%</td>
-                        </tr>
-                        <tr>
-                            <td>BAS%</td>
-                            <td>{reportData.bas}</td>
-                            <td>0 - 2</td>
-                            <td>%</td>
-                        </tr>
-                        <tr>
-                            <td>LYM#</td>
-                            <td>{reportData.lym2}</td>
-                            <td>1.5 - 4.0</td>
-                            <td>10^3/uL</td>
-                        </tr>
-                        <tr>
-                            <td>GRA#</td>
-                            <td>{reportData.gra}</td>
-                            <td>2.0 - 7.5</td>
-                            <td>10^3/uL</td>
-                        </tr>
-                        <tr>
-                            <td>PLT</td>
-                            <td>{reportData.plt}</td>
-                            <td>150 - 450</td>
-                            <td>10^3/uL</td>
-                        </tr>
-                        <tr>
-                            <td>ESR</td>
-                            <td>{reportData.esr}</td>
-                            <td>Up to 15</td>
-                            <td>mm/hr</td>
-                        </tr>
-                    </table>
-                </Grid>
-            </Grid>
+            <div>
+                <div ref={refPrint}>
+                    <Grid container spacing={3} className={classes.modelPaper}>
+                        <Grid item xs={12}>
+                            <Paper className={classes.paperTitle}>
+                                <Typography variant="h6" id="transition-modal-title" className={classes.reportTitle}>Blood Report</Typography>
+                            </Paper>
+                            <table className={classes.table}>
+                                <tr style={{ fontSize: "18px", color: "#0077B6" }}>
+                                    <td className={classes.trReport}>Report ID</td>
+                                    <td className={classes.trReport}>{reportData._id}</td>
+                                </tr>
+                                <tr>
+                                    <td className={classes.trReport}>Full Name</td>
+                                    <td>{reportData.fullname}</td>
+                                    <td className={classes.trReport}>Gender</td>
+                                    <td>{reportData.gender}</td>
+                                </tr>
+                                <tr>
+                                    <td className={classes.trReport}>Email</td>
+                                    <td>{reportData.email}</td>
+                                    <td className={classes.trReport}>Mobile Number</td>
+                                    <td>{reportData.mobile}</td>
+                                </tr>
+                                <tr>
+                                    <td className={classes.trReport}>Date of Birth</td>
+                                    <td>{reportData.dob}</td>
+                                    <td className={classes.trReport}>Date Collected</td>
+                                    <td>{reportData.datecollected}</td>
+                                </tr>
+                            </table>
+                            <Paper className={classes.paperSubTitle}>
+                                <Typography variant="body2" id="transition-modal-title" className={classes.reportSubTitle}>Complete Blood Count</Typography>
+                            </Paper>
+                            <table className={classes.table}>
+                                <tr>
+                                    <td className={classes.trReport}>Test Name</td>
+                                    <td className={classes.trReport}>Result</td>
+                                    <td className={classes.trReport}>Normal Range</td>
+                                    <td className={classes.trReport}>Units</td>
+                                </tr>
+                                <tr>
+                                    <td>Hemoglobin</td>
+                                    <td>{reportData.hemoglobin}</td>
+                                    <td>11.0 - 16.0</td>
+                                    <td>g/dL</td>
+                                </tr>
+                                <tr>
+                                    <td>RBC</td>
+                                    <td>{reportData.rbc}</td>
+                                    <td>3.5 - 5.50</td>
+                                    <td>10^6/uL</td>
+                                </tr>
+                                <tr>
+                                    <td>HCT</td>
+                                    <td>{reportData.hct}</td>
+                                    <td>37.0 - 50.0</td>
+                                    <td>%</td>
+                                </tr>
+                                <tr>
+                                    <td>MCV</td>
+                                    <td>{reportData.mcv}</td>
+                                    <td>82 - 95</td>
+                                    <td>fl</td>
+                                </tr>
+                                <tr>
+                                    <td>MCH</td>
+                                    <td>{reportData.mch}</td>
+                                    <td>27 - 31</td>
+                                    <td>pg</td>
+                                </tr>
+                                <tr>
+                                    <td>MCHC</td>
+                                    <td>{reportData.mchc}</td>
+                                    <td>32.0 - 36.0</td>
+                                    <td>g/dL</td>
+                                </tr>
+                                <tr>
+                                    <td>RDW-CV</td>
+                                    <td>{reportData.rdwcv}</td>
+                                    <td>11.5 - 14.5</td>
+                                    <td>%</td>
+                                </tr>
+                                <tr>
+                                    <td>RDW-SD</td>
+                                    <td>{reportData.rdwsd}</td>
+                                    <td>35 - 56</td>
+                                    <td>fl</td>
+                                </tr>
+                                <tr>
+                                    <td>WBC</td>
+                                    <td>{reportData.wbc}</td>
+                                    <td>4.5 - 11</td>
+                                    <td>10^3/uL</td>
+                                </tr>
+                                <tr>
+                                    <td>NEU%</td>
+                                    <td>{reportData.neu}</td>
+                                    <td>40 - 70</td>
+                                    <td>%</td>
+                                </tr>
+                                <tr>
+                                    <td>LYM%</td>
+                                    <td>{reportData.lym}</td>
+                                    <td>20 - 45</td>
+                                    <td>%</td>
+                                </tr>
+                                <tr>
+                                    <td>MON%</td>
+                                    <td>{reportData.mon}</td>
+                                    <td>2 - 10</td>
+                                    <td>%</td>
+                                </tr>
+                                <tr>
+                                    <td>EOS%</td>
+                                    <td>{reportData.eos}</td>
+                                    <td>1 - 6</td>
+                                    <td>%</td>
+                                </tr>
+                                <tr>
+                                    <td>BAS%</td>
+                                    <td>{reportData.bas}</td>
+                                    <td>0 - 2</td>
+                                    <td>%</td>
+                                </tr>
+                                <tr>
+                                    <td>LYM#</td>
+                                    <td>{reportData.lym2}</td>
+                                    <td>1.5 - 4.0</td>
+                                    <td>10^3/uL</td>
+                                </tr>
+                                <tr>
+                                    <td>GRA#</td>
+                                    <td>{reportData.gra}</td>
+                                    <td>2.0 - 7.5</td>
+                                    <td>10^3/uL</td>
+                                </tr>
+                                <tr>
+                                    <td>PLT</td>
+                                    <td>{reportData.plt}</td>
+                                    <td>150 - 450</td>
+                                    <td>10^3/uL</td>
+                                </tr>
+                                <tr>
+                                    <td>ESR</td>
+                                    <td>{reportData.esr}</td>
+                                    <td>Up to 15</td>
+                                    <td>mm/hr</td>
+                                </tr>
+                            </table>
+                        </Grid>
+                    </Grid>
+                </div>
+                <Pdf targetRef={refPrint} filename={reportData._id + " blood report.pdf"}>
+                    {({toPdf}) => (
+                        <Button onClick={toPdf} variant="contained" className={classes.dialogBtnBlue} startIcon={<GetAppIcon />}>Download Report</Button>
+                    )}
+                </Pdf> 
+            </div>
         </Fade>
     );
 
     return (
-        <div>
+        <div style={{ overflow: "hidden" }}> 
             <Grid container spacing={3}>
                 <Grid item xs={12}>
                     <Paper className={classes.paperTitle}>
@@ -476,9 +501,6 @@ const AllReports = () => {
                                             <TableCell align="left">
                                                 <Button variant="contained" color="secondary" className={classes.tableBtn} onClick={() => handleOpenModal(row)}>
                                                     View
-                                                </Button>
-                                                <Button variant="contained" color="secondary" className={classes.tableBtn}>
-                                                    Print
                                                 </Button>
                                                 <Button onClick={() => handleEditPage(row)} variant="contained" color="secondary" className={classes.tableBtn}>
                                                     Edit

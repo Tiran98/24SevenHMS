@@ -94,6 +94,15 @@ export default makeStyles((theme) => ({
             backgroundColor: "#2b2b2b",
         },
     },
+    dialogBtnBlue: {
+        padding: "10px",
+        float: "right",
+        color: "#ffffff",
+        backgroundColor: "#0077B6",
+        '&:hover': {
+            backgroundColor: "#023E8A",
+        },
+    },
     dialogBtnRed: {
         padding: "8px",
         color: "#ffffff",
