@@ -104,7 +104,6 @@ const PaymentDetails = () => {
     
     const classes = useStyles();
     const { empDetails } = useParams();
-
     const { control, handleSubmit, reset, formState: { errors }  } = useForm(
         {
             resolver: yupResolver(schema),
@@ -212,7 +211,6 @@ const PaymentDetails = () => {
 
         handleClose();
     }
-
     const onSubmit = (data) => {
     }
 

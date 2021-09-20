@@ -108,4 +108,12 @@ export default makeStyles((theme) => ({
         color: "#ff0000",
         fontSize: "15px",
     },
+    cookieAlertError: {
+        width: "800px",
+        color: "#ffffff",
+        fontSize: 18,
+        "& .MuiAlert-icon": {
+            fontSize: 24
+        }
+    },
 }));

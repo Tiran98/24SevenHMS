@@ -49,4 +49,31 @@ router.get('/', async(req, res) => {
     }
 });
 
+router.get('/labfind/:id', async(req, res) => {
+    try {
+        const labreport = await LabReports.findById(req.params.id);
+        res.json(labreport);
+    } catch (err) {
+        res.json({ message: err });
+    }
+});
+
+router.delete('/labdelete/:id', async(req, res) => {
+
+    LabReports.deleteOne({ _id: req.params.id })
+        .then(thing => res.status(200).send(thing))
+        .catch(error => res.status(400).send({ error: error.message }));
+
+});
+
+router.put('/labupdate/:id', async(req, res) => {
+
+    try {
+        const savedReport = await LabReports.findOneAndUpdate({ _id: req.params.id }, req.body, { useFindAndModify: false, new: true });
+        res.json(savedReport);
+    } catch (err) {
+        res.json({ message: err });
+    }
+});
+
 module.exports = router;
