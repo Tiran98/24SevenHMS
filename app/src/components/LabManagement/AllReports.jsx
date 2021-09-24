@@ -100,21 +100,10 @@ TablePaginationActions.propTypes = {
     rowsPerPage: PropTypes.number.isRequired,
 };
 
-function printSingleReport() {
-    return (
-        <div ref={refPrint}>
-            <h1>Hello CodeSandbox</h1>
-            <h2>Start editing to see some magic happen!</h2>
-            <p>This is a demo how to create a save to PDF button</p>
-        </div>
-    )
-};
-
-const AllReports = ({ children, filename, targetRef }) => {
+const AllReports = () => {
     const classes = useStyles();
     const history = useHistory();
     const [openModal, setOpenModal] = React.useState(false);
-    const [openModalReport, setOpenModalReport] = React.useState(false);
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
     const [opendlt, setOpendlt] = React.useState(false);
@@ -220,7 +209,6 @@ const AllReports = ({ children, filename, targetRef }) => {
     
     const handleClose = () => {
         setOpendlt(false);
-        setOpenModalReport(false);
     };
 
     const handleChangePage = (event, newPage) => {

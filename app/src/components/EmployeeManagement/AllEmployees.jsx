@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
+import Pdf from "react-to-pdf";
 import { useForm, Controller } from "react-hook-form";
 import { TextField, Paper, Button, Grid, Typography, IconButton, Table, TableBody, TableContainer, TableFooter, TablePagination, TableRow, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Snackbar  } from '@material-ui/core/';
 import { withStyles } from '@material-ui/core/styles';
@@ -9,8 +10,14 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import { Link } from 'react-router-dom';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import MuiTableCell from "@material-ui/core/TableCell";
+import Modal from '@material-ui/core/Modal';
+import Backdrop from '@material-ui/core/Backdrop';
+import Fade from '@material-ui/core/Fade';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
 
 import SearchIcon from '@material-ui/icons/Search';
+import GetAppIcon from '@material-ui/icons/GetApp';
 import AddIcon from '@material-ui/icons/Add';
 import FirstPageIcon from '@material-ui/icons/FirstPage';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
@@ -23,6 +30,8 @@ import useStyles from './styles';
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
+
+const refPrint = React.createRef();
 
 const useStyles1 = makeStyles((theme) => ({
     root: {
@@ -95,13 +104,19 @@ TablePaginationActions.propTypes = {
 
 const AllEmployees = () => {
     const classes = useStyles();
-    const { control, handleSubmit, reset } = useForm();
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
     const [opendlt, setOpendlt] = React.useState(false);
     const [employees, setEmployees] = React.useState([]);
     const [selectedItem, setSelectedItem] = React.useState("");
+    const [allCount, setAllCount] = React.useState();
     const [successMsg, setSuccessMsg] = useState(false);
+    const [openModal, setOpenModal] = React.useState(false);
+    const [searched, setSearched] = useState("");
+
+    const options = {
+        orientation: 'landscape',
+    };
 
     const CssTextField = withStyles({
         root: {
@@ -157,7 +172,27 @@ const AllEmployees = () => {
                 return res.json()
             }
         }).then(jsonRes => setEmployees(jsonRes));
-    }, [selectedItem])
+    }, [selectedItem]);
+
+    useEffect(() => {
+        fetch("http://localhost:5000/api/employee/allcounts").then(res => {
+            if(res.ok){
+                return res.json()
+            }
+        }).then(jsonRes => setAllCount(jsonRes));
+    }, []);
+
+    const requestSearch = (searchedVal) => {
+        const filteredRows = employees.filter((row) => {
+          return row.fullname.toLowerCase().includes(searchedVal.toLowerCase());
+        });
+        setEmployees(filteredRows);
+    };
+    
+    const cancelSearch = () => {
+        setSearched("");
+        requestSearch(searched);
+    };
 
     const handleClickOpen = (row) => {
         setOpendlt(true);
@@ -207,6 +242,101 @@ const AllEmployees = () => {
         setPage(0);
     };
 
+    const handleOpenModal = () => {
+        setOpenModal(true);
+        // console.log(row);
+
+    };
+    
+    const handleCloseModal = () => {
+        setOpenModal(false);
+    };
+
+    const modalBody = (
+        <Fade in={openModal}>
+            <div>
+                <div ref={refPrint}>
+                    <Grid container spacing={3} className={classes.modelPaper}>
+                        <Grid item xs={12}>
+                            <Paper className={classes.paperTitle}>
+                                <Typography variant="h4" className={classes.pageTitle}>All Employees</Typography>
+                            </Paper>
+                        </Grid>
+                    <TableContainer component={Paper}>
+                        <Table className={classes.table} aria-label="simple table">
+                        <TableBody>
+                                    <TableRow component={Paper} className={classes.paper}>
+                                        <TableCell component="th" className={classes.tableth} style={{ width: 200 }}>
+                                            Employee ID
+                                        </TableCell>
+                                        <TableCell component="th" className={classes.tableth}>
+                                            Full Name
+                                        </TableCell>
+                                        <TableCell component="th" className={classes.tableth}>
+                                            Position/Job Title
+                                        </TableCell>
+                                        <TableCell component="th" className={classes.tableth}>
+                                            Email
+                                        </TableCell>
+                                        <TableCell component="th" className={classes.tableth}>
+                                            Mobile Number
+                                        </TableCell>
+                                    </TableRow> <br />
+                                    {(employees).map((row) => (
+                                        <>
+                                        <TableRow key={row.name} className={classes.tableRow}>
+                                            <TableCell component="th" scope="row" style={{ width: 200 }}>
+                                                {row._id}
+                                            </TableCell>
+                                            <TableCell align="left">
+                                                {row.firstName} {row.lastName}
+                                            </TableCell>
+                                            <TableCell align="left">
+                                                {row.position}
+                                            </TableCell>
+                                            <TableCell align="left">
+                                                {row.email}
+                                            </TableCell>
+                                            <TableCell align="left">
+                                                {row.mobile}
+                                            </TableCell>
+                                        </TableRow>
+                                        <br />
+                                        </>
+                                    ))}
+                                </TableBody>
+                        </Table>
+                    </TableContainer>
+                        <Grid item xs={12}>
+                            <Paper className={classes.paperTitle}>
+                                <Typography variant="body2" className={classes.pageTitle}>All Employees Count : {employees.length}</Typography>
+                            </Paper>
+                        </Grid>
+                        <Grid container spacing={3}>
+                            <Grid item xs>
+                                <Typography variant="body2" display="inline" className={classes.count}>Doctors Count : {allCount ? allCount[0].doctorcount : 0}</Typography>
+                            </Grid>
+                            <Grid item xs>
+                                <Typography variant="body2" display="inline" className={classes.count}>Pharmacists Count : {allCount ? allCount[0].pharmacistcount : 0}</Typography>
+                            </Grid>
+                            <Grid item xs>
+                                <Typography variant="body2" display="inline" className={classes.count}>Accountacts Count : {allCount ? allCount[0].accountantcount : 0}</Typography>
+                            </Grid>
+                            <Grid item xs>
+                                <Typography variant="body2" display="inline" className={classes.count}>Assistants Count : {allCount ? allCount[0].assistantcount : 0}</Typography>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                </div>
+                <Pdf targetRef={refPrint} filename={"All Employees Report.pdf"} options={options} scale="0.8">
+                    {({toPdf}) => (
+                        <Button onClick={toPdf} variant="contained" className={classes.dialogBtnBlue} startIcon={<GetAppIcon />}>Download Report</Button>
+                    )}
+                </Pdf> 
+            </div>
+        </Fade>
+    );
+
     return (
         <div>
             <Grid container spacing={3}>
@@ -234,6 +364,9 @@ const AllEmployees = () => {
                                     </InputAdornment>
                                 ),
                             }}
+                            value={searched}
+                            onChange={(searchVal) => requestSearch(searchVal)}
+                            onCancelSearch={() => cancelSearch()}
                         />
                     </Grid>
                     <Grid item xs={12} sm={2}>
@@ -357,6 +490,21 @@ const AllEmployees = () => {
                     Employee record successfully deleted.
                 </Alert>
             </Snackbar>
+            <Button onClick={() => handleOpenModal()} variant="contained" className={classes.dialogBtnBlue} >View Full Report</Button>
+            <Modal
+                aria-labelledby="transition-modal-title"
+                aria-describedby="transition-modal-description"
+                className={classes.modal}
+                open={openModal}
+                onClose={handleCloseModal}
+                closeAfterTransition
+                BackdropComponent={Backdrop}
+                BackdropProps={{
+                timeout: 500,
+                }}
+            >
+               {modalBody}
+            </Modal>
         </div>
     )
 }
