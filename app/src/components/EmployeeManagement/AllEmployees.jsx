@@ -13,6 +13,7 @@ import MuiTableCell from "@material-ui/core/TableCell";
 import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
+import SearchBar from "material-ui-search-bar";
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 
@@ -109,7 +110,15 @@ const AllEmployees = () => {
     const [opendlt, setOpendlt] = React.useState(false);
     const [employees, setEmployees] = React.useState([]);
     const [selectedItem, setSelectedItem] = React.useState("");
-    const [allCount, setAllCount] = React.useState();
+    const [rows, setRows] = useState([]);
+    const [allCount, setAllCount] = React.useState(
+        {
+            doctorcount : 0,
+            pharmacistcount : 0,
+            assistantcount : 0,
+            accountantcount :0
+        }
+    );
     const [successMsg, setSuccessMsg] = useState(false);
     const [openModal, setOpenModal] = React.useState(false);
     const [searched, setSearched] = useState("");
@@ -175,6 +184,10 @@ const AllEmployees = () => {
     }, [selectedItem]);
 
     useEffect(() => {
+        setRows(employees);
+    }, [employees]);
+
+    useEffect(() => {
         fetch("http://localhost:5000/api/employee/allcounts").then(res => {
             if(res.ok){
                 return res.json()
@@ -184,9 +197,9 @@ const AllEmployees = () => {
 
     const requestSearch = (searchedVal) => {
         const filteredRows = employees.filter((row) => {
-          return row.fullname.toLowerCase().includes(searchedVal.toLowerCase());
+          return row.firstName.toLowerCase().includes(searchedVal.toString().toLowerCase());
         });
-        setEmployees(filteredRows);
+        setRows(filteredRows);
     };
     
     const cancelSearch = () => {
@@ -282,7 +295,7 @@ const AllEmployees = () => {
                                             Mobile Number
                                         </TableCell>
                                     </TableRow> <br />
-                                    {(employees).map((row) => (
+                                    {employees.map((row) => (
                                         <>
                                         <TableRow key={row.name} className={classes.tableRow}>
                                             <TableCell component="th" scope="row" style={{ width: 200 }}>
@@ -314,16 +327,16 @@ const AllEmployees = () => {
                         </Grid>
                         <Grid container spacing={3}>
                             <Grid item xs>
-                                <Typography variant="body2" display="inline" className={classes.count}>Doctors Count : {allCount ? allCount[0].doctorcount : 0}</Typography>
+                                <Typography variant="body2" display="inline" className={classes.count}>Doctors Count : {allCount.doctorcount}</Typography>
                             </Grid>
                             <Grid item xs>
-                                <Typography variant="body2" display="inline" className={classes.count}>Pharmacists Count : {allCount ? allCount[0].pharmacistcount : 0}</Typography>
+                                <Typography variant="body2" display="inline" className={classes.count}>Pharmacists Count : {allCount.pharmacistcount}</Typography>
                             </Grid>
                             <Grid item xs>
-                                <Typography variant="body2" display="inline" className={classes.count}>Accountacts Count : {allCount ? allCount[0].accountantcount : 0}</Typography>
+                                <Typography variant="body2" display="inline" className={classes.count}>Accountacts Count : {allCount.accountantcount}</Typography>
                             </Grid>
                             <Grid item xs>
-                                <Typography variant="body2" display="inline" className={classes.count}>Assistants Count : {allCount ? allCount[0].assistantcount : 0}</Typography>
+                                <Typography variant="body2" display="inline" className={classes.count}>Assistants Count : {allCount.assistantcount}</Typography>
                             </Grid>
                         </Grid>
                     </Grid>
@@ -347,7 +360,13 @@ const AllEmployees = () => {
                 </Grid>
                 <Grid container spacing={3} justifyContent="flex-end" alignItems="center" style={{ padding: "12px" }}>
                     <Grid item xs={12} sm={4}>
-                        <CssTextField
+                        <SearchBar
+                            cancelOnEscape
+                            value={searched}
+                            onChange={(searchVal) => requestSearch(searchVal)}
+                            onCancelSearch={() => cancelSearch()}
+                        />
+                        {/* <CssTextField
                             fullWidth
                             label="Search Records"
                             variant="outlined"
@@ -367,7 +386,7 @@ const AllEmployees = () => {
                             value={searched}
                             onChange={(searchVal) => requestSearch(searchVal)}
                             onCancelSearch={() => cancelSearch()}
-                        />
+                        /> */}
                     </Grid>
                     <Grid item xs={12} sm={2}>
                         <Button component={Link} to ="/add-employee" fullWidth variant="contained" startIcon={<AddIcon />} color="secondary" className={classes.submitbtn}>
@@ -400,8 +419,8 @@ const AllEmployees = () => {
                                         </TableCell>
                                     </TableRow> <br />
                                     {(rowsPerPage > 0
-                                        ? employees.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                        : employees
+                                        ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                        : rows
                                     ).map((row) => (
                                         <>
                                         <TableRow key={row.name} className={classes.tableRow}>
