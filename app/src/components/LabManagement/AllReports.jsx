@@ -13,6 +13,7 @@ import MuiTableCell from "@material-ui/core/TableCell";
 import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
+import SearchBar from "material-ui-search-bar";
 
 import SearchIcon from '@material-ui/icons/Search';
 import GetAppIcon from '@material-ui/icons/GetApp';
@@ -111,6 +112,8 @@ const AllReports = () => {
     const [reportData, setReportData] = React.useState([]);
     const [selectedItem, setSelectedItem] = React.useState("");
     const [successMsg, setSuccessMsg] = useState(false);
+    const [rows, setRows] = useState([]);
+    const [searched, setSearched] = useState("");
 
     const CssTextField = withStyles({
         root: {
@@ -171,6 +174,22 @@ const AllReports = () => {
     const handleClickOpen = (row) => {
         setOpendlt(true);
         setSelectedItem(row._id);
+    };
+
+    useEffect(() => {
+        setRows(reports);
+    }, [reports]);
+
+    const requestSearch = (searchedVal) => {
+        const filteredRows = reports.filter((row) => {
+          return row.fullname.toLowerCase().includes(searchedVal.toString().toLowerCase());
+        });
+        setRows(filteredRows);
+    };
+    
+    const cancelSearch = () => {
+        setSearched("");
+        requestSearch(searched);
     };
 
     const handleEditPage = (row) => {
@@ -404,24 +423,12 @@ const AllReports = () => {
                 </Grid>
                 <Grid container spacing={3} justifyContent="flex-end" alignItems="center" style={{ padding: "12px" }}>
                     <Grid item xs={12} sm={4}>
-                        <CssTextField
-                            fullWidth
-                            label="Search Records"
-                            variant="outlined"
-                            color="primary"
-                            InputLabelProps={{
-                                shrink: true,
-                            }}
-                            InputProps={{
-                                endAdornment: (
-                                    <InputAdornment position="end">
-                                        <IconButton type="submit" aria-label="search">
-                                            <SearchIcon />
-                                        </IconButton>
-                                    </InputAdornment>
-                                ),
-                            }}
-                        />
+                        <SearchBar
+                                cancelOnEscape
+                                value={searched}
+                                onChange={(searchVal) => requestSearch(searchVal)}
+                                onCancelSearch={() => cancelSearch()}
+                            />
                     </Grid>
                     <Grid item xs={12} sm={2}>
                         <Button component={Link} to ="/add-report" fullWidth variant="contained" startIcon={<AddIcon />} color="secondary" className={classes.submitbtn}>
@@ -460,8 +467,8 @@ const AllReports = () => {
                                         </TableCell>
                                     </TableRow> <br />
                                     {(rowsPerPage > 0
-                                        ? reports.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                        : reports
+                                        ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                        : rows
                                     ).map((row) => (
                                         <>
                                         <TableRow key={row.name} className={classes.tableRow}>
