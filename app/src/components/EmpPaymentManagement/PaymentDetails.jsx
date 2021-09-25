@@ -172,6 +172,7 @@ const PaymentDetails = () => {
     const [paymentId, setPaymentId] = useState("");
     const [formData, setFormData] = useState([]);
     const [empByName, setEmpByName] = useState([]);
+    const [employeeNames,setEmployeeNames] = useState([]);
 
     const { id } = useParams();
 
@@ -208,6 +209,12 @@ const PaymentDetails = () => {
             .then(jsonresponse => {
                 setEmpByName(jsonresponse);
                 //console.log(jsonresponse)
+
+                fetch("http://localhost:5000/api/employee").then(res => {
+                if(res.ok){
+                    return res.json()
+                }
+                }).then(jsonRes => setEmployeeNames(jsonRes));
             })
         });
 
@@ -461,9 +468,9 @@ const PaymentDetails = () => {
                                                 helperText={errors?.employee?.message}
                                                 {...field}
                                                 >
-                                                {employees.map((option) => (
-                                                    <MenuItem key={option.value} value={option.value}>
-                                                        {option.label}
+                                                {employeeNames.map((empNames) => (
+                                                    <MenuItem key={empNames._id} value={empNames.firstName}>
+                                                        {empNames.firstName} {empNames.lastName}
                                                     </MenuItem>
                                                 ))}
                                             </CssTextField>}
