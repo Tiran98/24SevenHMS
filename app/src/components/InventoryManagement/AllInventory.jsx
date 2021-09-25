@@ -106,6 +106,7 @@ const AllInventory = () => {
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
     const [opendlt, setOpendlt] = React.useState(false);
     const [inventory, setInventory] = React.useState([]);
+    const [productId, setProductId] = useState("");
 
     const CssTextField = withStyles({
         root: {
@@ -156,13 +157,29 @@ const AllInventory = () => {
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, inventoryFD.length - page * rowsPerPage);
 
     useEffect(() => {
-        fetch("http://localhost:5000/api/InvMngmnt/viewInvMngmnt").then(res => {
+        fetch("http://localhost:5000/api/InvMngmnt/viewInvMngmnt")
+        .then(res => {
             if(res.ok){
                 return res.json()
             }
         }).then(jsonRes => setInventory(jsonRes));
 
     }, [])
+
+    const deleteItem = () => {
+        console.log(productId)
+        axios
+        .delete("http://localhost:5000/api/InvMngmnt/deleteInvMngmnt/" + productId)
+        .then((res) => {
+            if(res.status == 200){
+                console.log("Item Deleted Successfully");
+            }
+        })
+        .catch((err) => {
+            console.log(err)
+        })
+        handleClose();
+    }
 
     const handleClickOpen = () => {
         setOpendlt(true);
@@ -349,7 +366,7 @@ const AllInventory = () => {
                         <Button onClick={handleClose} variant="contained"color="secondary" className={classes.dialogBtn}>
                             Cancel
                         </Button>
-                        <Button onClick={handleClose} variant="contained" className={classes.dialogBtnRed} autoFocus>
+                        <Button onClick={deleteItem} variant="contained" className={classes.dialogBtnRed} autoFocus>
                             Yes, Delete it
                         </Button>
                     </DialogActions>
