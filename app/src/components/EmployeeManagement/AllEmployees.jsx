@@ -341,7 +341,7 @@ const AllEmployees = () => {
                         </Grid>
                     </Grid>
                 </div>
-                <Pdf targetRef={refPrint} filename={"All Employees Report.pdf"} options={options} scale="0.8">
+                <Pdf targetRef={refPrint} filename={"All Employees Report.pdf"} options={options} scale="0.9">
                     {({toPdf}) => (
                         <Button onClick={toPdf} variant="contained" className={classes.dialogBtnBlue} startIcon={<GetAppIcon />}>Download Report</Button>
                     )}
