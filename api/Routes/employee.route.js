@@ -81,5 +81,13 @@ router.get('/allcounts', async(req, res) => {
     }
 });
 
+router.get('/getEmpByName/:firstName', async(req,res) => {
+    try{
+        const empByName = await Employee.findOne({firstName:req.params.firstName});
+        res.json(empByName);
+    }catch (err) {
+        res.json({ message: err});
+    }
+});
 
 module.exports = router;

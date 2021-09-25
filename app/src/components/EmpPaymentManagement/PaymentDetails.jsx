@@ -171,6 +171,7 @@ const PaymentDetails = () => {
     const [empPayment, setEmpPayment] = React.useState([]);
     const [paymentId, setPaymentId] = useState("");
     const [formData, setFormData] = useState([]);
+    const [empByName, setEmpByName] = useState([]);
 
     const { id } = useParams();
 
@@ -193,7 +194,22 @@ const PaymentDetails = () => {
             if(res.ok){
                 return res.json()
             }
-        }).then(jsonRes => setEmpPayment(jsonRes));
+        }).then(jsonRes =>{
+            setEmpPayment(jsonRes);
+            const firstName = jsonRes.employeeName;
+            //console.log(firstName)
+            
+            fetch("http://localhost:5000/api/employee/getEmpByName/" + firstName)
+            .then(res => {
+                if(res.ok){
+                    return res.json()
+                }
+            })
+            .then(jsonresponse => {
+                setEmpByName(jsonresponse);
+                //console.log(jsonresponse)
+            })
+        });
 
     }, [])
 
@@ -293,37 +309,37 @@ const PaymentDetails = () => {
                     <Paper className={classes.detailsPaper}>
                         <h2 style={{marginBottom:10,marginTop:10,marginLeft:10}}>Employee Details</h2>
                         <Grid item xs={12} style={{marginBottom:10,marginLeft:30}}>
-                            <Typography  variant="h6">First Name : <span style={{color:'#023e8a'}}>Mohomad</span></Typography>
+                            <Typography  variant="h6">First Name : <span style={{color:'#023e8a'}}>{empByName.firstName}</span></Typography>
                         </Grid>
                         <Grid item xs={12} style={{marginBottom:10,marginLeft:30}}>
-                            <Typography variant="h6">Last Name : <span style={{color:'#023e8a'}}>Rikas</span></Typography>
+                            <Typography variant="h6">Last Name : <span style={{color:'#023e8a'}}>{empByName.lastName}</span></Typography>
                         </Grid>
                         <Grid item xs={12} style={{marginBottom:10,marginLeft:30}}>
-                            <Typography variant="h6">Email : <span style={{color:'#023e8a'}}>Rikas.MRM@gmail.com</span></Typography>
+                            <Typography variant="h6">Email : <span style={{color:'#023e8a'}}>{empByName.email}</span></Typography>
                         </Grid>
                         <Grid item xs={12} style={{marginBottom:10,marginLeft:30}}>
-                            <Typography variant="h6">Mobile Number : <span style={{color:'#023e8a'}}>+94778541254</span></Typography>
+                            <Typography variant="h6">Mobile Number : <span style={{color:'#023e8a'}}>{empByName.mobile}</span></Typography>
                         </Grid>
                         <Grid item xs={12} style={{marginBottom:10,marginLeft:30}}>
-                            <Typography variant="h6">Address 1 : <span style={{color:'#023e8a'}}>Anurdhapura</span></Typography>
+                            <Typography variant="h6">Address 1 : <span style={{color:'#023e8a'}}>{empByName.address1}</span></Typography>
                         </Grid>
                         <Grid item xs={12} style={{marginBottom:10,marginLeft:30}}>
-                            <Typography variant="h6">Address 2 : <span style={{color:'#023e8a'}}>Lane 09</span></Typography>
+                            <Typography variant="h6">Address 2 : <span style={{color:'#023e8a'}}>{empByName.address2}</span></Typography>
                         </Grid>
                         <Grid item xs={12} style={{marginBottom:10,marginLeft:30}}>
-                            <Typography variant="h6">Gender : <span style={{color:'#023e8a'}}>Male</span></Typography>
+                            <Typography variant="h6">Gender : <span style={{color:'#023e8a'}}>{empByName.gender}</span></Typography>
                         </Grid>
                         <Grid item xs={12} style={{marginBottom:10,marginLeft:30}}>
-                            <Typography variant="h6">Marital Status : <span style={{color:'#023e8a'}}>Unmarried</span></Typography>
+                            <Typography variant="h6">Marital Status : <span style={{color:'#023e8a'}}>{empByName.marital}</span></Typography>
                         </Grid>
                         <Grid item xs={12} style={{marginBottom:10,marginLeft:30}}>
-                            <Typography variant="h6">Date of Birth : <span style={{color:'#023e8a'}}>10/03/1998</span></Typography>
+                            <Typography variant="h6">Date of Birth : <span style={{color:'#023e8a'}}>{empByName.dob}</span></Typography>
                         </Grid>
                         <Grid item xs={12} style={{marginBottom:10,marginLeft:30}}>
-                            <Typography variant="h6">Position/Job Title : <span style={{color:'#023e8a'}}>Reciptionist</span></Typography>
+                            <Typography variant="h6">Position/Job Title : <span style={{color:'#023e8a'}}>{empByName.position}</span></Typography>
                         </Grid>
                         <Grid item xs={12} style={{marginBottom:20,marginLeft:30}}>
-                            <Typography variant="h6">Date of Hire : <span style={{color:'#023e8a'}}>02/05/2020</span></Typography>
+                            <Typography variant="h6">Date of Hire : <span style={{color:'#023e8a'}}>{empByName.hiredate}</span></Typography>
                         </Grid>
                     </Paper>
                 </Grid>
