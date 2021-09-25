@@ -15,6 +15,7 @@ import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+import SearchBar from "material-ui-search-bar";
 import axios from 'axios';
 
 import useStyles from './styles';
@@ -107,6 +108,8 @@ const AllEmpPayments = () => {
     const [opendlt, setOpendlt] = React.useState(false);
     const [empPayments, setEmpPayments] = React.useState([]);
     const [paymentId, setPaymentId] = useState("");
+    const [searched, setSearched] = useState("");
+    const [rows, setRows] = useState([]);
 
     const CssTextField = withStyles({
         root: {
@@ -165,6 +168,10 @@ const AllEmpPayments = () => {
 
     }, [])
 
+    useEffect(() => {
+        setRows(empPayments)
+    }, [empPayments])
+
     const deletePayment = () => {
         console.log(paymentId)
         axios
@@ -199,6 +206,18 @@ const AllEmpPayments = () => {
         setPage(0);
     };
 
+    const requestSearch = (searchedVal) => {
+        const filteredRows = empPayments.filter((row) => {
+          return row.employeeName.toLowerCase().includes(searchedVal.toString().toLowerCase());
+        });
+        setRows(filteredRows);
+    };
+    
+    const cancelSearch = () => {
+        setSearched("");
+        requestSearch(searched);
+    };
+
     return (
         <div>
             <Grid container spacing={3}>
@@ -209,23 +228,11 @@ const AllEmpPayments = () => {
                 </Grid>
                 <Grid container spacing={3} justifyContent="flex-end" alignItems="center" style={{ padding: "12px",marginLeft:"-95px" }}>
                     <Grid item xs={12} sm={4}>
-                        <CssTextField
-                            fullWidth
-                            label="Search Records"
-                            variant="outlined"
-                            color="primary"
-                            InputLabelProps={{
-                                shrink: true,
-                            }}
-                            InputProps={{
-                                endAdornment: (
-                                    <InputAdornment position="end">
-                                        <IconButton type="submit" aria-label="search">
-                                            <SearchIcon />
-                                        </IconButton>
-                                    </InputAdornment>
-                                ),
-                            }}
+                        <SearchBar
+                            cancelOnEscape
+                            value={searched}
+                            onChange={(searchVal) => requestSearch(searchVal)}
+                            onCancelSearch={() => cancelSearch()}
                         />
                     </Grid>
                     <Grid item xs={12} sm={2}>
@@ -265,8 +272,8 @@ const AllEmpPayments = () => {
                                         </TableCell>
                                     </TableRow> <br />
                                     {(rowsPerPage > 0
-                                        ? empPayments.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                        : empPayments
+                                        ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                        : rows
                                     ).map((row) => (
                                         <>
                                         <TableRow key={row.paymentId} className={classes.tableRow}>
