@@ -48,27 +48,6 @@ router.get('/', async(req, res) => {
     }
 });
 
-// router.post('/adminLogin', async(req, res) => {
-
-//     var emailExist = "";
-//     //Checking if the user exist
-//     emailExist = await Employee.findOne({ email: req.body.email });
-//     if (!emailExist) return res.status(400).send('Email does not exist');
-
-//     //Checking password
-//     const validPassword = await bcrypt.compare(req.body.password, emailExist.password)
-//     if (!validPassword) return res.status(400).send('Email or password is wrong');
-
-//     //Create and assign an token
-//     const token = jwt.sign({ _id: emailExist._id }, process.env.TOKEN_SECRET);
-//     const user = {
-//         user: emailExist,
-//         token: token,
-//     };
-//     res.header('auth-token', token).send(user);
-
-// });
-
 router.delete('/empdelete/:id', async(req, res) => {
 
     // try {
@@ -81,6 +60,34 @@ router.delete('/empdelete/:id', async(req, res) => {
         .then(thing => res.status(200).send(thing))
         .catch(error => res.status(400).send({ error: error.message }));
 
+});
+
+router.get('/allcounts', async(req, res) => {
+
+    try {
+        const doctorcount = await Employee.countDocuments({ position: 'doctor' });
+        const pharmacistcount = await Employee.countDocuments({ position: 'pharmacist' });
+        const accountantcount = await Employee.countDocuments({ position: 'accountant' });
+        const assistantcount = await Employee.countDocuments({ position: 'labAssistant' });
+        var arr = {
+            "doctorcount": doctorcount,
+            "pharmacistcount": pharmacistcount,
+            "accountantcount": accountantcount,
+            "assistantcount": assistantcount
+        };
+        res.json(arr);
+    } catch (err) {
+        res.json({ message: err });
+    }
+});
+
+router.get('/getEmpByName/:firstName', async(req,res) => {
+    try{
+        const empByName = await Employee.findOne({firstName:req.params.firstName});
+        res.json(empByName);
+    }catch (err) {
+        res.json({ message: err});
+    }
 });
 
 module.exports = router;

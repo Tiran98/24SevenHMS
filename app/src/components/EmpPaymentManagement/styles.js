@@ -132,14 +132,46 @@ export default makeStyles((theme) => ({
         },
     },
     ReportBtn: {
-        marginRight: "20px",
+        marginLeft: "-15px",
         padding: "8px",
         color: "#ffffff",
         float: 'right',
-        marginTop:-40,
+        //marginTop:-40,
         backgroundColor: "#5E452C",
         '&:hover': {
             backgroundColor: "#3C2004",
         },
     },
+    modal: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    modelPaper: {
+        width: "1200px",
+        maxHeight: "100vh",
+        padding: "10px",
+        overflowY: 'scroll',
+        backgroundColor: theme.palette.background.paper,
+        border: '2px solid #0077B6',
+        boxShadow: theme.shadows[5],
+        padding: theme.spacing(2, 4, 3),
+    },
+    reciptModelSub:{
+        fontWeight: 500,
+        color: '#000000',
+        textAlign: 'left'  
+    },
+    ReportReciptBtn:{
+        marginRight:"-500px",
+        marginTop:"-50px",
+        padding: "8px",
+        color: "#ffffff",
+        float: 'right',
+        //marginTop:-40,
+        backgroundColor: "#5E452C",
+        '&:hover': {
+            backgroundColor: "#3C2004",
+        },
+    }
 }));
