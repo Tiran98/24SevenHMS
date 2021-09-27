@@ -102,9 +102,10 @@ function App() {
             <Route path="/all-inventory" exact component={AllInventory} />
             <Route path="/add-inventory" exact component={AddInventory} />
 
+
             <Route path="/update-inventory" exact component={IventoryUpdate} />
             <Route path="/details-inventory" exact component={InventoryDetails} />
-            
+
             <Route exact path="/admin">
                 <AdminLogin 
                   setDrawerState={setDrawerState}
