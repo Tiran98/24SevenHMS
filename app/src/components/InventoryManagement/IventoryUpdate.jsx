@@ -3,7 +3,7 @@ import React from 'react'
 const IventoryUpdate = () => {
     return (
         <div>
-            
+            <h1>Rikas</h1>
         </div>
     )
 }

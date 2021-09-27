@@ -63,4 +63,28 @@ router.delete('/deleteInvMngmnt/:productId', async(req,res) => {
 
 // });
 
+router.post('/updateInvMngmnt', async(req,res) => {
+    const updatedDetails = {
+        productId: req.body[0].productId,
+        productType: req.body[0].productType,
+        productName: req.body[0].productName,
+        quantity: req.body[0].quantity,
+        pricePerItem: req.body[0].pricePerItem,
+        manufactureDate: req.body[0].manufactureDate,
+        expiredDate: req.body[0].expiredDate,
+        description: req.body[0].description,
+        brand: req.body[0].brand,
+    };
+
+    try{
+        await Inventory.findOneAndUpdate({productId: req.body[0].productId}, updatedDetails,{useFindAndModify: false});
+        res.status(200).json({
+            message:data
+        })
+    }
+    catch(err){
+        res.json({message: err})
+    }
+});
+
 module.exports = router;

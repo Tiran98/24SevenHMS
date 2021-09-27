@@ -157,7 +157,7 @@ const AllInventory = () => {
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, inventoryFD.length - page * rowsPerPage);
 
     useEffect(() => {
-        fetch("http://localhost:5000/api/InvMngmnt/viewInvMngmnt")
+        fetch("http://localhost:5000/api/invMngmnt/viewInvMngmnt")
         .then(res => {
             if(res.ok){
                 return res.json()
@@ -169,7 +169,7 @@ const AllInventory = () => {
     const deleteItem = () => {
         console.log(productId)
         axios
-        .delete("http://localhost:5000/api/InvMngmnt/deleteInvMngmnt/" + productId)
+        .delete("http://localhost:5000/api/invMngmnt/deleteInvMngmnt/" + productId)
         .then((res) => {
             if(res.status == 200){
                 console.log("Item Deleted Successfully");

@@ -309,7 +309,7 @@ const PaymentDetails = () => {
                 <Grid item xs={12}>
                     <Paper className={classes.paperTitle}>
                         <Typography variant="h4" className={classes.pageTitle}>Payment Details</Typography>
-                        <Typography variant="h5" className={classes.pageTitleEID}>PID :{id}</Typography>
+                        <Typography variant="h5" className={classes.pageTitleEID}>Item ID :{id}</Typography>
                     </Paper>
                 </Grid>
                 <Grid item xs={6}>

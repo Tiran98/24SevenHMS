@@ -136,4 +136,23 @@ export default makeStyles((theme) => ({
         color: '#ffffff',
         padding: "15px",
     },
+    modelPaper: {
+        width: "800px",
+        maxHeight: "100vh",
+        overflowY: 'scroll',
+        backgroundColor: theme.palette.background.paper,
+        border: '2px solid #0077B6',
+        boxShadow: theme.shadows[5],
+        padding: theme.spacing(2, 4, 3),
+        
+    },
+    reportTitle: {
+        fontWeight: 800,
+        color: '#ffffff',
+        textAlign: 'left',
+        textTransform: 'uppercase',
+    },
+    trINV: {
+        fontWeight: 600,
+    },
 }));
