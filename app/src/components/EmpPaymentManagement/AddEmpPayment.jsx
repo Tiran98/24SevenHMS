@@ -105,6 +105,7 @@ const AddEmpPayment = () => {
     const [formData, setFormData] = useState([]);
     const isFirstRender = useRef(true);
     const [nextId, setNextId] = useState("");
+    const [employeeNames,setEmployeeNames] = useState([]);
 
     const [gender, setGender] = useState("");
     const history = useHistory();
@@ -147,6 +148,12 @@ const AddEmpPayment = () => {
     })(TextField);
 
     useEffect(() => {
+      fetch("http://localhost:5000/api/employee").then(res => {
+        if(res.ok){
+            return res.json()
+        }
+      }).then(jsonRes => setEmployeeNames(jsonRes));
+
         getMaxId();
 
         if (isFirstRender.current) {
@@ -172,8 +179,7 @@ const AddEmpPayment = () => {
         .catch((error) => {
           console.log(error);
         });
-      }
-
+    }
 
     const onSubmit = (data) => {
 
@@ -274,9 +280,9 @@ const AddEmpPayment = () => {
                                                 // error={!!errors?.employee}
                                                 // helperText={errors?.employee?.message}
                                                 >
-                                                {employees.map((option) => (
-                                                    <MenuItem key={option.value} value={option.value}>
-                                                        {option.label}
+                                                {employeeNames.map((empNames) => (
+                                                    <MenuItem key={empNames._id} value={empNames.firstName}>
+                                                        {empNames.firstName} {empNames.lastName}
                                                     </MenuItem>
                                                 ))}
                                             </CssTextField>}
