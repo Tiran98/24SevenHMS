@@ -99,10 +99,11 @@ function App() {
             <Route path="/emp-details/:id" exact component={PaymentDetails} />
             <Route path="/example" exact component={Example} />
             <Route path="/emp-update" exact component={EmpPaymentDetails} />
+
             <Route path="/all-inventory" exact component={AllInventory} />
             <Route path="/add-inventory" exact component={AddInventory} />
             <Route path="/update-inventory" exact component={IventoryUpdate} />
-            <Route path="/details-inventory" exact component={InventoryDetails} />
+            <Route path="/details-inventory/:id" exact component={InventoryDetails} />
 
             <Route exact path="/admin">
                 <AdminLogin 

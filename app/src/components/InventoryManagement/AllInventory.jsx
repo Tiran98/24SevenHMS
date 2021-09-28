@@ -167,7 +167,7 @@ const AllInventory = () => {
     }, [])
 
     const deleteItem = () => {
-        console.log(productId)
+        console.log(productId);
         axios
         .delete("http://localhost:5000/api/invMngmnt/deleteInvMngmnt/" + productId)
         .then((res) => {
@@ -181,8 +181,10 @@ const AllInventory = () => {
         handleClose();
     }
 
-    const handleClickOpen = () => {
+    const handleClickOpen = (productId) => {
         setOpendlt(true);
+        setProductId(productId);
+        // console.log(productId)
     };
     
     const handleClose = () => {
@@ -197,6 +199,8 @@ const AllInventory = () => {
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
     };
+
+    
 
     return (
         <div>
@@ -306,7 +310,7 @@ const AllInventory = () => {
                                                 <Button component={Link} to={'/details-inventory/' + row.productId} variant="contained" color="secondary" className={classes.tableBtn}>
                                                     Update
                                                 </Button>
-                                                <Button variant="contained" className={classes.tableBtnRed} onClick={handleClickOpen}>
+                                                <Button variant="contained" className={classes.tableBtnRed} onClick={() => handleClickOpen(row.productId)}>
                                                     Remove
                                                 </Button>
                                             </TableCell>

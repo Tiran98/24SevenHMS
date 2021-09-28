@@ -32,7 +32,18 @@ router.get('/viewInvMngmnt', async(req, res) => {
         res.json({ message: err });
     }
 });
-
+ 
+router.get('/getMaxId', async(req,res) =>{
+    try {
+        var maxId = await Inventory.findOne().sort('-productId');
+        if (maxId == null){
+            maxId = 0;
+        }
+        res.json(maxId)
+    }catch (err) {
+            res.json({message: err});
+        }
+});
 
 router.get('/getInvMngmnt/:productId', async(req,res) => {
     try{

@@ -106,7 +106,7 @@ const AddInventory = () => {
 
     const getMaxId = () => {
         axios
-        .get("http://localhost:5000/api/invMngmnt/getInvMngmnt")
+        .get("http://localhost:5000/api/invMngmnt/getMaxId")
         .then((response) => {
             console.log(response.data.productId);
           if(response.data.productId == null)

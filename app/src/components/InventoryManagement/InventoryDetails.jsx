@@ -218,16 +218,16 @@ const InventoryDetails = () => {
 
     return (
         <div>
-            <Grid container spacing={3} className={classes.modelPaper} >
+            <Grid container spacing={3} className={classes.modelPaper} style={{marginLeft:350}} >
                 <Grid item xs={12}>
                     <Paper className={classes.paperTitle}>
                         <Typography variant="h4" className={classes.pageTitle}>Payment Details</Typography>
-                        <Typography variant="h6" id="transition-modal-title" className={classes.reportTitle}>Item ID :{productId}</Typography>
+                        <Typography variant="h6" id="transition-modal-title" className={classes.reportTitle}>Item ID :{id}</Typography>
                     </Paper>
 
                     <table className={classes.table}>
                         <tr style={{ fontSize: "20px" }}>
-                            <td className={classes.trINV}>Product Type : {inventory.InventoryType} </td>
+                            <td className={classes.trINV}>Product Type : {inventory.productType} </td>
                         </tr>
                         <tr style={{ fontSize: "20px" }}>
                             <td className={classes.trINV}>Product Name : {inventory.productName}</td>
@@ -308,7 +308,7 @@ const InventoryDetails = () => {
                                     <Controller
                                             name="productType"
                                             control={control}
-                                            defaultValue={inventory.InventoryType}
+                                            defaultValue={inventory.productType}
                                             render={({ field }) => 
                                             <CssTextField
                                                 fullWidth
@@ -334,7 +334,7 @@ const InventoryDetails = () => {
                                         <Controller
                                             name="productName"
                                             control={control}
-                                            defaultValue=""
+                                            defaultValue={inventory.productName}
                                             render={({ field }) => 
                                             <CssTextField 
                                             fullWidth 
@@ -351,7 +351,7 @@ const InventoryDetails = () => {
                                         <Controller
                                             name="quantity"
                                             control={control}
-                                            defaultValue=""
+                                            defaultValue={inventory.quantity}
                                             render={({ field }) => 
                                             <CssTextField 
                                             fullWidth label="Quantity" 
@@ -367,7 +367,7 @@ const InventoryDetails = () => {
                                         <Controller
                                             name="pricePeritem"
                                             control={control}
-                                            defaultValue=""
+                                            defaultValue={inventory.pricePerItem}
                                             render={({ field }) => 
                                             <CssTextField 
                                             fullWidth label="Price Per Item" 
@@ -383,7 +383,7 @@ const InventoryDetails = () => {
                                         <Controller
                                             name="description"
                                             control={control}
-                                            defaultValue=""
+                                            defaultValue={inventory.description}
                                             render={({ field }) => 
                                             <TextField
                                                 id="outlined-multiline-static"
@@ -405,7 +405,7 @@ const InventoryDetails = () => {
                                         <Controller
                                             name="manfDate"
                                             control={control}
-                                            defaultValue=""
+                                            defaultValue={inventory.manufactureDate}
                                             render={({ field }) => 
                                                 <CssTextField
                                                     fullWidth
@@ -434,7 +434,7 @@ const InventoryDetails = () => {
                                         <Controller
                                             name="expDate"
                                             control={control}
-                                            defaultValue=""
+                                            defaultValue= {inventory.expiredDate}
                                             render={({ field }) => 
                                                 <CssTextField
                                                     fullWidth
@@ -463,7 +463,7 @@ const InventoryDetails = () => {
                                         <Controller
                                             name="brand"
                                             control={control}
-                                            defaultValue=""
+                                            defaultValue={inventory.brand}
                                             render={({ field }) => 
                                             <CssTextField  
                                             fullWidth 
