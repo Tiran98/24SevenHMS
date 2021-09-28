@@ -2,7 +2,17 @@ const router = require('express').Router();
 const Employee = require('../Models/Employee');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-var mongodb = require('mongodb');
+var nodemailer = require('nodemailer');
+var generator = require('generate-password');
+
+let transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: 'nyx.devsolutions@gmail.com',
+        pass: 'nyxdevsolutions2021'
+    }
+});
+
 
 router.post('/', async(req, res) => {
 
@@ -10,9 +20,15 @@ router.post('/', async(req, res) => {
     const emailExist = await Employee.findOne({ email: req.body.email });
     if (emailExist) return res.status(400).send('Email already exists');
 
+    //Generate Password
+    var password = generator.generate({
+        length: 8,
+        numbers: true
+    });
+
     //Hash passwords
     const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash("123", salt);
+    const hashedPassword = await bcrypt.hash(password, salt);
 
     const employee = new Employee({
         firstName: req.body.firstName,
@@ -32,6 +48,25 @@ router.post('/', async(req, res) => {
     try {
         const savedEmp = await employee.save();
         res.json(savedEmp);
+
+        //Sending email
+        var mailBody =
+            `<h4>Hello ${employee.firstName},</h4>
+    <p>Your Employee ID is <b>${savedEmp._id}</b> and your password is <b>${password}</b>. Thank you for joining with us.</p>`
+
+        var mailOptions = {
+            from: "nyx.devsolutions@gmail.com",
+            to: employee.email,
+            subject: "Welcome to 24Seven HMS",
+            html: mailBody
+        };
+        transporter.sendMail(mailOptions, function(error, info) {
+            if (error) {
+                console.log(error);
+            } else {
+                console.log("Email sent : " + info.response);
+            }
+        });
     } catch (err) {
         res.json({ message: err });
     }
