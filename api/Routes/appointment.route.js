@@ -34,4 +34,31 @@ router.get('/', async(req, res) => {
     }
 });
 
+router.get('/appfind/:id', async(req, res) => {
+    try {
+        const appointment = await Appointment.findById(req.params.id);
+        res.json(appointment);
+    } catch (err) {
+        res.json({ message: err });
+    }
+});
+
+router.delete = ('/appDelete', async(req, res) => {
+
+    Appointment.remove(req.params.appID, (err, data) => {
+        if(err) {
+            if(err.kind == "not_found") {
+                res.status(404).send({
+                    message:`Not found Appointment with id ${req.params.appID}.`
+                });
+            }else {
+                res.status(500).send({
+                    message: "Could not delete Appointment with id " + req.params.appID
+                });
+            }
+        } else res.send({ message: `Appointment was deleted Successfully!`});
+    });
+});
+
+
 module.exports = router;

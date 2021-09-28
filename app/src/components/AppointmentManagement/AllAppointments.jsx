@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useForm, Controller } from "react-hook-form";
-import { TextField, Paper, Button, Grid, Typography, IconButton, Table, TableBody, TableContainer, TableFooter, TablePagination, TableRow, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle  } from '@material-ui/core/';
+import { TextField, Paper, Button, Grid, Typography, IconButton, Table, TableBody, TableContainer, TableFooter, TablePagination, TableRow, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Snackbar  } from '@material-ui/core/';
 import { withStyles } from '@material-ui/core/styles';
+import MuiAlert from '@material-ui/lab/Alert';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import { Link } from 'react-router-dom';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
@@ -20,6 +21,10 @@ import LastPageIcon from '@material-ui/icons/LastPage';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 
 import useStyles from './styles';
+
+function Alert(props) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 const useStyles1 = makeStyles((theme) => ({
     root: {
@@ -113,6 +118,10 @@ const AllAppointments = () => {
     const [opendlt, setOpendlt] = React.useState(false);
     const [reportData, setReportData] = React.useState([]);
     const [appointment, setAppointment] = React.useState([]);
+    const [selectedItem, setSelectedItem] = React.useState("");
+    const [successMsg, setSuccessMsg] = React.useState(false);
+    const [rows, setRows] = useState([]);
+    
 
     const CssTextField = withStyles({
         root: {
@@ -168,11 +177,43 @@ const AllAppointments = () => {
                 return res.json()
             }
         }).then(jsonRes => setAppointment(jsonRes));
-    }, [])
-    
-    const handleClickOpen = () => {
+    }, [selectedItem])
+
+    const handleClickOpen = (row) => {
         setOpendlt(true);
+        setSelectedItem(row._id);
     };
+
+    const deleteItem = () => {
+        fetch(`http://localhost:5000/api/appointment/appdelete/${selectedItem}`, { method: 'DELETE' })
+        .then(async response => {
+            const data = await response.json();
+
+            // check for error response
+            if (!response.ok) {
+                // get error message from body or default to response status
+                const error = (data && data.message) || response.status;
+                return Promise.reject(error);
+            }
+            setSuccessMsg(true);
+            setSelectedItem("");
+            handleClose();
+        })
+        .catch(error => {
+            console.log(error);
+            console.error('There was an error!', error);
+        });
+    };
+
+    const handleSuccessMsg = (event, reason) => {
+
+        if (reason === 'clickaway') {
+          return;
+        }
+    
+        setSuccessMsg(false);
+    };
+    
     
     const handleClose = () => {
         setOpendlt(false);
@@ -345,7 +386,7 @@ const AllAppointments = () => {
                                                 <Button component={Link} to ="/update-appointment" variant="contained" color="secondary" className={classes.tableBtn}>
                                                     Update
                                                 </Button>
-                                                <Button variant="contained" className={classes.tableBtnRed} onClick={handleClickOpen}>
+                                                <Button variant="contained" className={classes.tableBtnRed} onClick={ () => handleClickOpen(row)}>
                                                     Remove
                                                 </Button>
                                             </TableCell>
@@ -420,6 +461,13 @@ const AllAppointments = () => {
             >
                {modalBody}
             </Modal>
+
+            <Snackbar open={successMsg} autoHideDuration={6000} onClose={handleSuccessMsg} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
+                <Alert onClose={handleSuccessMsg} severity="error" color="error" className={classes.cookieAlertError}>
+                    Appointment successfully deleted.
+                </Alert>
+            </Snackbar>
+
             <Grid item xs={12} sm={2}>
                 <Button component={Link} to ="/" fullWidth variant="contained" color="secondary" className={classes.submitbtn}>
                             Generate Report
