@@ -9,6 +9,8 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 import MuiTableCell from "@material-ui/core/TableCell";
 
 import SearchIcon from '@material-ui/icons/Search';
+import SearchBar from "material-ui-search-bar";
+import Pdf from "react-to-pdf";
 import AddIcon from '@material-ui/icons/Add';
 import FirstPageIcon from '@material-ui/icons/FirstPage';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
@@ -105,6 +107,8 @@ const AllInventory = () => {
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
     const [opendlt, setOpendlt] = React.useState(false);
+    const [searched, setSearched] = useState("");
+    const [rows, setRows] = useState([]);
     const [inventory, setInventory] = React.useState([]);
     const [productId, setProductId] = useState("");
 
@@ -166,6 +170,10 @@ const AllInventory = () => {
 
     }, [])
 
+    useEffect(() => {
+        setRows(inventory)
+    }, [inventory])
+
     const deleteItem = () => {
         console.log(productId);
         axios
@@ -200,6 +208,17 @@ const AllInventory = () => {
         setPage(0);
     };
 
+    const requestSearch = (searchedVal) => {
+        const filteredRows = inventory.filter((row) => {
+          return row.productName.toLowerCase().includes(searchedVal.toString().toLowerCase());
+        });
+         setRows(filteredRows);
+    };
+    
+    const cancelSearch = () => {
+        setSearched("");
+        requestSearch(searched);
+    };
     
 
     return (
@@ -212,23 +231,11 @@ const AllInventory = () => {
                 </Grid>
                 <Grid container spacing={3} justifyContent="flex-end" alignItems="center" style={{ padding: "12px",marginLeft:"-95px" }}>
                     <Grid item xs={12} sm={4}>
-                        <CssTextField
-                            fullWidth
-                            label="Search Item"
-                            variant="outlined"
-                            color="primary"
-                            InputLabelProps={{
-                                shrink: true,
-                            }}
-                            InputProps={{
-                                endAdornment: (
-                                    <InputAdornment position="end">
-                                        <IconButton type="submit" aria-label="search">
-                                            <SearchIcon />
-                                        </IconButton>
-                                    </InputAdornment>
-                                ),
-                            }}
+                        <SearchBar
+                            cancelOnEscape
+                            value={searched}
+                            onChange={(searchVal) => requestSearch(searchVal)}
+                            onCancelSearch={() => cancelSearch()}
                         />
                     </Grid>
                     <Grid item xs={12} sm={2}>
@@ -274,8 +281,8 @@ const AllInventory = () => {
                                         </TableCell>
                                     </TableRow> <br />
                                     {(rowsPerPage > 0
-                                        ? inventory.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                        : inventory
+                                        ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                        : rows
                                     ).map((row) => (
                                         <>
                                         <TableRow key={row.name} className={classes.tableRow}>
