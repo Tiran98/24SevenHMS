@@ -66,6 +66,18 @@ const InventoryDetails = () => {
         const [successMsg, setSuccessMsg] = useState(true);
     
         const [gender, setGender] = useState("");
+
+        const style = {
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: 400,
+            bgcolor: 'background.paper',
+            border: '2px solid #000',
+            boxShadow: 24,
+            p: 4,
+        };
     
         const CssTextField = withStyles({
             root: {
@@ -106,7 +118,7 @@ const InventoryDetails = () => {
 
         const history = useHistory();
         const [opendlt, setOpendlt] = React.useState(false);
-        const [Inventory, setInventory] = React.useState([]);
+        const [inventory, setInventory] = React.useState([]);
         const [productId, setProductId] = useState("");
         const [formData, setFormData] = useState([]);
         
@@ -200,37 +212,39 @@ const InventoryDetails = () => {
             setSuccessMsg(false);
         };
 
+        const handleProductType = (event) => {
+            setProductType(event.target.value, console.log(productType));
+        };
 
     return (
         <div>
-            <Grid container spacing={3} className={classes.modelPaper} >
+            <Grid container spacing={3} className={classes.modelPaper} style={{marginLeft:350}} >
                 <Grid item xs={12}>
                     <Paper className={classes.paperTitle}>
                         <Typography variant="h4" className={classes.pageTitle}>Payment Details</Typography>
-                        <Typography variant="h6" id="transition-modal-title" className={classes.reportTitle}>Item ID :{productId}</Typography>
+                        <Typography variant="h6" id="transition-modal-title" className={classes.reportTitle}>Item ID :{id}</Typography>
                     </Paper>
 
                     <table className={classes.table}>
                         <tr style={{ fontSize: "20px" }}>
-                            <td className={classes.trINV}>Product Type</td>
-                            <td>{formData.productType}</td>
+                            <td className={classes.trINV}>Product Type : {inventory.productType} </td>
                         </tr>
                         <tr style={{ fontSize: "20px" }}>
-                            <td className={classes.trINV}>Product Name</td>
-                            <td className={classes.trINV}>Quantity</td>
+                            <td className={classes.trINV}>Product Name : {inventory.productName}</td>
+                            <td className={classes.trINV}>Quantity : {inventory.quantity}</td>
 
 
                         </tr>
                         <tr style={{ fontSize: "20px" }}>
-                            <td className={classes.trINV}>Brand</td>
-                            <td className={classes.trINV}>Price</td>
+                            <td className={classes.trINV}>Brand : {inventory.brand}</td>
+                            <td className={classes.trINV}>Price : {inventory.pricePerItem}</td>
                         </tr>
                         <tr style={{ fontSize: "20px" }}>
-                            <td className={classes.trINV}>Manufacture Date</td>
-                            <td className={classes.trINV}>Expiration Date</td>
+                            <td className={classes.trINV}>Manufacture Date : {inventory.manufactureDate}</td>
+                            <td className={classes.trINV}>Expiration Date : {inventory.expiredDate}</td>
                         </tr>
                         <tr style={{ fontSize: "20px" }}>
-                            <td className={classes.trINV}>Description</td>
+                            <td className={classes.trINV}>Description : {inventory.description}</td>
                         </tr>
                     </table>
 
@@ -272,7 +286,228 @@ const InventoryDetails = () => {
                 </Paper>
             </Dialog>
 
+            <div>
+                <Modal
+                open={open}
+                    onClose={handleCloseUpdate}
+                    aria-labelledby="modal-modal-title"
+                    aria-describedby="modal-modal-description"
+                    >
+                        <Box sx={style} style={{width:800}}>
+                        <Grid container spacing={3}>
+                <Grid item xs={12}>
+                    <Paper className={classes.paperTitle}>
+                        <Typography variant="h4" className={classes.pageTitle}>Update Item Details</Typography>
+                    </Paper>
+                </Grid>
+                <Grid item xs={12}>
+                    <form onSubmit={handleSubmit(onSubmit)} className={classes.form}>
+                        <Paper className={classes.paper}>
+                            <Grid container spacing={2}>
+                                    <Grid item xs={12} sm={6}>
+                                    <Controller
+                                            name="productType"
+                                            control={control}
+                                            defaultValue={inventory.productType}
+                                            render={({ field }) => 
+                                            <CssTextField
+                                                fullWidth
+                                                select
+                                                label="Product Type"
+                                                value={productType}
+                                                onChange={handleProductType}
+                                                variant="outlined"
+                                                error={!!errors?.productType}
+                                                helperText={errors?.productType?.message}
+                                                {...field}
+                                                >
+                                                {productTypes.map((option) => (
+                                                    <MenuItem key={option.value} value={option.value}>
+                                                        {option.label}
+                                                    </MenuItem>
+                                                ))}
+                                            </CssTextField>}
+                                        />
+                                    </Grid>
+
+                                    <Grid item xs={12} sm={6}>
+                                        <Controller
+                                            name="productName"
+                                            control={control}
+                                            defaultValue={inventory.productName}
+                                            render={({ field }) => 
+                                            <CssTextField 
+                                            fullWidth 
+                                            label="Product Name" 
+                                            variant="outlined" 
+                                            color="primary" 
+                                            error={!!errors?.productName}
+                                            helperText={errors?.productName?.message} 
+                                            {...field} />}
+                                        />
+                                    </Grid>
+
+                                    <Grid item xs={12} sm={3}>
+                                        <Controller
+                                            name="quantity"
+                                            control={control}
+                                            defaultValue={inventory.quantity}
+                                            render={({ field }) => 
+                                            <CssTextField 
+                                            fullWidth label="Quantity" 
+                                            variant="outlined" 
+                                            color="primary"
+                                            error={!!errors?.quantity}
+                                            helperText={errors?.quantity?.message} 
+                                            {...field} />}
+                                        />
+                                    </Grid> 
+
+                                    <Grid item xs={12} sm={3}>
+                                        <Controller
+                                            name="pricePeritem"
+                                            control={control}
+                                            defaultValue={inventory.pricePerItem}
+                                            render={({ field }) => 
+                                            <CssTextField 
+                                            fullWidth label="Price Per Item" 
+                                            variant="outlined" 
+                                            color="primary"
+                                            error={!!errors?.pricePeritem}
+                                            helperText={errors?.pricePeritem?.message} 
+                                            {...field} />}
+                                        />
+                                    </Grid> 
+
+                                    <Grid item xs={12} sm={6}>
+                                        <Controller
+                                            name="description"
+                                            control={control}
+                                            defaultValue={inventory.description}
+                                            render={({ field }) => 
+                                            <TextField
+                                                id="outlined-multiline-static"
+                                                label="Description"
+                                                fullWidth
+                                                multiline
+                                                rows={4}
+                                                defaultValue=""
+                                                color="primary"
+                                                variant="outlined"
+                                                error={!!errors?.description}
+                                                helperText={errors?.description?.message} 
+                                                {...field}
+                                            />}
+                                        />
+                                    </Grid>
+
+                                    <Grid item xs={12} sm={3}>
+                                        <Controller
+                                            name="manfDate"
+                                            control={control}
+                                            defaultValue={inventory.manufactureDate}
+                                            render={({ field }) => 
+                                                <CssTextField
+                                                    fullWidth
+                                                    label="Manufacture Date"
+                                                    type="date"
+                                                    variant="outlined"
+                                                    color="primary"
+                                                    error={!!errors?.manfDate}
+                                                    helperText={errors?.manfDate?.message} 
+                                                    {...field}
+                                                    InputLabelProps={{
+                                                        shrink: true,
+                                                    }}
+                                                    InputProps={{
+                                                        startAdornment: (
+                                                          <InputAdornment position="start">
+                                                            <DateRangeIcon />
+                                                          </InputAdornment>
+                                                        ),
+                                                    }}
+                                            />}
+                                        />
+                                    </Grid>
+
+                                    <Grid item xs={12} sm={3}>
+                                        <Controller
+                                            name="expDate"
+                                            control={control}
+                                            defaultValue= {inventory.expiredDate}
+                                            render={({ field }) => 
+                                                <CssTextField
+                                                    fullWidth
+                                                    label="Expiration Date"
+                                                    type="date"
+                                                    variant="outlined"
+                                                    color="primary"
+                                                    error={!!errors?.expDate}
+                                                    helperText={errors?.expDate?.message} 
+                                                    {...field}
+                                                    InputLabelProps={{
+                                                        shrink: true,
+                                                    }}
+                                                    InputProps={{
+                                                        startAdornment: (
+                                                          <InputAdornment position="start">
+                                                            <DateRangeIcon />
+                                                          </InputAdornment>
+                                                        ),
+                                                    }}
+                                            />}
+                                        />
+                                    </Grid>
+                                    
+                                    <Grid item xs={12} sm={6}>
+                                        <Controller
+                                            name="brand"
+                                            control={control}
+                                            defaultValue={inventory.brand}
+                                            render={({ field }) => 
+                                            <CssTextField  
+                                            fullWidth 
+                                            label=" Brand " 
+                                            variant="outlined" 
+                                            color="primary" 
+                                            error={!!errors?.brand}
+                                            helperText={errors?.brand?.message}
+                                            {...field} />}
+                                        />
+                                    </Grid>  
+
+                            </Grid>
+                        </Paper>
+                        
+                        <Grid container spacing={3}>
+                            <Grid item xs={12} sm={3}>
+                                <Button type="reset" fullWidth variant="contained" className={classes.resetbtn}
+                                onClick={() => {
+                                    reset({
+                                      keepErrors: true,
+                                    });
+                                  }}>
+                                    Reset
+                                </Button>
+                            </Grid>    
+                            <Grid item xs={12} sm={9}>
+                                <Button type="submit" fullWidth variant="contained" color="secondary" className={classes.submitbtn}>
+                                    Update
+                                </Button>
+                            </Grid>
+                        </Grid> 
+
+                    </form>
+                </Grid>
+
+                        </Grid>
+                        </Box>
+                </Modal>
+            </div>
+
         </div>
+
+        
     )
 }
 
