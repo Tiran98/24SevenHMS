@@ -10,16 +10,21 @@ import MuiTableCell from "@material-ui/core/TableCell";
 
 import SearchIcon from '@material-ui/icons/Search';
 import SearchBar from "material-ui-search-bar";
-import Pdf from "react-to-pdf";
 import AddIcon from '@material-ui/icons/Add';
 import FirstPageIcon from '@material-ui/icons/FirstPage';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+import Modal from '@material-ui/core/Modal';
+import Backdrop from '@material-ui/core/Backdrop';
+import Pdf from "react-to-pdf";
+import GetAppIcon from '@material-ui/icons/GetApp';
 import axios from 'axios';
 
 import useStyles from './styles';
+
+const refPrint = React.createRef();
 
 const useStyles1 = makeStyles((theme) => ({
     root: {
@@ -111,6 +116,8 @@ const AllInventory = () => {
     const [rows, setRows] = useState([]);
     const [inventory, setInventory] = React.useState([]);
     const [productId, setProductId] = useState("");
+    const [openModal, setOpenModal] = React.useState(false);
+    const [inventoryData, setInventoryData] = React.useState([]);
 
     const CssTextField = withStyles({
         root: {
@@ -219,7 +226,59 @@ const AllInventory = () => {
         setSearched("");
         requestSearch(searched);
     };
+
+    const handleOpenModal = (row) => {
+        setOpenModal(true);
+        // console.log(row);
+        setInventoryData(row);
+    };
+
+    const handleCloseModal = () => {
+        setOpenModal(false);
+    };
     
+    const modalBody = (
+        <div>
+            <div ref={refPrint}>
+                <Grid container spacing={3} className={classes.modelPaper} >
+                <Grid item xs={12}>
+                    <Paper className={classes.paperTitle}>
+                        <Typography variant="h4" className={classes.pageTitle}>Item Details</Typography>
+                        <Typography variant="h6" id="transition-modal-title" className={classes.reportTitle}>Item ID :{inventoryData.productId}</Typography>
+                    </Paper>
+                    
+            <table className={classes.table}>
+                    <tr style={{ fontSize: "20px" }}>
+                    <td className={classes.trINV}>Product Type : {inventoryData.productType} </td>
+                </tr>
+                <tr style={{ fontSize: "20px" }}>
+                    <td className={classes.trINV}>Product Name : {inventoryData.productName}</td>
+                    <td className={classes.trINV}>Quantity : {inventoryData.quantity}</td>
+                </tr>
+                <tr style={{ fontSize: "20px" }}>
+                    <td className={classes.trINV}>Brand : {inventoryData.brand}</td>
+                    <td className={classes.trINV}>Price : {inventoryData.pricePerItem}</td>
+                </tr>
+                <tr style={{ fontSize: "20px" }}>
+                    <td className={classes.trINV}>Manufacture Date : {inventoryData.manufactureDate}</td>
+                    <td className={classes.trINV}>Expiration Date : {inventoryData.expiredDate}</td>
+                </tr>
+                <tr style={{ fontSize: "20px" }}>
+                    <td className={classes.trINV}>Description : {inventoryData.description}</td>
+                </tr>
+            </table>
+                <Pdf targetRef={refPrint} filename={inventoryData.productName + " Item details.pdf"}>
+                    {({toPdf}) => (
+                         <Button onClick={toPdf} variant="contained" className={classes.ReportDetailsBtn} startIcon={<GetAppIcon />}>Download Details</Button>
+                    )}
+                </Pdf> 
+                </Grid>
+                </Grid>
+            </div>
+            
+        </div>
+);
+
 
     return (
         <div>
@@ -320,6 +379,9 @@ const AllInventory = () => {
                                                 <Button variant="contained" className={classes.tableBtnRed} onClick={() => handleClickOpen(row.productId)}>
                                                     Remove
                                                 </Button>
+                                                <Button variant="contained" className={classes.ReportBtn} onClick={() => handleOpenModal(row)}>
+                                                    Details
+                                                </Button>
                                             </TableCell>
                                         </TableRow>
                                         <br />
@@ -354,11 +416,6 @@ const AllInventory = () => {
                             </Table>
                         </TableContainer>
                 </Grid>
-                <Grid item xs={12} sm={2}>
-                <Button variant="contained" color="secondary" className={classes.ReportBtn}>
-                    Generate Report
-                </Button>
-                </Grid>
             </Grid>
             <Dialog
                 open={opendlt}
@@ -383,6 +440,20 @@ const AllInventory = () => {
                     </DialogActions>
                 </Paper>
             </Dialog>
+            <Modal
+                aria-labelledby="transition-modal-title"
+                aria-describedby="transition-modal-description"
+                className={classes.modal}
+                open={openModal}
+                onClose={handleCloseModal}
+                closeAfterTransition
+                BackdropComponent={Backdrop}
+                BackdropProps={{
+                timeout: 500,
+                }}
+            >
+               {modalBody}
+            </Modal>
         </div>
     )
 }

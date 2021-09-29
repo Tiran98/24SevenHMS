@@ -12,8 +12,12 @@ import { withStyles } from '@material-ui/core/styles';
 import MenuItem from '@material-ui/core/MenuItem';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import DateRangeIcon from '@material-ui/icons/DateRange';
-
+import Pdf from "react-to-pdf";
 import useStyles from './styles';
+import Fade from '@material-ui/core/Fade';
+import GetAppIcon from '@material-ui/icons/GetApp';
+
+const refPrint = React.createRef();
 
 const schema = yup.object().shape({
     productType: yup.string().required("Select Product Type"),
@@ -64,8 +68,9 @@ const InventoryDetails = () => {
         const [productType, setProductType] = React.useState('default');
         const [position, setPosition] = React.useState('default');
         const [successMsg, setSuccessMsg] = useState(true);
-    
+        const [openModal, setOpenModal] = React.useState(false);
         const [gender, setGender] = useState("");
+        const [inventoryData, setInventoryData] = React.useState([]);
 
         const style = {
             position: 'absolute',
@@ -216,12 +221,62 @@ const InventoryDetails = () => {
             setProductType(event.target.value, console.log(productType));
         };
 
+        const handleOpenModal = (row) => {
+            setOpenModal(true);
+            // console.log(row);
+            setInventoryData(row);
+        };
+
+        const handleCloseModal = () => {
+            setOpenModal(false);
+        };
+
+        // const modalBody = (
+        //         <div>
+        //             <div ref={refPrint}>
+        //                 <Grid container spacing={3} className={classes.modelPaper} >
+        //                     <Paper className={classes.paperTitle}>
+        //                         <Typography variant="h4" className={classes.pageTitle}>Item Details</Typography>
+        //                         <Typography variant="h6" id="transition-modal-title" className={classes.reportTitle}>Item ID :{id}</Typography>
+        //                     </Paper>
+                            
+        //             <table className={classes.table}>
+        //                     <tr style={{ fontSize: "20px" }}>
+        //                     <td className={classes.trINV}>Product Type : {inventory.productType} </td>
+        //                 </tr>
+        //                 <tr style={{ fontSize: "20px" }}>
+        //                     <td className={classes.trINV}>Product Name : {inventory.productName}</td>
+        //                     <td className={classes.trINV}>Quantity : {inventory.quantity}</td>
+        //                 </tr>
+        //                 <tr style={{ fontSize: "20px" }}>
+        //                     <td className={classes.trINV}>Brand : {inventory.brand}</td>
+        //                     <td className={classes.trINV}>Price : {inventory.pricePerItem}</td>
+        //                 </tr>
+        //                 <tr style={{ fontSize: "20px" }}>
+        //                     <td className={classes.trINV}>Manufacture Date : {inventory.manufactureDate}</td>
+        //                     <td className={classes.trINV}>Expiration Date : {inventory.expiredDate}</td>
+        //                 </tr>
+        //                 <tr style={{ fontSize: "20px" }}>
+        //                     <td className={classes.trINV}>Description : {inventory.description}</td>
+        //                 </tr>
+        //             </table>
+
+        //                 </Grid>
+        //             </div>
+        //             <Pdf targetRef={refPrint} filename={inventoryData.productName + " Item details.pdf"}>
+        //             {({toPdf}) => (
+        //                 <Button onClick={toPdf} variant="contained" className={classes.dialogBtnBlue} startIcon={<GetAppIcon />}>Download Details</Button>
+        //             )}
+        //         </Pdf> 
+        //         </div>
+        // );
+
     return (
         <div>
-            <Grid container spacing={3} className={classes.modelPaper} style={{marginLeft:350}} >
+            <Grid container spacing={3} className={classes.modelPaper}  style={{marginLeft:500}} >
                 <Grid item xs={12}>
                     <Paper className={classes.paperTitle}>
-                        <Typography variant="h4" className={classes.pageTitle}>Payment Details</Typography>
+                        <Typography variant="h4" className={classes.pageTitle}>Item Details</Typography>
                         <Typography variant="h6" id="transition-modal-title" className={classes.reportTitle}>Item ID :{id}</Typography>
                     </Paper>
 
@@ -232,8 +287,6 @@ const InventoryDetails = () => {
                         <tr style={{ fontSize: "20px" }}>
                             <td className={classes.trINV}>Product Name : {inventory.productName}</td>
                             <td className={classes.trINV}>Quantity : {inventory.quantity}</td>
-
-
                         </tr>
                         <tr style={{ fontSize: "20px" }}>
                             <td className={classes.trINV}>Brand : {inventory.brand}</td>
@@ -285,7 +338,7 @@ const InventoryDetails = () => {
                     </DialogActions>
                 </Paper>
             </Dialog>
-
+                {/* {modalBody} */}
             <div>
                 <Modal
                 open={open}
