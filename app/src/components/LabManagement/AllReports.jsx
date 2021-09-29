@@ -423,7 +423,7 @@ const AllReports = () => {
                 </Grid>
                 <Grid container spacing={3} justifyContent="flex-end" alignItems="center" style={{ padding: "12px" }}>
                     <Grid item xs={12} sm={4}>
-                        <SearchBar
+                            <SearchBar
                                 cancelOnEscape
                                 value={searched}
                                 onChange={(searchVal) => requestSearch(searchVal)}

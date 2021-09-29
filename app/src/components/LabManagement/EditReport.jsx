@@ -64,7 +64,6 @@ const EditReport = (id) => {
 
     useEffect(() => {
         fetchReport();
-        setGender(report.gender);
         // if (isFirstRender.current) {
         //     isFirstRender.current = false;
         //     return;
@@ -95,6 +94,7 @@ const EditReport = (id) => {
         setValue('gra', report.gra || '');
         setValue('plt', report.plt || '');
         setValue('esr', report.esr || '');
+        setGender(report.gender);
     }, [report]);
 
     const fetchReport = async() => {
