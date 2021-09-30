@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { useHistory } from "react-router-dom";
 import { useForm, Controller } from "react-hook-form";
 import { TextField, Paper, Button, Grid, Typography, IconButton, Table, TableBody, TableContainer, TableFooter, TablePagination, TableRow, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Snackbar  } from '@material-ui/core/';
 import { withStyles } from '@material-ui/core/styles';
+import Pdf from "react-to-pdf";
+import axios from 'axios';
 import MuiAlert from '@material-ui/lab/Alert';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import { Link } from 'react-router-dom';
@@ -11,8 +14,10 @@ import MuiTableCell from "@material-ui/core/TableCell";
 import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
+import SearchBar from "material-ui-search-bar";
 
 import SearchIcon from '@material-ui/icons/Search';
+import GetAppIcon from '@material-ui/icons/GetApp';
 import AddIcon from '@material-ui/icons/Add';
 import FirstPageIcon from '@material-ui/icons/FirstPage';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
@@ -25,6 +30,8 @@ import useStyles from './styles';
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
+
+const refPrint = React.createRef();
 
 const useStyles1 = makeStyles((theme) => ({
     root: {
@@ -95,22 +102,10 @@ TablePaginationActions.propTypes = {
     rowsPerPage: PropTypes.number.isRequired,
 };
 
-//const appointment = [
-//   { "appID" : "0001", "firstName" : "Vinuri", "lastName" : "Galagoda", "email" : "vinuri@gmail.com", "mobile" : "0771234567", "gender" : "female", "consultant" : "Rikas", "appdate" : "12/02/2021", "apptime" : "4.00 pm - 4.10 pm"},
-//   { "appID" : "0002", "firstName" : "Vinuri", "lastName" : "Galagoda", "email" : "vinuri@gmail.com", "mobile" : "0771234567", "gender" : "female", "consultant" : "Rikas", "appdate" : "12/02/2021", "apptime" : "4.00 pm - 4.10 pm"},
-//   { "appID" : "0003", "firstName" : "Vinuri", "lastName" : "Galagoda", "email" : "vinuri@gmail.com", "mobile" : "0771234567", "gender" : "female", "consultant" : "Rikas", "appdate" : "12/02/2021", "apptime" : "4.00 pm - 4.10 pm"},
-//   { "appID" : "0004", "firstName" : "Vinuri", "lastName" : "Galagoda", "email" : "vinuri@gmail.com", "mobile" : "0771234567", "gender" : "female", "consultant" : "Rikas", "appdate" : "12/02/2021", "apptime" : "4.00 pm - 4.10 pm"},
-//   { "appID" : "0005", "firstName" : "Vinuri", "lastName" : "Galagoda", "email" : "vinuri@gmail.com", "mobile" : "0771234567", "gender" : "female", "consultant" : "Rikas", "appdate" : "12/02/2021", "apptime" : "4.00 pm - 4.10 pm"},
-//   { "appID" : "0006", "firstName" : "Vinuri", "lastName" : "Galagoda", "email" : "vinuri@gmail.com", "mobile" : "0771234567", "gender" : "female", "consultant" : "Rikas", "appdate" : "12/02/2021", "apptime" : "4.00 pm - 4.10 pm"},
-//   { "appID" : "0007", "firstName" : "Vinuri", "lastName" : "Galagoda", "email" : "vinuri@gmail.com", "mobile" : "0771234567", "gender" : "female", "consultant" : "Rikas", "appdate" : "12/02/2021", "apptime" : "4.00 pm - 4.10 pm"},
-//   { "appID" : "0008", "firstName" : "Vinuri", "lastName" : "Galagoda", "email" : "vinuri@gmail.com", "mobile" : "0771234567", "gender" : "female", "consultant" : "Rikas", "appdate" : "12/02/2021", "apptime" : "4.00 pm - 4.10 pm"},
-//   { "appID" : "0009", "firstName" : "Vinuri", "lastName" : "Galagoda", "email" : "vinuri@gmail.com", "mobile" : "0771234567", "gender" : "female", "consultant" : "Rikas", "appdate" : "12/02/2021", "apptime" : "4.00 pm - 4.10 pm"},
-//   { "appID" : "0010", "firstName" : "Vinuri", "lastName" : "Galagoda", "email" : "vinuri@gmail.com", "mobile" : "0771234567", "gender" : "female", "consultant" : "Rikas", "appdate" : "12/02/2021", "apptime" : "4.00 pm - 4.10 pm"},
-//   { "appID" : "0011", "firstName" : "Vinuri", "lastName" : "Galagoda", "email" : "vinuri@gmail.com", "mobile" : "0771234567", "gender" : "female", "consultant" : "Rikas", "appdate" : "12/02/2021", "apptime" : "4.00 pm - 4.10 pm"},
-//];
 
 const AllAppointments = () => {
     const classes = useStyles();
+    const history = useHistory();
     const [openModal, setOpenModal] = React.useState(false)
     const { control, handleSubmit, reset } = useForm();
     const [page, setPage] = React.useState(0);
@@ -121,7 +116,7 @@ const AllAppointments = () => {
     const [selectedItem, setSelectedItem] = React.useState("");
     const [successMsg, setSuccessMsg] = React.useState(false);
     const [rows, setRows] = useState([]);
-    
+    const [searched, setSearched] = useState("");
 
     const CssTextField = withStyles({
         root: {
@@ -184,6 +179,22 @@ const AllAppointments = () => {
         setSelectedItem(row._id);
     };
 
+    useEffect(() => {
+        setRows(reports);
+    }, [reports]);
+
+    const requestSearch = (searchedVal) => {
+        const filteredRows = appointment.filter((row) => {
+          return row.fullname.toLowerCase().includes(searchedVal.toString().toLowerCase());
+        });
+        setRows(filteredRows);
+    };
+    
+    const cancelSearch = () => {
+        setSearched("");
+        requestSearch(searched);
+    };
+
     const deleteItem = () => {
         fetch(`http://localhost:5000/api/appointment/appdelete/${selectedItem}`, { method: 'DELETE' })
         .then(async response => {
@@ -205,6 +216,7 @@ const AllAppointments = () => {
         });
     };
 
+
     const handleSuccessMsg = (event, reason) => {
 
         if (reason === 'clickaway') {
@@ -213,7 +225,10 @@ const AllAppointments = () => {
     
         setSuccessMsg(false);
     };
-    
+
+    const handleEditPage = (row) => {
+        history.push(`/update-appointment/${row._id}`);
+    };
     
     const handleClose = () => {
         setOpendlt(false);
@@ -238,46 +253,56 @@ const AllAppointments = () => {
         setOpenModal(false);
     };
 
+    
     const modalBody = (
         <Fade in={openModal}>
-            <Grid container spacing={3} className={classes.modelPaper}>
-                <Grid item xs={12}>
-                    <Typography variant="h6" id="transition-modal-title" style={{ color: '#0077B6', textAlign: 'center', textTransform: 'uppercase', fontWeight: 800, }} gutterBottom>
-                        24Seven hospital management system
-                    </Typography>
-                    <Paper className={classes.paperTitle}>
-                        <Typography variant="h6" id="transition-modal-title" className={classes.reportTitle}>Appointment Slip</Typography>
-                    </Paper>
-                    <table className={classes.table}>
-                        <tr style={{ fontSize: "18px", color: "#0077B6" }}>
-                            <td className={classes.trReport}>Appointment ID</td>
-                            <td className={classes.trReport}>{reportData._id}</td>
-                        </tr>
-                        <tr>
-                            <td className={classes.trReport}>Full Name</td>
-                            <td>{reportData.firstName} {reportData.lastName}</td>
-                            <td className={classes.trReport}>Gender</td>
-                            <td>{reportData.gender}</td>
-                        </tr>
-                        <tr>
-                            <td className={classes.trReport}>Email</td>
-                            <td>{reportData.email}</td>
-                            <td className={classes.trReport}>Mobile Number</td>
-                            <td>{reportData.mobile}</td>
-                        </tr>
-                        <tr>
-                            <td className={classes.trReport}>Name of Consultant</td>
-                            <td>{reportData.consultant}</td>
-                            <td className={classes.trReport}>Date of Appoinment</td>
-                            <td>{reportData.appdate}</td>
-                        </tr>
-                        <tr>
-                            <td className={classes.trReport}>Time of Appointment</td>
-                            <td>{reportData.apptime}</td>
-                        </tr>
-                    </table>
-                </Grid>
-            </Grid>
+            <div>
+                <div ref={refPrint}>
+                    <Grid container spacing={3} className={classes.modelPaper}>
+                        <Grid item xs={12}>
+                            <Typography variant="h6" id="transition-modal-title" style={{ color: '#0077B6', textAlign: 'center', textTransform: 'uppercase', fontWeight: 800, }} gutterBottom>
+                                24Seven hospital management system
+                            </Typography>
+                            <Paper className={classes.paperTitle}>
+                                <Typography variant="h6" id="transition-modal-title" className={classes.reportTitle}>Appointment Slip</Typography>
+                            </Paper>
+                            <table className={classes.table}>
+                                <tr style={{ fontSize: "18px", color: "#0077B6" }}>
+                                    <td className={classes.trReport}>Appointment ID</td>
+                                    <td className={classes.trReport}>{reportData._id}</td>
+                                </tr>
+                                <tr>
+                                    <td className={classes.trReport}>Full Name</td>
+                                    <td>{reportData.firstName} {reportData.lastName}</td>
+                                    <td className={classes.trReport}>Gender</td>
+                                    <td>{reportData.gender}</td>
+                                </tr>
+                                <tr>
+                                    <td className={classes.trReport}>Email</td>
+                                    <td>{reportData.email}</td>
+                                    <td className={classes.trReport}>Mobile Number</td>
+                                    <td>{reportData.mobile}</td>
+                                </tr>
+                                <tr>
+                                    <td className={classes.trReport}>Name of Consultant</td>
+                                    <td>{reportData.consultant}</td>
+                                    <td className={classes.trReport}>Date of Appoinment</td>
+                                    <td>{reportData.appdate}</td>
+                                </tr>
+                                <tr>
+                                    <td className={classes.trReport}>Time of Appointment</td>
+                                    <td>{reportData.apptime}</td>
+                                </tr>
+                            </table>
+                        </Grid>
+                    </Grid>
+                </div>
+                <Pdf targetRef={refPrint} filename={reportData._id + " appointments.pdf"}>
+                    {({toPdf}) => (
+                        <Button onClick={toPdf} variant="contained" className={classes.dialogBtnBlue} startIcon={<GetAppIcon />}>Generate Report</Button>
+                    )}
+                </Pdf> 
+            </div>
         </Fade>
     );
 
@@ -291,7 +316,7 @@ const AllAppointments = () => {
                 </Grid>
                 <Grid container spacing={3} justifyContent="flex-end" alignItems="center" style={{ padding: "12px" }}>
                     <Grid item xs={12} sm={4}>
-                        <CssTextField
+                    {/* <CssTextField
                             fullWidth
                             label="Search Records"
                             variant="outlined"
@@ -308,7 +333,13 @@ const AllAppointments = () => {
                                     </InputAdornment>
                                 ),
                             }}
-                        />
+                        />  */}
+                        <SearchBar
+                                cancelOnEscape
+                                value={searched}
+                                onChange={(searchVal) => requestSearch(searchVal)}
+                                onCancelSearch={() => cancelSearch()}
+                            />
                     </Grid>
                     <Grid item xs={12} sm={2}>
                         <Button component={Link} to ="/add-appointment" fullWidth variant="contained" startIcon={<AddIcon />} color="secondary" className={classes.submitbtn}>
@@ -383,10 +414,10 @@ const AllAppointments = () => {
                                                 <Button variant="contained" color="secondary" className={classes.tableBtn} onClick={() => handleOpenModal(row)}>
                                                     View
                                                 </Button>
-                                                <Button component={Link} to ="/update-appointment" variant="contained" color="secondary" className={classes.tableBtn}>
+                                                <Button onClick={() => handleEditPage(row)} variant="contained" color="secondary" className={classes.tableBtn}>
                                                     Update
                                                 </Button>
-                                                <Button variant="contained" className={classes.tableBtnRed} onClick={ () => handleClickOpen(row)}>
+                                                <Button variant="contained" className={classes.tableBtnRed} onClick={() => handleClickOpen(row)}>
                                                     Remove
                                                 </Button>
                                             </TableCell>
@@ -441,7 +472,7 @@ const AllAppointments = () => {
                         <Button onClick={handleClose} variant="contained"color="secondary" className={classes.dialogBtn}>
                             Cancel
                         </Button>
-                        <Button onClick={handleClose} variant="contained" className={classes.dialogBtnRed} autoFocus>
+                        <Button onClick={deleteItem} variant="contained" className={classes.dialogBtnRed} autoFocus>
                             Yes, Delete it
                         </Button>
                     </DialogActions>
