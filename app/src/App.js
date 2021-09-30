@@ -74,12 +74,15 @@ function App() {
             {pathName === "/admin" || pathName === "/login" ?
             <></>:
             <Navbar setDrawerState={setDrawerState} drawerState={drawerState} />}
-          {/* {drawerState ?
-          <Navbar setDrawerState={setDrawerState} drawerState={drawerState} />:
-          <></>} */}
         <Switch>
           <div className={classes.content} style={{ marginLeft: drawerWidth * drawerState }}>
             <Toolbar /> 
+            <Route exact path="/">
+                <Dashboard 
+                  setDrawerState={setDrawerState}
+                  setPathName={setPathName}
+                />
+            </Route>
             <Route exact path="/home">
                 <Dashboard 
                   setDrawerState={setDrawerState}
@@ -99,12 +102,10 @@ function App() {
             <Route path="/emp-details/:id" exact component={PaymentDetails} />
             <Route path="/example" exact component={Example} />
             <Route path="/emp-update" exact component={EmpPaymentDetails} />
-
             <Route path="/all-inventory" exact component={AllInventory} />
             <Route path="/add-inventory" exact component={AddInventory} />
             <Route path="/update-inventory" exact component={IventoryUpdate} />
             <Route path="/details-inventory/:id" exact component={InventoryDetails} />
-
             <Route exact path="/admin">
                 <AdminLogin 
                   setDrawerState={setDrawerState}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useHistory, useLocation } from 'react-router-dom';
 import { Paper, Button, Grid, Typography } from '@material-ui/core/';
 import ReactFitText from 'react-fittext';
@@ -16,9 +16,25 @@ import YoutubeSearchedForIcon from '@material-ui/icons/YoutubeSearchedFor';
 const Dashboard = ({ setPathName }) => {
     const classes = useStyles();
     const location = useLocation();
+    const history = useHistory();
+    const isFirstRender = useRef(true);
+    const [profile, setProfile] = React.useState();
 
     useEffect(() => {
         handleDrawerClose();
+    }, []);
+
+    useEffect(() => {
+        setProfile(localStorage.getItem('profile'));
+
+        if (isFirstRender.current) {
+            isFirstRender.current = false;
+            return;
+        }
+
+        if (profile === undefined) {
+            history.push("/login");
+        }
     }, []);
 
     const handleDrawerClose = () => {

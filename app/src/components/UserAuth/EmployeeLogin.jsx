@@ -102,7 +102,7 @@ const EmployeeLogin = ({ setPathName, setDrawerState }) => {
 
       }). then((response) => {
         setUserProfile(response.data);
-        history.push('/home');
+        history.push('/');
       }).catch((err) => {
         console.log(err.response.data);
         setErrorMsg(err.response.data);
