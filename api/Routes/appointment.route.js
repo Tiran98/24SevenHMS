@@ -43,22 +43,22 @@ router.get('/appfind/:id', async(req, res) => {
     }
 });
 
-router.delete = ('/appDelete', async(req, res) => {
+router.delete('/appdelete/:id', async(req, res) => {
 
-    Appointment.remove(req.params.appID, (err, data) => {
-        if(err) {
-            if(err.kind == "not_found") {
-                res.status(404).send({
-                    message:`Not found Appointment with id ${req.params.appID}.`
-                });
-            }else {
-                res.status(500).send({
-                    message: "Could not delete Appointment with id " + req.params.appID
-                });
-            }
-        } else res.send({ message: `Appointment was deleted Successfully!`});
-    });
+    Appointment.deleteOne({ _id: req.params.id })
+        .then(thing => res.status(200).send(thing))
+        .catch(error => res.status(400).send({ error: error.message }));
+
 });
 
+router.put('/appupdate/:id', async(req, res) => {
+
+    try {
+        const savedAppointment = await Appointment.findOneAndUpdate({ _id: req.params.id }, req.body, { useFindAndModify: false, new: true });
+        res.json(savedAppointmet);
+    } catch (err) {
+        res.json({ message: err });
+    }
+});
 
 module.exports = router;

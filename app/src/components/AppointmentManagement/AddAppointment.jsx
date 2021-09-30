@@ -17,28 +17,28 @@ function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
-const consultants = [
-    {
-        value: 'default',
-        label: 'Select the name of the Consultant',
-    },
-    {
-      value: 'vinuri',
-      label: 'Vinuri',
-    },
-    {
-      value: 'rikas',
-      label: 'Rikas',
-    },
-    {
-      value: 'tiran',
-      label: 'Tiran',
-    },
-    {
-      value: 'sanda',
-      label: 'Sanda',
-    },
-];
+// const consultants = [
+//     {
+//         value: 'default',
+//         label: 'Select the name of the Consultant',
+//     },
+//     {
+//       value: 'vinuri',
+//       label: 'Vinuri',
+//     },
+//     {
+//       value: 'rikas',
+//       label: 'Rikas',
+//     },
+//     {
+//       value: 'tiran',
+//       label: 'Tiran',
+//     },
+//     {
+//       value: 'sanda',
+//       label: 'Sanda',
+//     },
+// ];
 
 const apptime = [
     {
@@ -46,27 +46,27 @@ const apptime = [
         label: 'Select time',
     },
     {
-      value: 'time1',
+      value: '4.00 pm - 4.10 pm',
       label: '4.00 pm - 4.10 pm',
     },
     {
-      value: 'time2',
+      value: '4.10 pm - 4.20 pm',
       label: '4.10 pm - 4.20 pm',
     },
     {
-      value: 'time3',
+      value: '4.20 pm - 4.30 pm',
       label: '4.20 pm - 4.30 pm',
     },
     {
-      value: 'time4',
+      value: '4.30 pm - 4.40 pm',
       label: '4.30 pm - 4.40 pm',
     },
     {
-        value: 'time5',
+        value: '4.40 pm - 4.50 pm',
         label: '4.40 pm - 4.50 pm',
     },
     {
-      value: 'time6',
+      value: '4.50 pm - 5.00 pm',
       label: '4.50 pm - 5.00 pm',
     },
 ];
@@ -95,6 +95,7 @@ const AddAppointment = () => {
     const [time, setTime] = React.useState('default');    
     const [gender, setGender] = useState("");
     const [formData, setFormData] = useState([]);
+    const [consultants, setConsultants] = useState([]);
     const [successMsg, setSuccessMsg] = useState(false);
     const isFirstRender = useRef(true);
 
@@ -146,6 +147,14 @@ const AddAppointment = () => {
 
         submitForm(formData);
     }, [formData])
+
+    useEffect(() => {
+        fetch("http://localhost:5000/api/employee").then(res => {
+            if(res.ok){
+                return res.json()
+            }
+        }).then(jsonRes => setConsultants(jsonRes));
+    }, []);
 
     const onSubmit = (data) => {
         console.log(data);
@@ -320,9 +329,9 @@ const AddAppointment = () => {
                                                 error={!!errors?.consultant}
                                                 helperText={errors?.consultant?.message}
                                                 >
-                                                {consultants.map((option) => (
-                                                    <MenuItem key={option.value} value={option.value}>
-                                                        {option.label}
+                                                {consultants.filter(option => option.position.includes('doctor')).map((option) => (
+                                                    <MenuItem key={option._id} value={option.firstName}>
+                                                        {option.firstName} {option.lastName}
                                                     </MenuItem>
                                                 ))}
                                             </CssTextField>}

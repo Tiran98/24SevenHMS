@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useForm, Controller } from "react-hook-form";
-import { Radio, RadioGroup, FormLabel, TextField, FormControlLabel, Paper, Button, Grid, Typography, Divider } from '@material-ui/core/';
+import { Link, useHistory, useLocation } from 'react-router-dom';
+import { Radio, RadioGroup, FormLabel, TextField, FormControlLabel, Paper, Button, Grid, Typography, Divider, Snackbar } from '@material-ui/core/';
+import MuiAlert from '@material-ui/lab/Alert';
 import { withStyles } from '@material-ui/core/styles';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -9,28 +11,32 @@ import DateRangeIcon from '@material-ui/icons/DateRange';
 
 import useStyles from './styles';
 
-const consultants = [
-    {
-        value: 'default',
-        label: 'Select the name of the Consultant',
-    },
-    {
-      value: 'vinuri',
-      label: 'Vinuri',
-    },
-    {
-      value: 'rikas',
-      label: 'Rikas',
-    },
-    {
-      value: 'tiran',
-      label: 'Tiran',
-    },
-    {
-      value: 'sanda',
-      label: 'Sanda',
-    },
-];
+function Alert(props) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
+
+// const consultants = [
+//     {
+//         value: 'default',
+//         label: 'Select the name of the Consultant',
+//     },
+//     {
+//       value: 'vinuri',
+//       label: 'Vinuri',
+//     },
+//     {
+//       value: 'rikas',
+//       label: 'Rikas',
+//     },
+//     {
+//       value: 'tiran',
+//       label: 'Tiran',
+//     },
+//     {
+//       value: 'sanda',
+//       label: 'Sanda',
+//     },
+// ];
 
 const apptime = [
     {
@@ -38,38 +44,45 @@ const apptime = [
         label: 'Select time',
     },
     {
-      value: 'time1',
+      value: '4.00 pm - 4.10 pm',
       label: '4.00 pm - 4.10 pm',
     },
     {
-      value: 'time2',
+      value: '4.10 pm - 4.20 pm',
       label: '4.10 pm - 4.20 pm',
     },
     {
-      value: 'time3',
+      value: '4.20 pm - 4.30 pm',
       label: '4.20 pm - 4.30 pm',
     },
     {
-      value: 'time4',
+      value: '4.30 pm - 4.40 pm',
       label: '4.30 pm - 4.40 pm',
     },
     {
-        value: 'time5',
+        value: '4.40 pm - 4.50 pm',
         label: '4.40 pm - 4.50 pm',
     },
     {
-      value: 'time6',
+      value: '4.50 pm - 5.00 pm',
       label: '4.50 pm - 5.00 pm',
     },
 ];
 
 
-const UpdateAppointment = () => {
+const UpdateAppointment = (id) => {
     const classes = useStyles();
-    const { control, handleSubmit, reset } = useForm();
+    const history = useHistory();
+    const isFirstRender = useRef(true);
+    const { control, handleSubmit, setValue, formState: { errors } } = useForm();
     const [gender, setGender] = useState("");
     const [consultant, setConsultant] = React.useState('default');
     const [time, setTime] = React.useState('default');
+    const selectedId = id.match.params.id;
+    const [consultants, setConsultants] = useState([]);
+    const [successMsg, setSuccessMsg] = useState(false);
+    const [formData, setFormData] = useState([]);
+    const [appointment, setAppointment] = React.useState({});
 
 
     const CssTextField = withStyles({
@@ -109,19 +122,78 @@ const UpdateAppointment = () => {
         }
     })(TextField);
 
-    const onSubmit = (data) => {
+    useEffect(() => {
+        fetchReport();
+    }, []);
 
-        // if(userType == "attendee") {
-        //     formDataNew.append('firstName', data.firstName);
-        //     formDataNew.append('lastName', data.lastName);
-        //  
-        // } 
-        // submitForm(formDataNew);
+    useEffect(() => {
+        fetch("http://localhost:5000/api/employee").then(res => {
+            if(res.ok){
+                return res.json()
+            }
+        }).then(jsonRes => setConsultants(jsonRes));
+    }, []);
 
-        // for(var pair of formDataNew.entries()) {
-        //         console.log(pair[0]+', '+pair[1]);
-        // }
+    const fetchReport = async() => {
+        const response = await fetch(`http://localhost:5000/api/appointment/appfind/${selectedId}`);
+        const data = await response.json();
+        setAppointment(data);
     }
+
+    // console.log(appointment);
+
+    useEffect(() => {
+        setValue('_id', appointment._id || '');
+        setValue('firstName', appointment.firstName || '');
+        setValue('lastName', appointment.lastName || '');
+        setValue('email', appointment.email || '');
+        setValue('mobile', appointment.mobile || '');
+        setValue('dob', appointment.dob || '');
+        setValue('appdate', appointment.appdate || '');
+        setValue('dob', appointment.dob || '');
+        setValue('apptime', appointment.apptime || '');
+        setValue('consultant', appointment.consultant || '');
+        setTime(appointment.apptime || '');
+        setConsultant(appointment.consultant || '');
+        setGender(appointment.gender);
+    }, [appointment]);
+
+    const UpdateAppointment = (data) => {
+        const requestOptions = {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                firstName: data.firstName,
+                lastName: data.lastName,
+                email: data.email,
+                mobile: data.mobile,
+                gender: gender,
+                dob: data.dob,
+                consultant: data.consultant,
+                appdate: data.appdate,
+                apptime: data.apptime,
+            })
+        };
+        
+        fetch(`http://localhost:5000/api/appointment/appupdate/${selectedId}`, requestOptions)
+        .then(async response => {
+            const data = await response.json();
+            if (!response.ok) {
+                const error = (data && data.message) || response.status;
+                return Promise.reject(error);
+            }
+            setSuccessMsg(true);
+            history.push("/all-appointments");
+        })
+        .catch(error => {
+            console.log(error);
+            console.error('There was an error!', error);
+        });
+    };
+    
+    const onSubmit = (data) => {
+        UpdateAppointment(data);
+    };
 
     const handleRadioChange = (event) => {
         setGender(event.target.value, console.log(gender));
@@ -133,6 +205,15 @@ const UpdateAppointment = () => {
 
     const handleTime = (event) => {
         setTime(event.target.value, console.log(time));
+    };
+
+    const handleSuccessMsg = (event, reason) => {
+
+        if (reason === 'clickaway') {
+          return;
+        }
+    
+        setSuccessMsg(false);
     };
 
     return (
@@ -150,20 +231,29 @@ const UpdateAppointment = () => {
                                 <Grid container spacing={2}>
                                     <Grid item xs={12} sm={6}>
                                         <Controller
-                                            name="AppointmentID"
+                                            name="_id"
                                             control={control}
-                                            defaultValue=""
                                             render={({ field }) => 
                                             <CssTextField disabled fullWidth label="Appointment ID" variant="outlined" color="primary" {...field} />}
+                                            defaultValue={appointment._id}
                                         />
                                     </Grid>
                                     <Grid item xs={12} sm={6}>
                                         <Controller
-                                            name="fullname"
+                                            name="firstName"
                                             control={control}
-                                            defaultValue=""
                                             render={({ field }) => 
-                                            <CssTextField fullWidth label="Name" variant="outlined" color="primary" {...field} />}
+                                            <CssTextField fullWidth label="First Name" variant="outlined" color="primary" {...field} />}
+                                            defaultValue={appointment.firstName}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12} sm={6}>
+                                        <Controller
+                                            name="lastName"
+                                            control={control}
+                                            render={({ field }) => 
+                                            <CssTextField fullWidth label="Last Name" variant="outlined" color="primary" {...field} />}
+                                            defaultValue={appointment.lastName}
                                         />
                                     </Grid>
                                     <Grid item xs={12} sm={6}>
@@ -178,25 +268,25 @@ const UpdateAppointment = () => {
                                         <Controller
                                             name="email"
                                             control={control}
-                                            defaultValue=""
                                             render={({ field }) => 
                                             <CssTextField fullWidth label="Email" variant="outlined" color="primary" {...field} />}
+                                            defaultValue={appointment.email}
                                         />
                                     </Grid> 
                                     <Grid item xs={12} sm={6}>
                                         <Controller
                                             name="mobile"
                                             control={control}
-                                            defaultValue=""
                                             render={({ field }) => 
                                             <CssTextField fullWidth label="Mobile Number" variant="outlined" color="primary" {...field} />}
+                                            defaultValue={appointment.mobile}
                                         />
                                     </Grid>
                                     <Grid item xs={12} sm={6}>
                                         <Controller
                                             name="dob"
                                             control={control}
-                                            defaultValue=""
+                                            defaultValue={appointment.dob}
                                             render={({ field }) => 
                                                 <CssTextField
                                                     fullWidth
@@ -222,7 +312,7 @@ const UpdateAppointment = () => {
                                         <Controller
                                             name="consultant"
                                             control={control}
-                                            defaultValue=""
+                                            defaultValue={appointment.consultant}
                                             render={({ field }) => 
                                             <CssTextField
                                                 fullWidth
@@ -231,10 +321,13 @@ const UpdateAppointment = () => {
                                                 value={consultant}
                                                 onChange={handleConsultant}
                                                 variant="outlined"
+                                                {...field}
+                                                error={!!errors?.consultant}
+                                                helperText={errors?.consultant?.message}
                                                 >
-                                                {consultants.map((option) => (
-                                                    <MenuItem key={option.value} value={option.value}>
-                                                        {option.label}
+                                                {consultants.filter(option => option.position.includes('doctor')).map((option) => (
+                                                    <MenuItem key={option._id} value={option.firstName}>
+                                                        {option.firstName} {option.lastName}
                                                     </MenuItem>
                                                 ))}
                                             </CssTextField>}
@@ -242,15 +335,9 @@ const UpdateAppointment = () => {
                                     </Grid>
                                     <Grid item xs={12} sm={6}>
                                         <Controller
-                                            name="appointmentdate"
+                                            name="appdate"
                                             control={control}
-                                            defaultValue=""
-                                            render={({ field }) => 
-                                                <Grid item xs={12} sm={6}>
-                                        <Controller
-                                            name="appointmentdate"
-                                            control={control}
-                                            defaultValue=""
+                                            defaultValue={appointment.appdate}
                                             render={({ field }) => 
                                                 <CssTextField
                                                     fullWidth
@@ -272,14 +359,11 @@ const UpdateAppointment = () => {
                                             />}
                                         />
                                     </Grid>    
-                                    }
-                                        />
-                                    </Grid>    
                                     <Grid item xs={12} sm={6}>
                                         <Controller
-                                            name="time"
+                                            name="apptime"
                                             control={control}
-                                            defaultValue=""
+                                            defaultValue={appointment.apptime}
                                             render={({ field }) => 
                                             <CssTextField
                                                 fullWidth
@@ -287,6 +371,7 @@ const UpdateAppointment = () => {
                                                 label="Appointment Time"
                                                 value={time}
                                                 onChange={handleTime}
+                                                {...field}
                                                 variant="outlined"
                                                 >
                                                 {apptime.map((option) => (
@@ -301,8 +386,8 @@ const UpdateAppointment = () => {
                         </Paper>
                         <Grid container spacing={3}>
                             <Grid item xs={12} sm={3}>
-                                <Button type="reset" fullWidth variant="contained" className={classes.resetbtn}>
-                                    Reset
+                                <Button component={Link} to="/all-appointments" fullWidth variant="contained" className={classes.resetbtn}>
+                                    Back
                                 </Button>
                             </Grid>    
                             <Grid item xs={12} sm={9}>
@@ -314,6 +399,12 @@ const UpdateAppointment = () => {
                     </form>
                 </Grid>
             </Grid>
+            <Snackbar open={successMsg} autoHideDuration={6000} onClose={handleSuccessMsg} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
+                <Alert onClose={handleSuccessMsg} severity="success" color="info" className={classes.cookieAlert}>
+                    The form was updated successfully.
+                </Alert>
+            </Snackbar>                                     
+
         </div>
     )
 }
