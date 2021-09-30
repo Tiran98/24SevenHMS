@@ -118,6 +118,10 @@ const AllAppointments = () => {
     const [rows, setRows] = useState([]);
     const [searched, setSearched] = useState("");
 
+    const options = {
+        orientation: 'landscape',
+    };
+
     const CssTextField = withStyles({
         root: {
           '& .MuiInputBase-root': { 
@@ -180,12 +184,12 @@ const AllAppointments = () => {
     };
 
     useEffect(() => {
-        setRows(reports);
-    }, [reports]);
+        setRows(appointment);
+    }, [appointment]);
 
     const requestSearch = (searchedVal) => {
         const filteredRows = appointment.filter((row) => {
-          return row.fullname.toLowerCase().includes(searchedVal.toString().toLowerCase());
+          return row.firstName.toLowerCase().includes(searchedVal.toString().toLowerCase());
         });
         setRows(filteredRows);
     };
@@ -381,8 +385,8 @@ const AllAppointments = () => {
                                         </TableCell>
                                     </TableRow> <br />
                                     {(rowsPerPage > 0
-                                        ? appointment.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                        : appointment
+                                        ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                        : rows
                                     ).map((row) => (
                                         <>
                                         <TableRow key={row.name} className={classes.tableRow}>
@@ -499,11 +503,15 @@ const AllAppointments = () => {
                 </Alert>
             </Snackbar>
 
-            <Grid item xs={12} sm={2}>
-                <Button component={Link} to ="/" fullWidth variant="contained" color="secondary" className={classes.submitbtn}>
-                            Generate Report
-                </Button>
-            </Grid>
+            {/* <Grid item xs={12} sm={2}>
+            <Pdf targetRef={refPrint} filename={"All Appointments.pdf"} options={options} scale="0.9">
+                    {({toPdf}) => (
+                        <Button onClick={toPdf} variant="contained" className={classes.dialogBtnBlue} startIcon={<GetAppIcon />}>
+                        Generate Report
+                        </Button>
+                    )}
+                </Pdf> 
+            </Grid> */}
         </div>
     )
 }
