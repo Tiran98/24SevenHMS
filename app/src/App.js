@@ -29,6 +29,7 @@ import AllInventory from './components/InventoryManagement/AllInventory';
 import AddInventory from './components/InventoryManagement/AddInventory';
 import InventoryDetails from './components/InventoryManagement/InventoryDetails';
 import IventoryUpdate from './components/InventoryManagement/IventoryUpdate';
+import NotFound from './components/ErrorPage/NotFound';
 
 
 const drawerWidth = 240;
@@ -89,7 +90,7 @@ function App() {
             <Route path="/all-employees" exact component={AllEmployees} />
             <Route path="/add-report" exact component={AddReport} />
             <Route path="/all-reports" exact component={AllReports} />
-            <Route path="/edit-reports" exact component={EditReport} />
+            <Route path="/edit-reports/:id" exact component={EditReport} />
             <Route path="/add-emp-payment" exact component={AddEmpPayment} />
             <Route path="/all-emp-payment" exact component={AllEmpPay} />
             <Route path="/add-appointment" exact component={AddAppointment} />
@@ -98,12 +99,11 @@ function App() {
             <Route path="/emp-details/:id" exact component={PaymentDetails} />
             <Route path="/example" exact component={Example} />
             <Route path="/emp-update" exact component={EmpPaymentDetails} />
-            
+
             <Route path="/all-inventory" exact component={AllInventory} />
             <Route path="/add-inventory" exact component={AddInventory} />
-            <Route path="/update-inventory" exact component={InventoryDetails} />
-            <Route path="/details-inventory" exact component={IventoryUpdate} />
-
+            <Route path="/update-inventory" exact component={IventoryUpdate} />
+            <Route path="/details-inventory/:id" exact component={InventoryDetails} />
 
             <Route exact path="/admin">
                 <AdminLogin 
@@ -117,6 +117,7 @@ function App() {
                   setPathName={setPathName}
                 />
             </Route>
+            {/* <Route path="*" component={NotFound} /> */}
           </div>
         </Switch>
       </ThemeProvider>

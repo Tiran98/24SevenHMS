@@ -51,8 +51,10 @@ export default makeStyles((theme) => ({
         marginBottom: "50px",
     },
     table: {
-        minWidth: 500,
+        minWidth: 600,
+        padding: "10px",
         border: "none",
+        borderSpacing: "10px"
     },
     tableth: {
         color: "#0077B6",
@@ -106,6 +108,17 @@ export default makeStyles((theme) => ({
             backgroundColor: "#7d0000",
         },
     },
+
+    ReportBtn: {
+        marginLeft:20,
+        padding: "8px",
+        color: "#ffffff",
+        //marginTop:-40,
+        backgroundColor: "#5E452C",
+        '&:hover': {
+            backgroundColor: "#3C2004",
+        },
+    },
     detailsPaper: {
         backgroundColor:"#ffffff"
     },
@@ -131,15 +144,41 @@ export default makeStyles((theme) => ({
             backgroundColor: "#7d0000",
         },
     },
-    ReportBtn: {
-        marginRight: "20px",
+
+    modal: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    modelPaper: {
+        width: "800px",
+        maxHeight: "100vh",
+        overflowY: 'scroll',
+        backgroundColor: theme.palette.background.paper,
+        border: '2px solid #0077B6',
+        boxShadow: theme.shadows[5],
+        padding: theme.spacing(2, 4, 3),
+        
+    },
+    reportTitle: {
+        fontWeight: 800,
+        color: '#ffffff',
+        textAlign: 'left',
+        textTransform: 'uppercase',
+    },
+    trINV: {
+        fontWeight: 600,
+    },
+    ReportDetailsBtn:{
+        // marginRight:"-100px",
+        // marginTop:"10px",
         padding: "8px",
         color: "#ffffff",
         float: 'right',
-        marginTop:-40,
+        //marginTop:-40,
         backgroundColor: "#5E452C",
         '&:hover': {
             backgroundColor: "#3C2004",
         },
-    },
+    }
 }));

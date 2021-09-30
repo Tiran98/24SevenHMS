@@ -94,6 +94,15 @@ export default makeStyles((theme) => ({
             backgroundColor: "#2b2b2b",
         },
     },
+    dialogBtnBlue: {
+        padding: "10px",
+        float: "right",
+        color: "#ffffff",
+        backgroundColor: "#0077B6",
+        '&:hover': {
+            backgroundColor: "#023E8A",
+        },
+    },
     dialogBtnRed: {
         padding: "8px",
         color: "#ffffff",
@@ -148,6 +157,14 @@ export default makeStyles((theme) => ({
     cookieAlert: {
         width: "800px",
         color: "#0077B6",
+        fontSize: 18,
+        "& .MuiAlert-icon": {
+            fontSize: 24
+        }
+    },
+    cookieAlertError: {
+        width: "800px",
+        color: "#ffffff",
         fontSize: 18,
         "& .MuiAlert-icon": {
             fontSize: 24

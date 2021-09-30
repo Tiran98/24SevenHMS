@@ -104,7 +104,7 @@ const Dashboard = ({ setPathName }) => {
                             <Grid item xs={6}>
                                 <Button
                                     fullWidth
-
+                                    component={Link} to ="/all-inventory"
                                     variant="contained"
                                     size="large"
                                     className={classes.menuButton}

@@ -105,6 +105,7 @@ const AddEmpPayment = () => {
     const [formData, setFormData] = useState([]);
     const isFirstRender = useRef(true);
     const [nextId, setNextId] = useState("");
+    const [employeeNames,setEmployeeNames] = useState([]);
 
     const [gender, setGender] = useState("");
     const history = useHistory();
@@ -147,6 +148,12 @@ const AddEmpPayment = () => {
     })(TextField);
 
     useEffect(() => {
+      fetch("http://localhost:5000/api/employee").then(res => {
+        if(res.ok){
+            return res.json()
+        }
+      }).then(jsonRes => setEmployeeNames(jsonRes));
+
         getMaxId();
 
         if (isFirstRender.current) {
@@ -161,26 +168,26 @@ const AddEmpPayment = () => {
         axios
         .get("http://localhost:5000/api/empPay/getMaxId")
         .then((response) => {
-            console.log(response.data.employeeId);
-          if(response.data.employeeId == null)
+          if(response.data.paymentId == null)
           {
             setNextId(1);
           }else{
-            setNextId(response.data.employeeId + 1);
+            console.log(response.data.paymentId);
+            setNextId(response.data.paymentId + 1);
           }
         })
         .catch((error) => {
           console.log(error);
         });
-      }
-
+    }
 
     const onSubmit = (data) => {
 
-        var codeId = document.getElementById("empId").value
+        var codeId = document.getElementById("payId").value
 
         setFormData({
-            employeeId: nextId,
+            paymentId:nextId,
+            employeeId: '1',
             employeeType: data.empType,
             employeeName: data.employee,
             paymentAmount: data.payAmount,
@@ -273,9 +280,9 @@ const AddEmpPayment = () => {
                                                 // error={!!errors?.employee}
                                                 // helperText={errors?.employee?.message}
                                                 >
-                                                {employees.map((option) => (
-                                                    <MenuItem key={option.value} value={option.value}>
-                                                        {option.label}
+                                                {employeeNames.map((empNames) => (
+                                                    <MenuItem key={empNames._id} value={empNames.firstName}>
+                                                        {empNames.firstName} {empNames.lastName}
                                                     </MenuItem>
                                                 ))}
                                             </CssTextField>}
@@ -428,7 +435,7 @@ const AddEmpPayment = () => {
                                 </Button>
                             </Grid>
                             <Grid hidden='ture' item xs={12}>
-                                <h1 id="empId" name="empId">{nextId}</h1>
+                                <h1 id="payId" name="payId">{nextId}</h1>
                             </Grid>
                         </Grid> 
                     </form>
