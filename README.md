@@ -3,8 +3,11 @@ Group ID - 2021S2_REG_WE_58
 Group Member Details
 
 IT19165394 - Galagoda R R P W M R V N - vinuri-g
+
 IT19113982 - Rikas M R M - RikasMRM
+
 IT19178028 - Hettiarachchi T M - Tiran98
+
 IT19143200 - Sandakalum H G D - hdgsandakalum
 
 Purpose of the project
@@ -18,8 +21,11 @@ They are,
 4. Lab Report Management
 
 Technologies
+
 Front end - ReactJS
+
 Back end - NodeJS
+
 Databse - MongoDB
 
 
