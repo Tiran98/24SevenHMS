@@ -40,7 +40,7 @@ They are,
 
 ## Technologies
 
-MERN stack has for the development of this project. MERN stands for MongoDB, Express, React, Node, after the four key technologies that make up the stack.
+MERN stack has use for the development of this project. MERN stands for MongoDB, Express, React, Node, after the four key technologies that make up the stack.
 
 1. MongoDB - document database
 2. Express(.js) - Node.js web framework
