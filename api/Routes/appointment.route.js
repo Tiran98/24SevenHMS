@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const Appointment = require("../Models/Appointment");
 const validate = require("../middlewares/validate");
-const { body, param } = require("express-validator");
+const { body } = require("express-validator");
 const {
   firstName,
   lastName,
@@ -11,6 +11,8 @@ const {
   dob,
   mongoId,
 } = require("../middlewares/commonValidations");
+const AppError = require("../utils/errors");
+const catchAsync = require("../utils/catchAsync");
 
 router.post(
   "/addApp",
@@ -25,7 +27,7 @@ router.post(
     body("appdate").isDate(),
     body("apptime").matches(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/),
   ]),
-  async (req, res) => {
+  catchAsync(async (req, res, next) => {
     const appointment = new Appointment({
       firstName: req.body.firstName,
       lastName: req.body.lastName,
@@ -37,39 +39,42 @@ router.post(
       appdate: req.body.appdate,
       apptime: req.body.apptime,
     });
-
-    try {
-      const savedApp = await appointment.save();
-      res.json(savedApp);
-    } catch (err) {
-      res.json({ message: err });
-    }
-  }
+    const savedApp = await appointment.save();
+    res.status(201).json(savedApp);
+  })
 );
 
-router.get("/", async (req, res) => {
-  try {
-    const appointment = await Appointment.find();
-    res.json(appointment);
-  } catch (err) {
-    res.json({ message: err });
-  }
-});
+router.get(
+  "/",
+  catchAsync(async (req, res, next) => {
+    const appointments = await Appointment.find();
+    res.json(appointments);
+  })
+);
 
-router.get("/appfind/:id", validate([mongoId]), async (req, res) => {
-  try {
+router.get(
+  "/appfind/:id",
+  validate([mongoId]),
+  catchAsync(async (req, res, next) => {
     const appointment = await Appointment.findById(req.params.id);
+    if (!appointment) {
+      return next(new AppError("No appointment found with that ID", 404));
+    }
     res.json(appointment);
-  } catch (err) {
-    res.json({ message: err });
-  }
-});
+  })
+);
 
-router.delete("/appdelete/:id", validate([mongoId]), async (req, res) => {
-  Appointment.deleteOne({ _id: req.params.id })
-    .then((thing) => res.status(200).send(thing))
-    .catch((error) => res.status(400).send({ error: error.message }));
-});
+router.delete(
+  "/appdelete/:id",
+  validate([mongoId]),
+  catchAsync(async (req, res, next) => {
+    const appointment = await Appointment.findByIdAndDelete(req.params.id);
+    if (!appointment) {
+      return next(new AppError("No appointment found with that ID", 404));
+    }
+    res.status(204).json(null);
+  })
+);
 
 router.put(
   "/appupdate/:id",
@@ -85,18 +90,17 @@ router.put(
     body("appdate").isDate(),
     body("apptime").matches(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/),
   ]),
-  async (req, res) => {
-    try {
-      const savedAppointment = await Appointment.findOneAndUpdate(
-        { _id: req.params.id },
-        req.body,
-        { useFindAndModify: false, new: true }
-      );
-      res.json(savedAppointmet);
-    } catch (err) {
-      res.json({ message: err });
+  catchAsync(async (req, res, next) => {
+    const savedAppointment = await Appointment.findOneAndUpdate(
+      { _id: req.params.id },
+      req.body,
+      { useFindAndModify: false, new: true }
+    );
+    if (!savedAppointment) {
+      return next(new AppError("No appointment found with that ID", 404));
     }
-  }
+    res.json(appointment);
+  })
 );
 
 module.exports = router;

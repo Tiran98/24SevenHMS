@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const LabReports = require("../Models/LabReports");
 const validate = require("../middlewares/validate");
-const { body, param } = require("express-validator");
+const { body } = require("express-validator");
 const {
   email,
   mobile,
@@ -9,6 +9,8 @@ const {
   dob,
   mongoId,
 } = require("../middlewares/commonValidations");
+const AppError = require("../utils/errors");
+const catchAsync = require("../utils/catchAsync");
 
 const labReportValidationSchema = [
   body("fullname")
@@ -80,81 +82,88 @@ const labReportValidationSchema = [
     .withMessage("ESR must be a non-negative number"),
 ];
 
-router.post("/", validate(labReportValidationSchema), async (req, res) => {
-  const labReports = new LabReports({
-    fullname: req.body.fullname,
-    email: req.body.email,
-    mobile: req.body.mobile,
-    dob: req.body.dob,
-    gender: req.body.gender,
-    datecollected: req.body.datecollected,
-    hemoglobin: req.body.hemoglobin,
-    rbc: req.body.rbc,
-    hct: req.body.hct,
-    mcv: req.body.mcv,
-    mch: req.body.mch,
-    mchc: req.body.mchc,
-    rdwcv: req.body.rdwcv,
-    rdwsd: req.body.rdwsd,
-    wbc: req.body.wbc,
-    neu: req.body.neu,
-    lym: req.body.lym,
-    mon: req.body.mon,
-    eos: req.body.eos,
-    bas: req.body.bas,
-    lym2: req.body.lym2,
-    gra: req.body.gra,
-    plt: req.body.plt,
-    esr: req.body.esr,
-  });
+router.post(
+  "/",
+  validate(labReportValidationSchema),
+  catchAsync(async (req, res) => {
+    const labReports = new LabReports({
+      fullname: req.body.fullname,
+      email: req.body.email,
+      mobile: req.body.mobile,
+      dob: req.body.dob,
+      gender: req.body.gender,
+      datecollected: req.body.datecollected,
+      hemoglobin: req.body.hemoglobin,
+      rbc: req.body.rbc,
+      hct: req.body.hct,
+      mcv: req.body.mcv,
+      mch: req.body.mch,
+      mchc: req.body.mchc,
+      rdwcv: req.body.rdwcv,
+      rdwsd: req.body.rdwsd,
+      wbc: req.body.wbc,
+      neu: req.body.neu,
+      lym: req.body.lym,
+      mon: req.body.mon,
+      eos: req.body.eos,
+      bas: req.body.bas,
+      lym2: req.body.lym2,
+      gra: req.body.gra,
+      plt: req.body.plt,
+      esr: req.body.esr,
+    });
 
-  try {
     const savedReport = await labReports.save();
-    res.json(savedReport);
-  } catch (err) {
-    res.json({ message: err });
-  }
-});
+    res.status(201).json(savedReport);
+  })
+);
 
-router.get("/", async (req, res) => {
-  try {
+router.get(
+  "/",
+  catchAsync(async (req, res) => {
     const labreports = await LabReports.find();
     res.json(labreports);
-  } catch (err) {
-    res.json({ message: err });
-  }
-});
+  })
+);
 
-router.get("/labfind/:id", validate([mongoId]), async (req, res) => {
-  try {
+router.get(
+  "/labfind/:id",
+  validate([mongoId]),
+  catchAsync(async (req, res) => {
     const labreport = await LabReports.findById(req.params.id);
+    if (!labreport) {
+      throw new AppError("Labotary item not found", 404);
+    }
     res.json(labreport);
-  } catch (err) {
-    res.json({ message: err });
-  }
-});
+  })
+);
 
-router.delete("/labdelete/:id", validate([mongoId]), async (req, res) => {
-  LabReports.deleteOne({ _id: req.params.id })
-    .then((thing) => res.status(200).send(thing))
-    .catch((error) => res.status(400).send({ error: error.message }));
-});
+router.delete(
+  "/labdelete/:id",
+  validate([mongoId]),
+  catchAsync(async (req, res) => {
+    const result = await LabReports.deleteOne({ _id: req.params.id });
+    if (!result) {
+      throw new AppError("Labotary item not found", 404);
+    }
+    res.status(200).json({ message: "Labotary item deleted successfully" });
+  })
+);
 
 router.put(
   "/labupdate/:id",
   validate([mongoId, ...labReportValidationSchema]),
-  async (req, res) => {
-    try {
-      const savedReport = await LabReports.findOneAndUpdate(
-        { _id: req.params.id },
-        req.body,
-        { useFindAndModify: false, new: true }
-      );
-      res.json(savedReport);
-    } catch (err) {
-      res.json({ message: err });
+  catchAsync(async (req, res) => {
+    const savedReport = await LabReports.findOneAndUpdate(
+      { _id: req.params.id },
+      req.body,
+      { useFindAndModify: false, new: true }
+    );
+    if (!savedReport) {
+      throw new AppError("Labotary item not found", 404);
     }
-  }
+    res.status(200).json(savedReport);
+  })
 );
 
 module.exports = router;

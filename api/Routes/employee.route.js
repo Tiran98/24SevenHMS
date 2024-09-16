@@ -8,6 +8,7 @@ const validate = require("../middlewares/validate");
 const { body, param } = require("express-validator");
 const {
   firstName,
+  firstNameParam,
   lastName,
   email,
   mobile,
@@ -15,12 +16,17 @@ const {
   dob,
   mongoId,
 } = require("../middlewares/commonValidations");
+const AppError = require("../utils/errors");
+const catchAsync = require("../utils/catchAsync");
 
 let transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASSWORD,
+  },
+  tls: {
+    rejectUnauthorized: false,
   },
 });
 
@@ -39,16 +45,20 @@ router.post(
     body("position").isString().trim().notEmpty(),
     body("hiredate").isDate(),
   ]),
-  async (req, res) => {
+  catchAsync(async (req, res, next) => {
     //Checking if the user is already in the database
     const emailExist = await Employee.findOne({ email: req.body.email });
-    if (emailExist) return res.status(400).send("Email already exists");
+    if (emailExist) {
+      throw new AppError("Email already exists", 400);
+    }
 
     //Generate Password
     var password = generator.generate({
       length: 8,
       numbers: true,
     });
+
+    console.log("Generate Password", password);
 
     //Hash passwords
     const salt = await bcrypt.genSalt(12);
@@ -69,93 +79,78 @@ router.post(
       hiredate: req.body.hiredate,
     });
 
-    try {
-      const savedEmp = await employee.save();
-      res.json(savedEmp);
+    const savedEmp = await employee.save();
 
-      //Sending email
-      var mailBody = `<h4>Hello ${employee.firstName},</h4>
-    <p>Your Employee ID is <b>${savedEmp._id}</b> and your password is <b>${password}</b>. Thank you for joining with us.</p>`;
+    const mailBody = `<h4>Hello ${employee.firstName},</h4>
+    <p>Your Employee ID is <b>${savedEmp._id}</b> and your password is <b>${password}</b>. Thank you for joining us.</p>`;
 
-      var mailOptions = {
-        from: "nyx.devsolutions@gmail.com",
-        to: employee.email,
-        subject: "Welcome to 24Seven HMS",
-        html: mailBody,
-      };
-      transporter.sendMail(mailOptions, function (error, info) {
-        if (error) {
-          console.log(error);
-        } else {
-          console.log("Email sent : " + info.response);
-        }
-      });
-    } catch (err) {
-      res.json({ message: err });
-    }
-  }
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to: employee.email,
+      subject: "Welcome to 24Seven HMS",
+      html: mailBody,
+    };
+
+    await transporter.sendMail(mailOptions);
+
+    res.status(201).json(savedEmp);
+  })
 );
 
-router.get("/", async (req, res) => {
-  try {
-    const employee = await Employee.find();
-    res.json(employee);
-  } catch (err) {
-    res.json({ message: err });
-  }
-});
+router.get(
+  "/",
+  catchAsync(async (req, res) => {
+    const employees = await Employee.find();
+    res.json(employees);
+  })
+);
 
-router.delete("/empdelete/:id", validate([mongoId]), async (req, res) => {
-  try {
+router.delete(
+  "/empdelete/:id",
+  validate([mongoId]),
+  catchAsync(async (req, res) => {
     const result = await Employee.deleteOne({ _id: req.params.id });
     if (result.deletedCount === 0) {
-      return res.status(404).json({ message: "Employee not found" });
+      throw new AppError("Employee not found", 404);
     }
     res.status(200).json({ message: "Employee deleted successfully" });
-  } catch (error) {
-    res
-      .status(500)
-      .json({ message: "An error occurred while deleting the employee" });
-  }
-});
+  })
+);
 
-router.get("/allcounts", async (req, res) => {
-  try {
-    const doctorcount = await Employee.countDocuments({ position: "doctor" });
-    const pharmacistcount = await Employee.countDocuments({
-      position: "pharmacist",
+router.get(
+  "/allcounts",
+  catchAsync(async (req, res) => {
+    const [doctorCount, pharmacistCount, accountantCount, assistantCount] =
+      await Promise.all([
+        Employee.countDocuments({ position: "Doctor" }),
+        Employee.countDocuments({ position: "Pharmacist" }),
+        Employee.countDocuments({ position: "Accountant" }),
+        Employee.countDocuments({ position: "LabAssistant" }),
+      ]);
+
+    res.json({
+      doctorCount,
+      pharmacistCount,
+      accountantCount,
+      assistantCount,
     });
-    const accountantcount = await Employee.countDocuments({
-      position: "accountant",
-    });
-    const assistantcount = await Employee.countDocuments({
-      position: "labAssistant",
-    });
-    var arr = {
-      doctorcount: doctorcount,
-      pharmacistcount: pharmacistcount,
-      accountantcount: accountantcount,
-      assistantcount: assistantcount,
-    };
-    res.json(arr);
-  } catch (err) {
-    res.json({ message: err });
-  }
-});
+  })
+);
 
 router.get(
   "/getEmpByName/:firstName",
-  validate([firstName]),
-  async (req, res) => {
-    try {
-      const empByName = await Employee.findOne({
-        firstName: req.params.firstName,
-      });
-      res.json(empByName);
-    } catch (err) {
-      res.json({ message: err });
+  validate([firstNameParam]),
+  catchAsync(async (req, res) => {
+    const empByName = await Employee.findOne({
+      firstName: req.params.firstName,
+    });
+
+    if (!empByName) {
+      throw new AppError("Employee not found", 404);
     }
-  }
+
+    res.json(empByName);
+  })
 );
 
 module.exports = router;
