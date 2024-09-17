@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const EmpPayment = require("../Models/EmpPayment");
 const validate = require("../middlewares/validate");
-const { body } = require("express-validator");
+const { body, param } = require("express-validator");
 const AppError = require("../utils/errors");
 const catchAsync = require("../utils/catchAsync");
 

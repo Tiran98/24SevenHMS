@@ -5,8 +5,31 @@ const cors = require("cors");
 require("dotenv").config();
 const errorHandler = require("./middlewares/errorHandler");
 const AppError = require("./utils/errors");
+const rateLimit = require("express-rate-limit");
+const helmet = require("helmet");
 
 const app = express();
+
+const enforceHttps = (req, res, next) => {
+  if (
+    !req.secure &&
+    req.get("x-forwarded-proto") !== "https" &&
+    process.env.NODE_ENV !== "development"
+  ) {
+    return res.redirect("https://" + req.get("host") + req.url);
+  }
+  next();
+};
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+});
+
+app.use(enforceHttps);
+app.use(helmet());
+app.use(limiter);
+
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 
@@ -20,11 +43,16 @@ const authRoute = require("./Routes/auth.route");
 const appointmentRoute = require("./Routes/appointment.route");
 const inventoryRoute = require("./Routes/inventory.route");
 
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 5,
+});
+
 //Route Middlewares
 app.use("/api/employee", employeeRoute);
 app.use("/api/labreports", labreportsRoute);
 app.use("/api/empPay", empPaymentRoute);
-app.use("/api/user", authRoute);
+app.use("/api/user", authLimiter, authRoute);
 app.use("/api/appointment", appointmentRoute);
 app.use("/api/invMngmnt", inventoryRoute);
 
