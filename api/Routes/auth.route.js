@@ -6,6 +6,7 @@ const { email, password } = require("../middlewares/commonValidations");
 const AppError = require("../utils/errors");
 const catchAsync = require("../utils/catchAsync");
 const { generateAccessToken, generateRefreshToken } = require("../utils/jwt");
+const authMiddleware = require("../middlewares/authMiddleware");
 
 router.post(
   "/adminlogin",
@@ -30,8 +31,8 @@ router.post(
       throw new AppError("Invalid email or password", 401);
     }
 
-    const accessToken = generateAccessToken(emailExist._id);
-    const refreshToken = generateRefreshToken(emailExist._id);
+    const accessToken = generateAccessToken(emailExist._id, "admin");
+    const refreshToken = generateRefreshToken(emailExist._id, "admin");
 
     emailExist.refreshToken = refreshToken;
     await emailExist.save();
@@ -62,8 +63,8 @@ router.post(
       throw new AppError("Invalid email or password", 401);
     }
 
-    const accessToken = generateAccessToken(employee._id);
-    const refreshToken = generateRefreshToken(employee._id);
+    const accessToken = generateAccessToken(employee._id, employee.position);
+    const refreshToken = generateRefreshToken(employee._id, employee.position);
 
     employee.refreshToken = refreshToken;
     await employee.save();
@@ -102,8 +103,11 @@ router.post(
         throw new AppError("Invalid refresh token", 403);
       }
 
-      const accessToken = generateAccessToken(employee._id);
-      const newRefreshToken = generateRefreshToken(employee._id);
+      const accessToken = generateAccessToken(employee._id, employee.position);
+      const newRefreshToken = generateRefreshToken(
+        employee._id,
+        employee.position
+      );
 
       employee.refreshToken = newRefreshToken;
       await employee.save();
@@ -117,6 +121,7 @@ router.post(
 
 router.post(
   "/logout",
+  authMiddleware,
   catchAsync(async (req, res, next) => {
     const { refreshToken } = req.body;
 

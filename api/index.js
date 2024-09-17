@@ -7,6 +7,7 @@ const errorHandler = require("./middlewares/errorHandler");
 const AppError = require("./utils/errors");
 const rateLimit = require("express-rate-limit");
 const helmet = require("helmet");
+const authMiddleware = require("./middlewares/authMiddleware");
 
 const app = express();
 
@@ -31,7 +32,8 @@ app.use(helmet());
 app.use(limiter);
 
 app.use(cors());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: "10kb" }));
+app.use(express.urlencoded({ extended: true, limit: "10kb" }));
 
 app.use(express.json());
 
@@ -48,13 +50,43 @@ const authLimiter = rateLimit({
   max: 5,
 });
 
+const checkRole = (roles) => (req, res, next) => {
+  if (!req.user) {
+    return next(new AppError("User not authenticated", 401));
+  }
+  if (!roles.includes(req.user.role)) {
+    return next(new AppError("Not authorized to access this route", 403));
+  }
+  next();
+};
+
 //Route Middlewares
-app.use("/api/employee", employeeRoute);
-app.use("/api/labreports", labreportsRoute);
-app.use("/api/empPay", empPaymentRoute);
+app.use(
+  "/api/employee",
+  authMiddleware,
+  checkRole(["admin", "doctor"]),
+  employeeRoute
+);
+app.use(
+  "/api/labreports",
+  authMiddleware,
+  checkRole(["admin", "doctor", "labAssistant"]),
+  labreportsRoute
+);
+app.use(
+  "/api/empPay",
+  authMiddleware,
+  checkRole(["admin", "accountant"]),
+  empPaymentRoute
+);
 app.use("/api/user", authLimiter, authRoute);
-app.use("/api/appointment", appointmentRoute);
-app.use("/api/invMngmnt", inventoryRoute);
+app.use("/api/appointment", authMiddleware, appointmentRoute);
+app.use(
+  "/api/invMngmnt",
+  authMiddleware,
+  checkRole(["admin", "pharmacist"]),
+  inventoryRoute
+);
 
 app.all("*", (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
