@@ -24,6 +24,8 @@
     "nodemailer": "^6.6.5",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-facebook": "^9.0.12",
+    "react-facebook-login": "^4.1.1",
     "react-fittext": "^1.0.0",
     "react-hook-form": "^7.12.2",
     "react-live-clock": "^5.2.0",
@@ -36,7 +38,7 @@
     "yup": "^0.32.9"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "set HTTPS=true&&set SSL_CRT_FILE=C:/Users/hgdsa/OneDrive/Desktop/Study/SSD/Assignment 1/24SevenHMS/app/cert.crt&&set SSL_KEY_FILE=C:/Users/hgdsa/OneDrive/Desktop/Study/SSD/Assignment 1/24SevenHMS/app/cert.key&&react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
